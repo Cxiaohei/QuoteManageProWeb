@@ -71,6 +71,25 @@ const options = {
           ]
         },
         {
+          path: 'quotationManagement',
+          name: '报价管理',
+          meta: {
+            icon: 'setting'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'rdProjects',
+              name: '研发项目',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/rdProjects'),
+            },
+          ]
+        },
+        
+        {
           path: 'category2',
           name: '产品管理',
           meta: {
