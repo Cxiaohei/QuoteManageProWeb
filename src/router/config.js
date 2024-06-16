@@ -86,9 +86,18 @@ const options = {
               },
               component: () => import('@/pages/businessCode/quotationManagement/rdProjects'),
             },
+            {
+              path: 'rdProjectsDetail',
+              name: '研发项目详情',
+              meta: {
+                invisible: true,
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetail'),
+            },
           ]
         },
-        
+
         {
           path: 'category2',
           name: '产品管理',

@@ -38,16 +38,12 @@
       :selectedRows.sync="selectedRows"
       bordered
     >
-      <!-- <span slot="action" slot-scope="text, record">
-        <a
-          href="javascript:;"
-          @click="essentialData_edit(record)"
-          style="margin-right: 5px"
-          >编辑</a
+      <span slot="action" slot-scope="text, record">
+        <a href="javascript:;" @click="rdProjectsDetail(record, 'detail')"
+          >详情</a
         >
-        <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-          <a href="javascript:;" @click="showLog(record)">日志</a>
-      </span> -->
+        <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
+      </span>
 
       <span slot="categoryLevel" slot-scope="text, record">
         {{
@@ -150,6 +146,15 @@ export default {
     //编辑
     essentialData_edit(record) {
       this.$refs.RdProjectsModalRefs.openModules("edit", record);
+    },
+    //详情页
+    rdProjectsDetail(record) {
+      this.$router.push({
+        path: "rdProjectsDetail",
+        query: {
+          id: record.id,
+        },
+      });
     },
     //获取列表数据
     getPageList() {

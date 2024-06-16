@@ -15,8 +15,29 @@ export async function editEssentialDataList(params) {
     return request("/api/app/basic-configuration/base-data-info", METHOD.PUT, params)
 }
 
+//研发项目详情
+export async function getRdProjectsDetail(Id) {
+    return request(`/api/app/develop-project/dev-project-detail/${Id}`, METHOD.GET)
+}
+//研发项目新增子项
+export async function addRdProjectsDetailList(params) {
+    return request(`/api/app/develop-project/dev-project-detail-list`, METHOD.POST, params)
+}
+export async function editRdProjectsDetailList(params) {
+    return request(`/api/app/develop-project/dev-project-detail`, METHOD.PUT, params)
+}
+export async function deleteRdProjectsDetailList(params) {
+    return request(`/api/app/develop-project/dev-pro-detail/${params}`, METHOD.DELETE)
+}
+
+
+
 export default {
     getPageList,
     addEssentialDataList,
-    editEssentialDataList
+    editEssentialDataList,
+    getRdProjectsDetail,
+    addRdProjectsDetailList,
+    editRdProjectsDetailList,
+    deleteRdProjectsDetailList
 }
