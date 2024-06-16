@@ -117,7 +117,7 @@ export default {
     openModules(title, detailType, type, record) {
       // this.title = title;
       this.detailType = detailType;
-      this.detailDataList = [{ detailType: this.detailType }];
+      this.detailDataList = [{ detailType: this.detailType ,developProjectId:this.$route.query.id,}];
       if (type == "add") {
         this.title = "新增";
       } else {
