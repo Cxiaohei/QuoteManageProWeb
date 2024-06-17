@@ -47,6 +47,21 @@
             <a href="#">删除</a>
           </a-popconfirm>
         </span>
+        <span slot="detailFeeType" slot-scope="text, record">
+          {{ record.detailFeeType == 0 ? "费用" : "人工" }}
+        </span>
+        <span slot="engineerLevel" slot-scope="text, record">
+          {{
+            record.engineerLevel == 0
+              ? "初级"
+              : record.engineerLevel == 1
+              ? "中级"
+              : record.engineerLevel == 2
+              ? "高级"
+              : "资深"
+          }}
+        </span>
+
         <span slot="creationTime" slot-scope="text, record">
           {{ record.creationTime }}
         </span>
@@ -78,24 +93,82 @@ const columns = [
     },
   },
   {
-    title: "标题111",
+    title: "子类",
     dataIndex: "subclasses",
     scopedSlots: {
       customRender: "subclasses",
     },
   },
   {
-    title: "描述",
+    title: "费用说明",
+    width: "110px",
     dataIndex: "feeDescription",
     scopedSlots: {
       customRender: "feeDescription",
     },
   },
   {
-    title: "engineerLevel",
+    title: "工种",
+    width: "150px",
+    dataIndex: "trades",
+    scopedSlots: {
+      customRender: "trades",
+    },
+  },
+  {
+    title: "费用类型",
+    width: "150px",
+    dataIndex: "detailFeeType",
+    scopedSlots: {
+      customRender: "detailFeeType",
+    },
+  },
+  {
+    title: "工程师级别",
+    width: "150px",
     dataIndex: "engineerLevel",
     scopedSlots: {
       customRender: "engineerLevel",
+    },
+  },
+  {
+    title: "折扣率",
+    width: "100px",
+    dataIndex: "discountedRate",
+    scopedSlots: {
+      customRender: "discountedRate",
+    },
+  },
+  {
+    title: "总价",
+    width: "100px",
+    dataIndex: "totalPrice",
+    scopedSlots: {
+      customRender: "totalPrice",
+    },
+  },
+  {
+    title: "数量",
+    width: "100px",
+    dataIndex: "quantityNum",
+    scopedSlots: {
+      customRender: "quantityNum",
+    },
+  },
+  {
+    title: "参考值",
+    width: "100px",
+    dataIndex: "referenceValue",
+    scopedSlots: {
+      customRender: "referenceValue",
+    },
+  },
+  {
+    title: "单价",
+    width: "100px",
+    dataIndex: "unitPrice",
+    scopedSlots: {
+      customRender: "unitPrice",
     },
   },
   {

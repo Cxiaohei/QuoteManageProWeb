@@ -29,6 +29,10 @@ export async function editRdProjectsDetailList(params) {
 export async function deleteRdProjectsDetailList(params) {
     return request(`/api/app/develop-project/dev-pro-detail/${params}`, METHOD.DELETE)
 }
+//获取工种列表
+export async function getTradesList() {
+    return request("/api/app/basic-configuration/base-datas", METHOD.GET)
+}
 
 
 
@@ -39,5 +43,6 @@ export default {
     getRdProjectsDetail,
     addRdProjectsDetailList,
     editRdProjectsDetailList,
-    deleteRdProjectsDetailList
+    deleteRdProjectsDetailList,
+    getTradesList
 }
