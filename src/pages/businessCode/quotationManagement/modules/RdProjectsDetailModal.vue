@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal
-      width="80%"
+      :width="1280"
       :title="title"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
@@ -20,8 +20,6 @@
         bordered
       >
         <span slot="action" slot-scope="text, record, index">
-          &nbsp; -
-
           <a
             href="javascript:;"
             v-if="index == 0"
@@ -41,7 +39,7 @@
         <span slot="trades" slot-scope="text, record">
           <a-select
             v-model="record.trades"
-            style="width: 120px"
+            style="width: 110px"
             placeholder="工种"
             @change="changeTrades(record)"
           >
@@ -58,7 +56,7 @@
         <span slot="detailFeeType" slot-scope="text, record">
           <a-select
             v-model="record.detailFeeType"
-            style="width: 120px"
+            style="width: 110px"
             placeholder="类型"
             @change="changeFeeType(record)"
           >
@@ -72,7 +70,7 @@
           <a-select
             disabled
             v-model="record.engineerLevel"
-            style="width: 120px"
+            style="width: 80px"
             placeholder="等级"
           >
             <a-select-option :value="0">初级</a-select-option>
@@ -87,7 +85,7 @@
           <a-input
             :disabled="record.detailFeeType == 0"
             v-model="record.discountedRate"
-            style="width: 120px"
+            style="width: 50px"
           ></a-input>
         </span>
 
@@ -116,7 +114,7 @@ import cloneDeep from "lodash.clonedeep";
 
 const columns = [
   {
-    width: 100,
+    width: 70,
     title: "操作",
     dataIndex: "action",
     scopedSlots: {
@@ -133,7 +131,7 @@ const columns = [
   },
   {
     title: "费用说明",
-    width: "150px",
+    width: "130px",
     dataIndex: "feeDescription",
     scopedSlots: {
       customRender: "feeDescription",
@@ -141,7 +139,7 @@ const columns = [
   },
   {
     title: "工种",
-    width: "150px",
+    width: "130px",
     dataIndex: "trades",
     scopedSlots: {
       customRender: "trades",
@@ -149,7 +147,7 @@ const columns = [
   },
   {
     title: "费用类型",
-    width: "150px",
+    width: "130px",
     dataIndex: "detailFeeType",
     scopedSlots: {
       customRender: "detailFeeType",
@@ -157,7 +155,7 @@ const columns = [
   },
   {
     title: "工程师级别",
-    width: "150px",
+    width: "100px",
     dataIndex: "engineerLevel",
     scopedSlots: {
       customRender: "engineerLevel",
@@ -165,7 +163,7 @@ const columns = [
   },
   {
     title: "折扣率",
-    width: "100px",
+    width: "80px",
     dataIndex: "discountedRate",
     scopedSlots: {
       customRender: "discountedRate",
