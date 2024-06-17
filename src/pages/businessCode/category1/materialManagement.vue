@@ -35,7 +35,7 @@
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" @click="essentialData_edit(record)" style="margin-right: 5px;">编辑</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a> -->
+        <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
       <span slot="acceptType" slot-scope="text, record">
@@ -80,6 +80,62 @@ const columns = [
     scopedSlots: {
       customRender: "bomName"
     }
+  },
+  {
+    title: "9NC",
+    dataIndex: "nineNC",
+    scopedSlots: {
+      customRender: "nineNC"
+    }
+  },
+  {
+    title: "品牌",
+    dataIndex: "brand",
+    scopedSlots: {
+      customRender: "brand"
+    }
+  },
+  {
+    title: "规格",
+    dataIndex: "specification",
+    scopedSlots: {
+      customRender: "specification"
+    }
+  },
+  {
+    title: "型号",
+    dataIndex: "bomModel",
+    scopedSlots: {
+      customRender: "bomModel"
+    }
+  },
+  {
+    title: "物料库存数",
+    dataIndex: "inventoriesBomNum",
+    scopedSlots: {
+      customRender: "inventoriesBomNum"
+    }
+  },
+  {
+    title: "物料已使用数",
+    dataIndex: "usedBomNum",
+    scopedSlots: {
+      customRender: "usedBomNum"
+    }
+  },
+  {
+    title: "最近一次使用",
+    dataIndex: "recentUseBomNum",
+    scopedSlots: {
+      customRender: "recentUseBomNum"
+    }
+  },
+  {
+    title: "备注",
+    dataIndex: "remarks",
+    scopedSlots: {
+      customRender: "remarks"
+    }
   }
 ];
 
@@ -122,30 +178,30 @@ export default {
     },
     //获取列表数据
     getPageList() {
-        const params = {
-          skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
-          MaxResultCount: this.pagination.pageSize,
-          ...this.queryFrom
-        };
-        getPageList(params)
-          .then(res => {
-            if (res.code == 1) {
-              const pagination = {
-                ...this.pagination
-              };
-              pagination.total = res.data.totalCount;
-              this.pagination = pagination;
-              this.dataSource = res.data.items;
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.$message.error(res.message);
-            }
-          })
-          .catch(err => {
+      const params = {
+        skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
+        MaxResultCount: this.pagination.pageSize,
+        ...this.queryFrom
+      };
+      getPageList(params)
+        .then(res => {
+          if (res.code == 1) {
+            const pagination = {
+              ...this.pagination
+            };
+            pagination.total = res.data.totalCount;
+            this.pagination = pagination;
+            this.dataSource = res.data.items;
             this.loading = false;
-            console.log(err);
-          });
+          } else {
+            this.loading = false;
+            this.$message.error(res.message);
+          }
+        })
+        .catch(err => {
+          this.loading = false;
+          console.log(err);
+        });
     },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {

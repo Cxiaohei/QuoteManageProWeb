@@ -93,6 +93,13 @@ const columns = [
     scopedSlots: {
       customRender: "categoryType"
     }
+  },
+  {
+    title: "单价",
+    dataIndex: "unitPrice",
+    scopedSlots: {
+      customRender: "unitPrice"
+    }
   }
 ];
 export default {

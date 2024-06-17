@@ -11,7 +11,7 @@ export async function addEssentialDataList(params) {
 }
 //编辑内部物料
 export async function editEssentialDataList(params) {
-    params.baseDataId = params.id;
+    // params.baseDataId = params.id;
     return request("/api/app/bom-details/bom-detail-info", METHOD.PUT, params)
 }
 

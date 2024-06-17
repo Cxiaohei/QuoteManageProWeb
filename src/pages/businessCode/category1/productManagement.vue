@@ -81,6 +81,62 @@ const columns = [
     scopedSlots: {
       customRender: "productName"
     }
+  },
+  {
+    title: "产品线",
+    dataIndex: "productLine",
+    scopedSlots: {
+      customRender: "productLine"
+    }
+  },
+  {
+    title: "产品描述",
+    dataIndex: "description",
+    scopedSlots: {
+      customRender: "description"
+    }
+  },
+  {
+    title: "产品线",
+    dataIndex: "productLine",
+    scopedSlots: {
+      customRender: "productLine"
+    }
+  },
+  {
+    title: "标准价格",
+    dataIndex: "standardPrice",
+    scopedSlots: {
+      customRender: "standardPrice"
+    }
+  },
+  {
+    title: "成本价",
+    dataIndex: "costPrice",
+    scopedSlots: {
+      customRender: "costPrice"
+    }
+  },
+  {
+    title: "当前报价",
+    dataIndex: "currentPrice",
+    scopedSlots: {
+      customRender: "currentPrice"
+    }
+  },
+  {
+    title: "最后一次报价时间",
+    dataIndex: "lastQuoteTime",
+    scopedSlots: {
+      customRender: "lastQuoteTime"
+    }
+  },
+  {
+    title: "备注",
+    dataIndex: "remarks",
+    scopedSlots: {
+      customRender: "remarks"
+    }
   }
 ];
 

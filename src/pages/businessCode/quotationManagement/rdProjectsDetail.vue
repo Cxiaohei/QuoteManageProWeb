@@ -21,7 +21,7 @@
       <a-button
         type="primary"
         @click="addChildren(item.title, item.detailType)"
-        style="margin-bottom: 5px"
+        style="margin-bottom: 15px"
         >新增</a-button
       >
       <a-table

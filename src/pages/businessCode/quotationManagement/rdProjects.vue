@@ -104,10 +104,31 @@ const columns = [
     },
   },
   {
-    title: "产品定义",
-    dataIndex: "haveProductDefinitions",
+    title: "发起人姓名",
+    dataIndex: "createUserName",
     scopedSlots: {
-      customRender: "haveProductDefinitions",
+      customRender: "createUserName",
+    },
+  },
+  {
+    title: "项目总费用",
+    dataIndex: "totalFee",
+    scopedSlots: {
+      customRender: "totalFee",
+    },
+  },
+  {
+    title: "人工总费用",
+    dataIndex: "laborCost",
+    scopedSlots: {
+      customRender: "laborCost",
+    },
+  },
+  {
+    title: "其他费用",
+    dataIndex: "otherFee",
+    scopedSlots: {
+      customRender: "otherFee",
     },
   },
 ];

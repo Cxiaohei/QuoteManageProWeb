@@ -80,6 +80,62 @@ const columns = [
     scopedSlots: {
       customRender: "bomName"
     }
+  },
+  {
+    title: "物料代码",
+    dataIndex: "bomCode",
+    scopedSlots: {
+      customRender: "bomCode"
+    }
+  },
+  {
+    title: "品牌",
+    dataIndex: "brand",
+    scopedSlots: {
+      customRender: "brand"
+    }
+  },
+  {
+    title: "规格",
+    dataIndex: "specification",
+    scopedSlots: {
+      customRender: "specification"
+    }
+  },
+  {
+    title: "型号",
+    dataIndex: "bomModel",
+    scopedSlots: {
+      customRender: "bomModel"
+    }
+  },
+  {
+    title: "物料库存数",
+    dataIndex: "inventoriesBomNum",
+    scopedSlots: {
+      customRender: "inventoriesBomNum"
+    }
+  },
+  {
+    title: "物料已使用数",
+    dataIndex: "usedBomNum",
+    scopedSlots: {
+      customRender: "usedBomNum"
+    }
+  },
+  {
+    title: "最近一次使用",
+    dataIndex: "recentUseBomNum",
+    scopedSlots: {
+      customRender: "recentUseBomNum"
+    }
+  },
+  {
+    title: "备注",
+    dataIndex: "remarks",
+    scopedSlots: {
+      customRender: "remarks"
+    }
   }
 ];
 

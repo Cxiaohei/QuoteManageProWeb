@@ -21,7 +21,12 @@
           :key="index"
           :label="item.label"
         >
-          <a-input v-model="queryFrom[item.key]" style="width: 150px" :placeholder="item.label"></a-input>
+        <a-select v-model="queryFrom[item.key]" style="width: 150px;" placeholder="物料工艺" v-if="item.key=='bomCraft'">
+            <a-select-option :value="0">贴片</a-select-option>
+            <a-select-option :value="5">插件</a-select-option>
+            <a-select-option :value="10">手工焊</a-select-option>
+          </a-select>
+          <a-input v-else v-model="queryFrom[item.key]" style="width: 150px" :placeholder="item.label"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -108,6 +113,22 @@ export default {
         {
           label: "备注",
           key: "remarks"
+        },
+        {
+          label: "备用1",
+          key: "spareColumOne"
+        },
+        {
+          label: "备用2",
+          key: "spareColumTwo"
+        },
+        {
+          label: "备用3",
+          key: "spareColumThree"
+        },
+        {
+          label: "备用4",
+          key: "spareColumFour"
         }
       ],
       rules: {
