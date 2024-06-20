@@ -197,13 +197,29 @@ export default {
           key: "createUserName",
           type: "string"
         }
+        ,
+        {
+          label: "总人工费",
+          key: "laborCost",
+          type: "string"
+        },
+        {
+          label: "其他费用汇总",
+          key: "otherFee",
+          type: "string"
+        },
+        {
+          label: "项目总费用",
+          key: "totalFee",
+          type: "string"
+        }
       ],
       // 所有子项
       AlldetailListChildren: [
         {
           key: "definitionDetails",
           hasKey: "haveProductDefinitions",
-          moneyHasKey: "definitionsMoney",
+          moneyHasKey: "productDefinitionsMoney",
           detailType: 0,
           title: " 产品定义"
         },
@@ -250,7 +266,7 @@ export default {
           title: " 认证"
         },
         {
-          key: "definitionDetails",
+          key: "otherFeeDetails",
           hasKey: "haveOtherFee",
           moneyHasKey: "otherFeeMoney",
           detailType: 7,
