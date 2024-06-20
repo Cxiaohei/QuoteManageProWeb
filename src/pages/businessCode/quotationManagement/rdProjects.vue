@@ -8,17 +8,11 @@
           </a-space>
         </a-form-item>
         <a-form-item>
-          <a-input
-            v-model.trim="queryFrom.Filter"
-            style="width: 120px"
-            placeholder="关键字"
-          ></a-input>
+          <a-input v-model.trim="queryFrom.Filter" style="width: 120px" placeholder="关键字"></a-input>
         </a-form-item>
         <a-form-item>
           <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist"
-              >查询</a-button
-            >
+            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
@@ -39,39 +33,41 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="rdProjectsDetail(record, 'detail')"
-          >详情</a
-        >
+        <a
+          href="javascript:;"
+          @click="rdProjectsDetail(record, 'detail')"
+          style="margin-right: 5px;"
+        >详情</a>
+        <a href="javascript:;" @click="calculateProjects(record, 'detail')">评分</a>
         <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
       </span>
 
       <span slot="categoryLevel" slot-scope="text, record">
         {{
-          record.categoryLevel == 0
-            ? "初级"
-            : record.categoryLevel == 1
-            ? "中级"
-            : record.categoryLevel == 2
-            ? "高级"
-            : "资深"
+        record.categoryLevel == 0
+        ? "初级"
+        : record.categoryLevel == 1
+        ? "中级"
+        : record.categoryLevel == 2
+        ? "高级"
+        : "资深"
         }}
       </span>
-      <span slot="categoryType" slot-scope="text, record">
-        {{ record.categoryType == 0 ? "岗位" : "-" }}
-      </span>
+      <span
+        slot="categoryType"
+        slot-scope="text, record"
+      >{{ record.categoryType == 0 ? "岗位" : "-" }}</span>
       <span slot="creationTime" slot-scope="text, record">
         {{
-          record.creationTime
-            ? record.creationTime.substring(0, 19).replace("T", "/")
-            : "/"
+        record.creationTime
+        ? record.creationTime.substring(0, 19).replace("T", "/")
+        : "/"
         }}
       </span>
     </a-table>
 
-    <RdProjectsModal
-      ref="RdProjectsModalRefs"
-      @ok="getPageList"
-    ></RdProjectsModal>
+    <RdProjectsModal ref="RdProjectsModalRefs" @ok="getPageList"></RdProjectsModal>
+    <CalculateProjectsModal ref="CalculateProjectsModalRefs" @ok="getPageList"></CalculateProjectsModal>
   </a-card>
 </template>
       
@@ -80,65 +76,66 @@ import { getPageList } from "@/services/businessCode/quotationManagement/rdProje
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import RdProjectsModal from "./modules/RdProjectsModal.vue";
+import CalculateProjectsModal from "./modules/CalculateProjectsModal.vue";
 
 const columns = [
   {
     width: 100,
     title: "操作",
     scopedSlots: {
-      customRender: "action",
-    },
+      customRender: "action"
+    }
   },
   {
     title: "研发项目编号",
     dataIndex: "projectNo",
     scopedSlots: {
-      customRender: "projectNo",
-    },
+      customRender: "projectNo"
+    }
   },
   {
     title: "研发项目名称",
     dataIndex: "projectName",
     scopedSlots: {
-      customRender: "projectName",
-    },
+      customRender: "projectName"
+    }
   },
   {
     title: "发起人姓名",
     dataIndex: "createUserName",
     scopedSlots: {
-      customRender: "createUserName",
-    },
+      customRender: "createUserName"
+    }
   },
   {
     title: "项目总费用",
     dataIndex: "totalFee",
     scopedSlots: {
-      customRender: "totalFee",
-    },
+      customRender: "totalFee"
+    }
   },
   {
     title: "人工总费用",
     dataIndex: "laborCost",
     scopedSlots: {
-      customRender: "laborCost",
-    },
+      customRender: "laborCost"
+    }
   },
   {
     title: "其他费用",
     dataIndex: "otherFee",
     scopedSlots: {
-      customRender: "otherFee",
-    },
-  },
+      customRender: "otherFee"
+    }
+  }
 ];
 export default {
-  components: { RdProjectsModal },
+  components: { RdProjectsModal, CalculateProjectsModal },
   data() {
     return {
       selectedRowKeys: [],
       queryFrom: {
-        processStepName: "",
+        processStepName: ""
       },
       loading: true,
       dataSource: [],
@@ -147,8 +144,8 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        showTotal: (total) => `总计 ${total} 条`,
-      },
+        showTotal: total => `总计 ${total} 条`
+      }
     };
   },
   mounted() {},
@@ -156,7 +153,7 @@ export default {
     this.getPageList();
   },
   computed: {
-    ...mapGetters("account", ["organizationId"]),
+    ...mapGetters("account", ["organizationId"])
   },
   methods: {
     checkPermission,
@@ -173,22 +170,26 @@ export default {
       this.$router.push({
         path: "rdProjectsDetail",
         query: {
-          id: record.id,
-        },
+          id: record.id
+        }
       });
+    },
+    //评分
+    calculateProjects(record) {
+      this.$refs.CalculateProjectsModalRefs.openModules(record, "add");
     },
     //获取列表数据
     getPageList() {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        ...this.queryFrom,
+        ...this.queryFrom
       };
       getPageList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             const pagination = {
-              ...this.pagination,
+              ...this.pagination
             };
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
@@ -199,7 +200,7 @@ export default {
             this.$message.error(res.message);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           console.log(err);
         });
@@ -211,7 +212,7 @@ export default {
     //页数切换
     handleTableChange(pagination) {
       const pager = {
-        ...this.pagination,
+        ...this.pagination
       };
       pager.current = pagination.current;
       this.pagination = pager;
@@ -239,8 +240,8 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    },
-  },
+    }
+  }
 };
 </script>
       

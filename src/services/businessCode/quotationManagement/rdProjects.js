@@ -34,6 +34,20 @@ export async function getTradesList() {
     return request("/api/app/basic-configuration/base-datas", METHOD.GET)
 }
 
+//计算项目得分
+export async function calculateProjectScore(params) {
+    return request(`/api/app/develop-project/calculate-project-score`, METHOD.POST, params)
+}
+//设置评分
+export async function setProjectScore(params) {
+    return request(`/api/app/develop-project/project-score`, METHOD.POST, params)
+}
+//获取项目得分详情
+export async function getProjectScore(Id) {
+    return request(`/api/app/develop-project/project-score-detail/${Id}`, METHOD.GET)
+}
+
+
 
 
 export default {
@@ -44,5 +58,7 @@ export default {
     addRdProjectsDetailList,
     editRdProjectsDetailList,
     deleteRdProjectsDetailList,
-    getTradesList
+    getTradesList,
+    calculateProjectScore,
+    setProjectScore
 }
