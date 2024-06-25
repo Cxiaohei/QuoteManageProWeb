@@ -27,9 +27,10 @@
             <a-select-option :value="3">资深</a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item style="width: 31%;" label="岗位" prop="categoryType">
-          <a-select v-model="queryFrom.categoryType" style="width: 150px;" placeholder="岗位">
+        <a-form-model-item style="width: 31%;" label="数据类型" prop="categoryType">
+          <a-select v-model="queryFrom.categoryType" style="width: 150px;" placeholder="数据类型">
             <a-select-option :value="0">岗位</a-select-option>
+            <a-select-option :value="1">物料种类</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="单价" prop="unitPrice">
