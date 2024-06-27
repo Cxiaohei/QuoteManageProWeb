@@ -21,90 +21,78 @@
     <a-table
       rowKey="id"
       :row-selection="{
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange,
-          }"
+        selectedRowKeys: selectedRowKeys,
+        onChange: onSelectChange,
+      }"
       :columns="columns"
       :dataSource="dataSource"
       @change="handleTableChange"
       :pagination="pagination"
       :loading="loading"
       :selectedRows.sync="selectedRows"
-      childrenColumnName="childrens"
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="essentialData_edit(record)" style="margin-right: 5px;">编辑</a>
-        <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a>-->
+        <a
+          href="javascript:;"
+          @click="rdProjectsDetail(record, 'detail')"
+          style="margin-right: 5px;"
+        >详情</a>
+        <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
       </span>
 
       <span slot="categoryLevel" slot-scope="text, record">
         {{
-        record.categoryLevel == 0 ?"初级":record.categoryLevel == 1 ?"中级":record.categoryLevel == 2 ?"高级":"资深"
+        record.categoryLevel == 0
+        ? "初级"
+        : record.categoryLevel == 1
+        ? "中级"
+        : record.categoryLevel == 2
+        ? "高级"
+        : "资深"
         }}
       </span>
-      <span slot="categoryType" slot-scope="text, record">
-        {{
-        record.categoryType == 0 ?"岗位":"-"
-        }}
-      </span>
-      <span slot="creationTime" slot-scope="text, record">
-        {{
-        record.creationTime?record.creationTime.substring(0,19).replace('T','/'):"/"
-        }}
-      </span>
+      <span
+        slot="categoryType"
+        slot-scope="text, record"
+      >{{ record.categoryType == 0 ? "岗位" : "-" }}</span>
     </a-table>
 
-    <EssentialDataModel ref="EssentialDataModelRefs" @ok="getPageList"></EssentialDataModel>
+    <BomQuoteModal ref="BomQuoteModalRefs" @ok="getPageList"></BomQuoteModal>
   </a-card>
 </template>
-    
-<script>
-import { getPageList } from "@/services/businessCode/category1/essentialData";
+      
+  <script>
+import { getPageList } from "@/services/businessCode/quotationManagement/bomQuote";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import EssentialDataModel from "./modules/EssentialDataModal.vue";
+import BomQuoteModal from "./modules/BomQuoteModal.vue";
 
 const columns = [
   {
-    width: 150,
+    width: 100,
     title: "操作",
     scopedSlots: {
       customRender: "action"
     }
   },
   {
-    title: "类别名称",
-    dataIndex: "categoryName",
+    title: "编号",
+    dataIndex: "bomQuoteNo",
     scopedSlots: {
-      customRender: "categoryName"
+      customRender: "bomQuoteNo"
     }
   },
   {
-    title: "级别",
-    dataIndex: "categoryLevel",
+    title: "数量",
+    dataIndex: "bomNum",
     scopedSlots: {
-      customRender: "categoryLevel"
-    }
-  },
-  {
-    title: "类别",
-    dataIndex: "categoryType",
-    scopedSlots: {
-      customRender: "categoryType"
-    }
-  },
-  {
-    title: "单价",
-    dataIndex: "unitPrice",
-    scopedSlots: {
-      customRender: "unitPrice"
+      customRender: "bomNum"
     }
   }
 ];
 export default {
-  components: { EssentialDataModel },
+  components: { BomQuoteModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -133,11 +121,20 @@ export default {
     checkPermission,
     //新增
     add_pagelist() {
-      this.$refs.EssentialDataModelRefs.openModules("add");
+      this.$refs.BomQuoteModalRefs.openModules("add");
     },
     //编辑
     essentialData_edit(record) {
-      this.$refs.EssentialDataModelRefs.openModules("edit", record);
+      this.$refs.BomQuoteModalRefs.openModules("edit", record);
+    },
+    //详情页
+    rdProjectsDetail(record) {
+      this.$router.push({
+        path: "bomQuoteDetail",
+        query: {
+          id: record.id
+        }
+      });
     },
     //获取列表数据
     getPageList() {
@@ -155,7 +152,6 @@ export default {
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
             this.dataSource = res.data.items;
-            // this.dataSource = this.buildTree(res.data.items);
             this.loading = false;
           } else {
             this.loading = false;
@@ -166,39 +162,6 @@ export default {
           this.loading = false;
           console.log(err);
         });
-    },
-    //处理原始数据为树
-    buildTree(items) {
-      // 创建一个 Map 来存储节点，以便快速查找
-      const nodeMap = new Map(
-        items.map(item => [item.id, { ...item, children: [] }])
-      );
-
-      // 遍历所有节点，构建树形结构
-      items.forEach(item => {
-        const parentId = item.parentId;
-        if (parentId && nodeMap.has(parentId)) {
-          // 如果节点有 parentId，则将其添加到其父节点的 children 数组中
-          nodeMap.get(parentId).children.push(nodeMap.get(item.id));
-        } else {
-          // 否则，将节点视为根节点并添加到结果数组中（这里我们假设没有根节点数组，只是示例）
-          // 你可以根据需要修改此部分来收集根节点
-        }
-      });
-
-      // 从 Map 中获取根节点（假设 parentId 为 null 或 'root' 的节点是根节点）
-      const roots = [];
-      nodeMap.forEach((node, id) => {
-        if (
-          !node.parentId ||
-          node.parentId === "root" ||
-          node.parentId === null
-        ) {
-          roots.push(node);
-        }
-      });
-
-      return roots; // 返回根节点数组
     },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {
@@ -239,8 +202,8 @@ export default {
   }
 };
 </script>
-    
-    <style lang="less" scoped>
+      
+      <style lang="less" scoped>
 .queryFromBox {
   margin-bottom: 5px;
   .btnListBox {
@@ -251,4 +214,4 @@ export default {
   }
 }
 </style>
-    
+      

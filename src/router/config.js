@@ -95,6 +95,31 @@ const options = {
               },
               component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetail'),
             },
+            {
+              path: 'odmQuote',
+              name: 'ODM报价',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/odmQuote'),
+            },
+            {
+              path: 'bomQuote',
+              name: 'BOM报价',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/bomQuote'),
+            },
+            {
+              path: 'bomQuoteDetail',
+              name: 'BOM报价详情',
+              meta: {
+                invisible: true,
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/bomQuoteDetail'),
+            },
           ]
         },
 

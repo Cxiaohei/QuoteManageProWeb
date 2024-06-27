@@ -33,6 +33,31 @@
             <a-select-option :value="1">物料种类</a-select-option>
           </a-select>
         </a-form-model-item>
+        <a-form-model-item
+          style="width: 31%;"
+          label="物料类型"
+          prop="dsBaseDataType"
+          v-if="queryFrom.categoryType==1"
+        >
+          <a-select v-model="queryFrom.dsBaseDataType" style="width: 150px;" placeholder="物料类型">
+            <a-select-option :value="0">结构料</a-select-option>
+            <a-select-option :value="1">电子料</a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item style="width: 31%;" label="类别父级" prop="parentId" help="不选则为一级类别">
+          <a-select
+            v-model="queryFrom.parentId"
+            style="width: 150px;"
+            placeholder="类别父级"
+            allowClear
+          >
+            <a-select-option
+              :value="item.id"
+              v-for="(item,index) in ParentBaseList"
+              :key="index"
+            >{{item.categoryName}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="单价" prop="unitPrice">
           <a-input v-model="queryFrom.unitPrice" style="width: 150px" placeholder="类别名称"></a-input>
         </a-form-model-item>
@@ -44,7 +69,8 @@
 <script>
 import {
   addEssentialDataList,
-  editEssentialDataList
+  editEssentialDataList,
+  getParentBase
 } from "@/services/businessCode/category1/essentialData";
 import cloneDeep from "lodash.clonedeep";
 
@@ -57,6 +83,8 @@ export default {
       uservisible: false,
       queryFrom: {},
       confirmLoading: false,
+      ParentBaseList: [],
+      parentId: "", //父级ID
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
@@ -73,6 +101,13 @@ export default {
   methods: {
     openModules(type, info) {
       this.queryFrom = {};
+      this.confirmLoading = true;
+      //获取父级数据
+      getParentBase().then(res => {
+        this.ParentBaseList = res.data;
+        this.confirmLoading = false;
+      });
+
       if (type == "add") {
         this.title = "新增";
       } else {

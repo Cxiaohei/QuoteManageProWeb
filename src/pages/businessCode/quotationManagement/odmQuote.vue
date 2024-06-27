@@ -21,9 +21,9 @@
     <a-table
       rowKey="id"
       :row-selection="{
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange,
-          }"
+        selectedRowKeys: selectedRowKeys,
+        onChange: onSelectChange,
+      }"
       :columns="columns"
       :dataSource="dataSource"
       @change="handleTableChange"
@@ -33,32 +33,48 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="productData_edit(record)" style="margin-right: 5px;">编辑</a>
-        <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a> -->
+        <a
+          href="javascript:;"
+          @click="rdProjectsDetail(record, 'detail')"
+          style="margin-right: 5px;"
+        >详情</a>
+        <a href="javascript:;" @click="calculateProjects(record, 'detail')">评分</a>
+        <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
       </span>
 
-      <span slot="acceptType" slot-scope="text, record">
+      <span slot="categoryLevel" slot-scope="text, record">
         {{
-        record.acceptType == 0 ?"固定资产":"调拨资产"
+        record.categoryLevel == 0
+        ? "初级"
+        : record.categoryLevel == 1
+        ? "中级"
+        : record.categoryLevel == 2
+        ? "高级"
+        : "资深"
         }}
       </span>
+      <span
+        slot="categoryType"
+        slot-scope="text, record"
+      >{{ record.categoryType == 0 ? "岗位" : "-" }}</span>
       <span slot="creationTime" slot-scope="text, record">
         {{
-        record.creationTime?record.creationTime.substring(0,19).replace('T','/'):"/"
+        record.creationTime
+        ? record.creationTime.substring(0, 19).replace("T", "/")
+        : "/"
         }}
       </span>
     </a-table>
-    <ProductManagementModal ref="ProductManagementModalRefs" @ok="getPageList"></ProductManagementModal>
-  
+
+    <OdmQuoteModal ref="OdmQuoteModalRefs" @ok="getPageList"></OdmQuoteModal>
   </a-card>
 </template>
-    
-<script>
-import { getPageList } from "@/services/businessCode/category1/productManagement";
+      
+  <script>
+import { getPageList } from "@/services/businessCode/quotationManagement/odmQuote";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import ProductManagementModal from "./modules/ProductManagementModal";
+import OdmQuoteModal from "./modules/OdmQuoteModal.vue";
 
 const columns = [
   {
@@ -69,71 +85,50 @@ const columns = [
     }
   },
   {
-    title: "编号",
-    dataIndex: "productNo",
+    title: "研发项目编号",
+    dataIndex: "projectNo",
     scopedSlots: {
-      customRender: "productNo"
+      customRender: "projectNo"
     }
   },
   {
-    title: "名称",
-    dataIndex: "productName",
+    title: "研发项目名称",
+    dataIndex: "projectName",
     scopedSlots: {
-      customRender: "productName"
+      customRender: "projectName"
     }
   },
   {
-    title: "产品线",
-    dataIndex: "productLine",
+    title: "发起人姓名",
+    dataIndex: "createUserName",
     scopedSlots: {
-      customRender: "productLine"
+      customRender: "createUserName"
     }
   },
   {
-    title: "产品描述",
-    dataIndex: "description",
+    title: "项目总费用",
+    dataIndex: "totalFee",
     scopedSlots: {
-      customRender: "description"
+      customRender: "totalFee"
     }
   },
   {
-    title: "标准价格",
-    dataIndex: "standardPrice",
+    title: "人工总费用",
+    dataIndex: "laborCost",
     scopedSlots: {
-      customRender: "standardPrice"
+      customRender: "laborCost"
     }
   },
   {
-    title: "成本价",
-    dataIndex: "costPrice",
+    title: "其他费用",
+    dataIndex: "otherFee",
     scopedSlots: {
-      customRender: "costPrice"
-    }
-  },
-  {
-    title: "当前报价",
-    dataIndex: "currentPrice",
-    scopedSlots: {
-      customRender: "currentPrice"
-    }
-  },
-  {
-    title: "最后一次报价时间",
-    dataIndex: "lastQuoteTime",
-    scopedSlots: {
-      customRender: "lastQuoteTime"
-    }
-  },
-  {
-    title: "备注",
-    dataIndex: "remarks",
-    scopedSlots: {
-      customRender: "remarks"
+      customRender: "otherFee"
     }
   }
 ];
-
 export default {
+  components: { OdmQuoteModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -151,12 +146,10 @@ export default {
       }
     };
   },
-  components: { ProductManagementModal },
   mounted() {},
   created() {
     this.getPageList();
   },
-  activated() {},
   computed: {
     ...mapGetters("account", ["organizationId"])
   },
@@ -164,52 +157,55 @@ export default {
     checkPermission,
     //新增
     add_pagelist() {
-      this.$refs.ProductManagementModalRefs.openModules("add");
+      this.$refs.OdmQuoteModalRefs.openModules("add");
     },
     //编辑
-    productData_edit(record) {
-      this.$refs.ProductManagementModalRefs.openModules("edit", record);
+    essentialData_edit(record) {
+      this.$refs.OdmQuoteModalRefs.openModules("edit", record);
+    },
+    //详情页
+    rdProjectsDetail(record) {
+      this.$router.push({
+        path: "rdProjectsDetail",
+        query: {
+          id: record.id
+        }
+      });
+    },
+    //评分
+    calculateProjects(record) {
+      this.$refs.CalculateProjectsModalRefs.openModules(record, "add");
     },
     //获取列表数据
     getPageList() {
-        const params = {
-          skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
-          MaxResultCount: this.pagination.pageSize,
-          ...this.queryFrom
-        };
-        getPageList(params)
-          .then(res => {
-            if (res.code == 1) {
-              const pagination = {
-                ...this.pagination
-              };
-              pagination.total = res.data.totalCount;
-              this.pagination = pagination;
-              this.dataSource = res.data.items;
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.$message.error(res.message);
-            }
-          })
-          .catch(err => {
+      const params = {
+        skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
+        MaxResultCount: this.pagination.pageSize,
+        ...this.queryFrom
+      };
+      getPageList(params)
+        .then(res => {
+          if (res.code == 1) {
+            const pagination = {
+              ...this.pagination
+            };
+            pagination.total = res.data.totalCount;
+            this.pagination = pagination;
+            this.dataSource = res.data.items;
             this.loading = false;
-            console.log(err);
-          });
+          } else {
+            this.loading = false;
+            this.$message.error(res.message);
+          }
+        })
+        .catch(err => {
+          this.loading = false;
+          console.log(err);
+        });
     },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys;
-    },
-    // 编辑
-    pinbanOrder_edit(record, type) {
-      this.$router.push({
-        path: "actionFixedAssets",
-        query: {
-          id: record.id,
-          type
-        }
-      });
     },
     //页数切换
     handleTableChange(pagination) {
@@ -246,8 +242,8 @@ export default {
   }
 };
 </script>
-    
-    <style lang="less" scoped>
+      
+      <style lang="less" scoped>
 .queryFromBox {
   margin-bottom: 5px;
   .btnListBox {
@@ -258,4 +254,4 @@ export default {
   }
 }
 </style>
-    
+      

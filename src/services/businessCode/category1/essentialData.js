@@ -15,8 +15,15 @@ export async function editEssentialDataList(params) {
     return request("/api/app/basic-configuration/base-data-info", METHOD.PUT, params)
 }
 
+
+//获取父级基础数据
+export async function getParentBase() {
+    return request("/api/app/basic-configuration/parent-base-datas", METHOD.GET)
+}
+
 export default {
     getPageList,
     addEssentialDataList,
-    editEssentialDataList
+    editEssentialDataList,
+    getParentBase
 }
