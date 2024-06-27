@@ -46,7 +46,7 @@
           </a-select>
         </a-form-model-item>
       </a-form-model>
-      {{detailDataList1}}
+      <!-- {{detailDataList1}} -->
       <div style="padding-top:20px">
         <h3>结构料</h3>
         <a-table
