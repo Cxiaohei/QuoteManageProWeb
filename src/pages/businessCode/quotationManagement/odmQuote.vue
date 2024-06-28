@@ -35,10 +35,9 @@
       <span slot="action" slot-scope="text, record">
         <a
           href="javascript:;"
-          @click="rdProjectsDetail(record, 'detail')"
+          @click="odmQuoteDetail(record, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
-        <a href="javascript:;" @click="calculateProjects(record, 'detail')">评分</a>
         <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
       </span>
 
@@ -85,47 +84,33 @@ const columns = [
     }
   },
   {
-    title: "研发项目编号",
-    dataIndex: "projectNo",
+    title: "ODM编号",
+    dataIndex: "odmQuoteNo",
     scopedSlots: {
-      customRender: "projectNo"
+      customRender: "odmQuoteNo"
     }
   },
   {
-    title: "研发项目名称",
-    dataIndex: "projectName",
+    title: "ODM名称",
+    dataIndex: "odmQuoteName",
     scopedSlots: {
-      customRender: "projectName"
+      customRender: "odmQuoteName"
     }
   },
   {
-    title: "发起人姓名",
-    dataIndex: "createUserName",
+    title: "remarks",
+    dataIndex: "备注",
     scopedSlots: {
       customRender: "createUserName"
     }
   },
   {
-    title: "项目总费用",
-    dataIndex: "totalFee",
+    title: "产品名",
+    dataIndex: "productName",
     scopedSlots: {
-      customRender: "totalFee"
+      customRender: "productName"
     }
   },
-  {
-    title: "人工总费用",
-    dataIndex: "laborCost",
-    scopedSlots: {
-      customRender: "laborCost"
-    }
-  },
-  {
-    title: "其他费用",
-    dataIndex: "otherFee",
-    scopedSlots: {
-      customRender: "otherFee"
-    }
-  }
 ];
 export default {
   components: { OdmQuoteModal },
@@ -164,17 +149,13 @@ export default {
       this.$refs.OdmQuoteModalRefs.openModules("edit", record);
     },
     //详情页
-    rdProjectsDetail(record) {
+    odmQuoteDetail(record) {
       this.$router.push({
-        path: "rdProjectsDetail",
+        path: "odmQuoteDetail",
         query: {
           id: record.id
         }
       });
-    },
-    //评分
-    calculateProjects(record) {
-      this.$refs.CalculateProjectsModalRefs.openModules(record, "add");
     },
     //获取列表数据
     getPageList() {

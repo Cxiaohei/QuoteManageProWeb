@@ -155,7 +155,7 @@
           :pagination="false"
           bordered
         >
-        <span slot="action" slot-scope="text, record, index">
+          <span slot="action" slot-scope="text, record, index">
             <a-popconfirm
               v-if="record.isadd"
               title="确定新增该条数据吗?"
@@ -458,7 +458,7 @@ export default {
         this.ProductList = res.data;
       });
     },
-    
+
     onSelect(value, record, type) {
       console.log("onSelect", value);
       console.log(record);
@@ -483,8 +483,9 @@ export default {
     confirmAddList(record) {
       const params = {
         bomQuoteId: this.$route.query.id,
-        bomQuoteRelations: record
+        bomQuoteRelations: [record]
       };
+      params.bomQuoteRelations[0].id = "";
       addBomDetail(params).then(res => {
         if (res.code == 1) {
           this.$message.success("添加成功");

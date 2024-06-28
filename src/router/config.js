@@ -104,6 +104,14 @@ const options = {
               component: () => import('@/pages/businessCode/quotationManagement/odmQuote'),
             },
             {
+              path: 'odmQuoteDetail',
+              name: 'ODM详情',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/odmQuoteDetail'),
+            },
+            {
               path: 'bomQuote',
               name: 'BOM报价',
               meta: {

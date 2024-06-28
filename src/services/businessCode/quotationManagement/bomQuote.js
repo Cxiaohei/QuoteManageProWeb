@@ -11,7 +11,7 @@ export async function getAllProductList() {
         "maxResultCount": 0,
         "skipCount": 0,
         "pageIndx": 0,
-        "filter": "string"
+        // "filter": "string"
     })
 }
 

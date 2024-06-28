@@ -42,7 +42,7 @@
               :value="item.id"
               v-for="(item,index) in ProductList"
               :key="index"
-            >{{item.productName}}</a-select-option>
+            >{{item.productNo}}</a-select-option>
           </a-select>
         </a-form-model-item>
       </a-form-model>
@@ -489,6 +489,9 @@ export default {
         ...this.queryFrom,
         bomQuoteRelations: [...this.detailDataList1, ...this.detailDataList2]
       };
+      params.bomQuoteRelations.map(item => {
+        item.id = "";
+      });
       addBomDataList(params)
         .then(res => {
           if (res.code == 1) {
