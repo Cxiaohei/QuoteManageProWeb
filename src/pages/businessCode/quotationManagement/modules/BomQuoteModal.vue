@@ -489,6 +489,9 @@ export default {
         ...this.queryFrom,
         bomQuoteRelations: [...this.detailDataList1, ...this.detailDataList2]
       };
+      if (this.$route.path == "/quotationManagement/odmQuoteDetail") {
+        params.odmQuoteId = this.$route.query.id;
+      }
       params.bomQuoteRelations.map(item => {
         item.id = "";
       });
@@ -496,6 +499,14 @@ export default {
         .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
+            if (this.$route.path == "/quotationManagement/odmQuoteDetail") {
+              this.$router.push({
+                path: "bomQuoteDetail",
+                query: {
+                  id: res.data.id
+                }
+              });
+            }
             this.$emit("ok");
             this.uservisible = false;
           } else {

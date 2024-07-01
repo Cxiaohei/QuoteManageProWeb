@@ -107,6 +107,7 @@ const options = {
               path: 'odmQuoteDetail',
               name: 'ODM详情',
               meta: {
+                invisible: true,
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
               component: () => import('@/pages/businessCode/quotationManagement/odmQuoteDetail'),
@@ -146,14 +147,6 @@ const options = {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
               component: () => import('@/pages/businessCode/category1/productManagement'),
-            },
-            {
-              path: 'category2list2',
-              name: '目录1',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category2/list1'),
             },
           ]
         },

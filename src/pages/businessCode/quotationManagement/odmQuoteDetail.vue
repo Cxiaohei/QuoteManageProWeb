@@ -20,14 +20,14 @@
           <a-input
             v-else-if="item.type == 'string'"
             v-model="queryFrom[item.key]"
-            style="width: 150px"
+            style="width: 250px"
             :placeholder="item.label"
           ></a-input>
           <!-- 产品下拉 -->
           <a-select
             v-else-if="item.label == '产品'"
             v-model="queryFrom[item.key]"
-            style="width: 150px"
+            style="width: 250px"
             :placeholder="item.label"
             allowClear
           >
@@ -35,23 +35,106 @@
               :value="item.id"
               v-for="(item,index) in ProductList"
               :key="index"
-            >{{item.productName}}</a-select-option>
+            >{{item.productNo}}</a-select-option>
           </a-select>
         </a-form-model-item>
       </a-form-model>
+
+      <div style="padding-top: 30px;">
+        <h3>
+          研发项目
+          <a-button type="primary" @click="addOdmRdProjects">添加</a-button>
+        </h3>
+        <a-table :columns="columns1" :data-source="data11" :pagination="false">
+          <span slot="action" slot-scope="text, record">
+            <a
+              href="javascript:;"
+              @click="RdProjectsDetail(record, 'detail')"
+              style="margin-right: 5px;"
+            >详情</a>
+          </span>
+        </a-table>
+      </div>
+      <div style="padding-top: 30px;">
+        <h3>
+          BOM报价
+          <a-button type="primary" @click="addBomQuote">添加</a-button>
+        </h3>
+        <a-table :columns="columns2" :data-source="data22" :pagination="false">
+          <span slot="action" slot-scope="text, record">
+            <a
+              href="javascript:;"
+              @click="bomDetail(record, 'detail')"
+              style="margin-right: 5px;"
+            >详情</a>
+          </span>
+        </a-table>
+      </div>
     </a-card>
+
+    <OdmRdProjectsModal ref="OdmRdProjectsModalRefs" @ok="getDetail"></OdmRdProjectsModal>
+    <BomQuoteModal ref="BomQuoteModalRefs" @ok="getDetail"></BomQuoteModal>
   </div>
 </template>
 
 <script>
 import {
   getAllProductList,
-  OdmDetailDataList
+  OdmDetailDataList,
+  getRdProjectsDetail,
+  BomDetailDataList
 } from "@/services/businessCode/quotationManagement/odmQuote";
+import OdmRdProjectsModal from "./modules/OdmRdProjectsModal.vue";
+import BomQuoteModal from "./modules/BomQuoteModal.vue";
+
 import cloneDeep from "lodash.clonedeep";
+
+const columns1 = [
+  {
+    width: 100,
+    title: "操作",
+    scopedSlots: {
+      customRender: "action"
+    }
+  },
+  {
+    title: "项目名",
+    dataIndex: "projectName",
+    key: "projectName"
+  },
+  {
+    title: "发起人",
+    dataIndex: "createUserName",
+    key: "createUserName"
+  }
+];
+const columns2 = [
+  {
+    width: 100,
+    title: "操作",
+    scopedSlots: {
+      customRender: "action"
+    }
+  },
+  {
+    dataIndex: "bomQuoteNo",
+    title: "报价单名称"
+  },
+  {
+    title: "产品",
+    dataIndex: "productNo",
+    key: "productNo"
+  },
+  {
+    title: "备注",
+    dataIndex: "remarks",
+    key: "remarks"
+  }
+];
 
 export default {
   name: "customerModal",
+  components: { OdmRdProjectsModal, BomQuoteModal },
   props: {},
   data() {
     return {
@@ -72,7 +155,7 @@ export default {
         },
         {
           label: "产品",
-          key: "productName",
+          key: "dsProductsId",
           type: "select"
         },
         {
@@ -90,7 +173,13 @@ export default {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
         ]
-      }
+      },
+      columns1,
+      columns2,
+      data11: [],
+      data22: [],
+      developProjectId: "",
+      bomQuoteId: ""
     };
   },
   created() {
@@ -106,6 +195,18 @@ export default {
         console.log("详情");
         this.queryFrom = res.data;
         console.log(res.data);
+        this.developProjectId = res.data.developProjectId;
+        this.bomQuoteId = res.data.bomQuoteId;
+        // console.log("项目详情");
+        getRdProjectsDetail(res.data.developProjectId).then(resDev => {
+          console.log(resDev.data);
+          this.data11 = [resDev.data];
+        });
+        // console.log("BOM详情");
+        BomDetailDataList(res.data.bomQuoteId).then(resBom => {
+          console.log(resBom.data);
+          this.data22 = [resBom.data];
+        });
       });
 
       //获取产品列表
@@ -113,7 +214,33 @@ export default {
         this.ProductList = res.data;
       });
     },
-
+    addOdmRdProjects() {
+      this.$refs.OdmRdProjectsModalRefs.openModules(
+        "add",
+        this.developProjectId
+      );
+    },
+    addBomQuote() {
+      this.$refs.BomQuoteModalRefs.openModules("add");
+    },
+    //项目详情
+    RdProjectsDetail(record) {
+      this.$router.push({
+        path: "rdProjectsDetail",
+        query: {
+          id: record.id
+        }
+      });
+    },
+    //详情页
+    bomDetail(record) {
+      this.$router.push({
+        path: "bomQuoteDetail",
+        query: {
+          id: record.id
+        }
+      });
+    },
     // //新增基础数据
     // addBomDataList() {
     //   this.logDataSource = [];

@@ -98,10 +98,10 @@ const columns = [
     }
   },
   {
-    title: "remarks",
-    dataIndex: "备注",
+    title: "备注",
+    dataIndex: "remarks",
     scopedSlots: {
-      customRender: "createUserName"
+      customRender: "remarks"
     }
   },
   {

@@ -29,10 +29,22 @@ export async function getAllProductList() {
 }
 
 
+//研发项目详情
+export async function getRdProjectsDetail(Id) {
+    return request(`/api/app/develop-project/dev-project-detail/${Id}`, METHOD.GET)
+}
+//bom详情
+export async function BomDetailDataList(Id) {
+    return request(`/api/app/bom-quote/bom-quote-detail/${Id}`, METHOD.GET)
+}
+
+
 
 export default {
     getPageList,
     addOdmDataList,
     OdmDetailDataList,
-    getAllProductList
+    getAllProductList,
+    getRdProjectsDetail,
+    BomDetailDataList
 }
