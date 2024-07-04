@@ -29,13 +29,13 @@ const progressStart = (to, from, next) => {
 const loginGuard = (to, from, next, options) => {
   const { message } = options
   // 去掉登录验证
-  next()
-  // if (!loginIgnore.includes(to) && !checkAuthorization()) {
-  //   message.warning('登录已失效，请重新登录')
-  //   next({path: '/login'})
-  // } else {
-  //   next()
-  // }
+  // next()
+  if (!loginIgnore.includes(to) && !checkAuthorization()) {
+    message.warning('登录已失效，请重新登录')
+    next({path: '/login'})
+  } else {
+    next()
+  }
 }
 
 /**

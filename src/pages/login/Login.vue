@@ -220,8 +220,6 @@ export default {
   methods: {
     ...mapMutations("account", ["setUser", "setPermissions", "setRoles"]),
     onSubmit(e) {
-      this.$message.success("登录成功", 3);
-      this.$router.push("/dashboard/home");
 
       e.preventDefault();
       this.form.validateFields(err => {

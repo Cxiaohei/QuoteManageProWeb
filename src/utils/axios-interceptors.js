@@ -22,26 +22,26 @@ const resp401 = {
    * @returns {Promise<never>}
    */
   onRejected(error, options) {
-    return
+    // return
     // 去掉登录验证
-    // const { router, message } = options
-    // if (error.response && error.response.status == 401) {
-    //   message.error('认证 token 已过期，请重新登录')
-    //   Cookie.remove(xsrfHeaderName)
-    //   router.push('/login');
-    //   return Promise.reject(error)
-    // }
-    // let msg = ''
-    // if(error.response && error.response.data && error.response.data.error_description){
-    //   msg = error.response.data.error_description
-    // }
-    // else if (error.response && error.response.data && error.response.data.error) {
-    //   msg = error.response.data.error.message
-    // } else {
-    //   msg = error.message
-    // }
-    // message.error(msg)
-    // return Promise.reject(error)
+    const { router, message } = options
+    if (error.response && error.response.status == 401) {
+      message.error('认证 token 已过期，请重新登录')
+      Cookie.remove(xsrfHeaderName)
+      router.push('/login');
+      return Promise.reject(error)
+    }
+    let msg = ''
+    if(error.response && error.response.data && error.response.data.error_description){
+      msg = error.response.data.error_description
+    }
+    else if (error.response && error.response.data && error.response.data.error) {
+      msg = error.response.data.error.message
+    } else {
+      msg = error.message
+    }
+    message.error(msg)
+    return Promise.reject(error)
   }
 }
 
@@ -74,13 +74,13 @@ const reqCommon = {
     const { message } = options
     const { url, xsrfCookieName, headers } = config
     // 去掉登录验证
-    // if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
-    //   message.warning('认证 token 已过期，请重新登录')
-    // }
-    // if (headers.Authorization && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
-    //   message.warning('认证 token 已过期，请重新登录')
-    // }
-    // config.headers['Authorization'] = Cookie.get(xsrfHeaderName)
+    if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+      message.warning('认证 token 已过期，请重新登录')
+    }
+    if (headers.Authorization && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+      message.warning('认证 token 已过期，请重新登录')
+    }
+    config.headers['Authorization'] = Cookie.get(xsrfHeaderName)
     return config
   },
   /**
