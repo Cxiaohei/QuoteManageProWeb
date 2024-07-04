@@ -2,7 +2,7 @@ import {request, METHOD} from '@/utils/request'
 import { transformAbpListQuery } from '@/utils/abp'
 
 export function getOrganizationsAllWithDetails(query) {
-  return request('/api/identity/organizations/all/details', METHOD.GET, query)
+  return request('/api/identity/organization-units/all/details', METHOD.GET, query)
 }
 
 /**
@@ -11,7 +11,7 @@ export function getOrganizationsAllWithDetails(query) {
  * @param {object} query
  */
 export function getOrganizationsWithDetails(query) {
-  return request('/api/identity/organizations/details', METHOD.GET, query)
+  return request('/api/identity/organization-units/details', METHOD.GET, query)
 }
 
 /**
@@ -19,51 +19,51 @@ export function getOrganizationsWithDetails(query) {
  * @param {object} query
  */
 export function getOrganizationsRoot() {
-  return request('/api/identity/organizations/root', METHOD.GET)
+  return request('/api/identity/organization-units/root', METHOD.GET)
 }
 
 export function getOrganizationSingleWithDetails(id) {
-  return request(`/api/identity/organizations/${id}/details`, METHOD.GET)
+  return request(`/api/identity/organization-units/${id}/details`, METHOD.GET)
 }
 
 export function getOrganizationSingle(id) {
-  return request(`/api/identity/organizations/${id}`, METHOD.GET)
+  return request(`/api/identity/organization-units/${id}`, METHOD.GET)
 }
 
 export function getOrganizationsAll() {
-  return request('/api/identity/organizations/all', METHOD.GET)
+  return request('/api/identity/organization-units/all', METHOD.GET)
 }
 
 export function getOrganizations(query) {
-  return request('/api/identity/organizations', METHOD.GET,transformAbpListQuery(query))
+  return request('/api/identity/organization-units', METHOD.GET,transformAbpListQuery(query))
 }
 
 export function getOrganizationChildren(pid) {
-  return request(`/api/identity/organizations/children/${pid}`, METHOD.GET)
+  return request(`/api/identity/organization-units/children/${pid}`, METHOD.GET)
 }
 
 export function getOrgUsers(query) {
-  return request('/api/identity/organizations/users', METHOD.GET,transformAbpListQuery(query))
+  return request('/api/identity/organization-units/users', METHOD.GET,transformAbpListQuery(query))
 }
 
 export function getOrgRoles(query) {
-  return request('/api/identity/organizations/roles', METHOD.GET,transformAbpListQuery(query))
+  return request('/api/identity/organization-units/roles', METHOD.GET,transformAbpListQuery(query))
 }
 
 export function createOrganization(payload) {
-  return request('/api/identity/organizations', METHOD.POST, payload)
+  return request('/api/identity/organization-units', METHOD.POST, payload)
 }
 
 export function updateOrganization(id, payload) {
-  return request(`/api/identity/organizations/${id}`, METHOD.PUT, payload)
+  return request(`/api/identity/organization-units/${id}`, METHOD.PUT, payload)
 }
 
 export function deleteOrganization(id) {
-  return request(`/api/identity/organizations/${id}`, METHOD.DELETE)
+  return request(`/api/identity/organization-units/${id}`, METHOD.DELETE)
 }
 export async function createUpdate(params) {
   if (params.id) {
-      return request(`/api/identity/organizations/${params.id}`, METHOD.PUT, params)
+      return request(`/api/identity/organization-units/${params.id}`, METHOD.PUT, params)
   }
-  return request('/api/identity/organizations', METHOD.POST, params)
+  return request('/api/identity/organization-units', METHOD.POST, params)
 }
