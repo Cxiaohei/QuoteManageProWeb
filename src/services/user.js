@@ -20,7 +20,7 @@ export async function login(username, password, tenant) {
     client_id: 'QuoteManagePro_App',
     client_secret: '1q2w3e*',
     grant_type: "password",
-    scope:'IdentityService', //AbpVnext  Framework
+    scope:'QuoteManagePro', //AbpVnext  Framework
     // scope:"Framework" //AbpVnext  Framework
   };
   let config = {
