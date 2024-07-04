@@ -215,7 +215,7 @@ export default {
   },
   mounted() {
     //获取验证码
-    this.getImgCode();
+    // this.getImgCode();
   },
   methods: {
     ...mapMutations("account", ["setUser", "setPermissions", "setRoles"]),

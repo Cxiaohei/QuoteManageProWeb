@@ -27,8 +27,8 @@ const resp401 = {
     const { router, message } = options
     if (error.response && error.response.status == 401) {
       message.error('认证 token 已过期，请重新登录')
-      Cookie.remove(xsrfHeaderName)
-      router.push('/login');
+      // Cookie.remove(xsrfHeaderName)
+      // router.push('/login');
       return Promise.reject(error)
     }
     let msg = ''
@@ -74,12 +74,12 @@ const reqCommon = {
     const { message } = options
     const { url, xsrfCookieName, headers } = config
     // 去掉登录验证
-    if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
-      message.warning('认证 token 已过期，请重新登录')
-    }
-    if (headers.Authorization && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
-      message.warning('认证 token 已过期，请重新登录')
-    }
+    // if (url.indexOf('login') === -1 && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+    //   message.warning('认证 token 已过期，请重新登录')
+    // }
+    // if (headers.Authorization && xsrfCookieName && !Cookie.get(xsrfCookieName)) {
+    //   message.warning('认证 token 已过期，请重新登录')
+    // }
     config.headers['Authorization'] = Cookie.get(xsrfHeaderName)
     return config
   },

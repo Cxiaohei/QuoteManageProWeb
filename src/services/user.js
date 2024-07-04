@@ -18,7 +18,7 @@ export async function login(username, password, tenant) {
     username: username,
     password: password,
     client_id: 'QuoteManagePro_App',
-    client_secret: '1q2w3e*',
+    // client_secret: '1q2w3e*',
     grant_type: "password",
     scope:'QuoteManagePro', //AbpVnext  Framework
     // scope:"Framework" //AbpVnext  Framework
