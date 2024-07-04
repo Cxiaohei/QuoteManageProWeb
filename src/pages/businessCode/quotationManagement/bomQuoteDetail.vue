@@ -35,7 +35,7 @@
               :value="item.id"
               v-for="(item,index) in ProductList"
               :key="index"
-            >{{item.productName}}</a-select-option>
+            >{{item.productNo}}</a-select-option>
           </a-select>
         </a-form-model-item>
       </a-form-model>

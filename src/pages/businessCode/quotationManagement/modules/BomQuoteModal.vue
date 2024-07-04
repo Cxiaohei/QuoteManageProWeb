@@ -8,7 +8,6 @@
       @ok="handleOk"
       @cancel="handleCancel"
     >
-    {{ dsProductsId }}
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -36,6 +35,7 @@
             v-else-if="item.label == '产品'"
             v-model="queryFrom[item.key]"
             style="width: 150px"
+            :disabled="dsProductsIdDisabled"
             :placeholder="item.label"
             allowClear
           >
@@ -286,18 +286,13 @@ const columns = [
 export default {
   name: "customerModal",
   props: {
-    dsProductsId: {
-      type: String
-    }
-  },
-  mounted() {
-    console.log(this.dsProductsId)
-    this.dsProductsId ? (this.queryFrom.dsProductsId = this.dsProductsId) : "";
+    dsProductsId: String
   },
   data() {
     return {
       title: "标题",
       uservisible: false,
+      dsProductsIdDisabled:false,
       columns,
       TdArr: ["nineNC", "bomName", "bomModel", "bomCode", "specification"],
       seachData: [], //查询数据
@@ -409,6 +404,12 @@ export default {
       //获取产品列表
       getAllProductList().then(res => {
         this.ProductList = res.data;
+
+        //有产品复默认值
+        if (this.dsProductsId) {
+          this.queryFrom.dsProductsId = this.dsProductsId;
+          this.dsProductsIdDisabled = true;
+        }
       });
       if (type == "add") {
         this.title = "新增";
