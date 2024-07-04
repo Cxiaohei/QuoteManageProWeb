@@ -164,7 +164,7 @@ export default {
       form: {
         orgIds: [],
         // extraProperties:{Sex:1}
-        extraProperties: '1'
+        // extraProperties: '1'
       },
       rules: {
         userName: [

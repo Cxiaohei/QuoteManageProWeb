@@ -2,7 +2,7 @@ import {request, METHOD} from '@/utils/request'
 import { transformAbpListQuery } from '@/utils/abp'
 
 export function getOrganizationsAllWithDetails(query) {
-  return request('/api/identity/organization-units/all/details', METHOD.GET, query)
+  return request('/api/identity/users/available-organization-units', METHOD.GET, query)
 }
 
 /**
