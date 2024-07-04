@@ -8,6 +8,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
     >
+    {{ dsProductsId }}
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -284,7 +285,15 @@ const columns = [
 
 export default {
   name: "customerModal",
-  props: {},
+  props: {
+    dsProductsId: {
+      type: String
+    }
+  },
+  mounted() {
+    console.log(this.dsProductsId)
+    this.dsProductsId ? (this.queryFrom.dsProductsId = this.dsProductsId) : "";
+  },
   data() {
     return {
       title: "标题",

@@ -43,7 +43,7 @@
       <div style="padding-top: 30px;">
         <h3>
           研发项目
-          <a-button type="primary" @click="addOdmRdProjects">添加</a-button>
+          <a-button type="primary" @click="addOdmRdProjects" v-if="data11.length==0">添加</a-button>
         </h3>
         <a-table :columns="columns1" :data-source="data11" :pagination="false">
           <span slot="action" slot-scope="text, record">
@@ -58,7 +58,7 @@
       <div style="padding-top: 30px;">
         <h3>
           BOM报价
-          <a-button type="primary" @click="addBomQuote">添加</a-button>
+          <a-button type="primary" @click="addBomQuote" v-if="data22.length==0">添加</a-button>
         </h3>
         <a-table :columns="columns2" :data-source="data22" :pagination="false">
           <span slot="action" slot-scope="text, record">
@@ -73,7 +73,7 @@
     </a-card>
 
     <OdmRdProjectsModal ref="OdmRdProjectsModalRefs" @ok="getDetail"></OdmRdProjectsModal>
-    <BomQuoteModal ref="BomQuoteModalRefs" @ok="getDetail"></BomQuoteModal>
+    <BomQuoteModal ref="BomQuoteModalRefs" @ok="getDetail" :dsProductsId="queryFrom.dsProductsId"></BomQuoteModal>
   </div>
 </template>
 
@@ -200,12 +200,16 @@ export default {
         // console.log("项目详情");
         getRdProjectsDetail(res.data.developProjectId).then(resDev => {
           console.log(resDev.data);
-          this.data11 = [resDev.data];
+          if (resDev.data) {
+            this.data11 = [resDev.data];
+          }
         });
         // console.log("BOM详情");
         BomDetailDataList(res.data.bomQuoteId).then(resBom => {
           console.log(resBom.data);
-          this.data22 = [resBom.data];
+          if (resBom.data) {
+            this.data22 = [resBom.data];
+          }
         });
       });
 
