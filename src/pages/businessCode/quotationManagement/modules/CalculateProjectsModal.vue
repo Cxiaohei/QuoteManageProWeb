@@ -62,7 +62,7 @@ import cloneDeep from "lodash.clonedeep";
 
 const columns = [
   {
-    title: "子类",
+    title: "东胜支出",
     width: "110px",
     dataIndex: "dsDisburse",
     scopedSlots: {
@@ -70,23 +70,23 @@ const columns = [
     }
   },
   {
-    title: "费用说明",
-    width: "130px",
+    title: "客户支付金额",
+    width: "100px",
     dataIndex: "customerPayment",
     scopedSlots: {
       customRender: "customerPayment"
     }
   },
   {
-    title: "工种",
-    width: "130px",
+    title: "首单金额",
+    width: "80px",
     dataIndex: "firstOrderAmount",
     scopedSlots: {
       customRender: "firstOrderAmount"
     }
   },
   {
-    title: "费用类型",
+    title: "6个月内订单金额",
     width: "130px",
     dataIndex: "sixMonthAmount",
     scopedSlots: {
@@ -94,15 +94,15 @@ const columns = [
     }
   },
   {
-    title: "工程师级别",
-    width: "100px",
+    title: "12个月内订单金额",
+    width: "130px",
     dataIndex: "twelveMonthAmount",
     scopedSlots: {
       customRender: "twelveMonthAmount"
     }
   },
   {
-    title: "折扣率",
+    title: "能否形成通用软件系统",
     width: "80px",
     dataIndex: "isCommonSoftware",
     scopedSlots: {
@@ -110,7 +110,7 @@ const columns = [
     }
   },
   {
-    title: "数量",
+    title: "能否形成新的硬件产品",
     width: "100px",
     dataIndex: "isNewHardware",
     scopedSlots: {
@@ -118,7 +118,7 @@ const columns = [
     }
   },
   {
-    title: "参考值",
+    title: "能否形成新的软硬件产品",
     width: "100px",
     dataIndex: "isHardwareSoftware",
     scopedSlots: {

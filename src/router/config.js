@@ -167,6 +167,22 @@ const options = {
               component: () => import('@/pages/businessCode/category1/essentialData'),
             },
             {
+              path: 'essentialTwoData',
+              name: '二级基础数据',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/essentialTwoData'),
+            },
+            {
+              path: 'priceStrategy',
+              name: '价格策略',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+            },
+            {
               path: 'role',
               name: '角色管理',
               meta: {
@@ -182,54 +198,54 @@ const options = {
               },
               component: () => import('@/pages/systemManagement/identity/UserList'),
             },
-            {
-              path: 'organization',
-              name: '组织机构',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/systemManagement/organization/organizationUnits'),
-            },
-            {
-              path: 'claimTypes',
-              name: '声明类型',
-              meta: {
-                authority: 'AbpIdentity.ClaimTypes',
-              },
-              component: () => import('@/pages/systemManagement/claimType/claimTypes'),
-            },
-            {
-              path: 'securityLogs',
-              name: '安全日志',
-              meta: {
-                authority: 'AbpIdentity.ClaimTypes',
-              },
-              component: () => import('@/pages/systemManagement/claimType/securityLogs'),
-            },
-            {
-              path: 'dataDictionary',
-              name: '数据字典',
-              meta: {
-                authority: 'EasyAbp.Abp.DataDictionary.DataDictionary',
-              },
-              component: () => import('@/pages/systemManagement/dataDictionary/DataDictionary')
-            },
-            {
-              path: 'auditLog',
-              name: '审计日志',
-              meta: {
-                authority: 'AbpAuditLogging.Default',
-              },
-              component: () => import('@/pages/systemManagement/auditlogging/List'),
-            },
-            {
-              path: 'tenant',
-              name: '租户管理',
-              meta: {
-                authority: 'Saas.Tenants',
-              },
-              component: () => import('@/pages/systemManagement/multiTenancy/TenantList'),
-            },
+            // {
+            //   path: 'organization',
+            //   name: '组织机构',
+            //   meta: {
+            //     // authority: 'AbpIdentity.OrganizationUnits',
+            //   },
+            //   component: () => import('@/pages/systemManagement/organization/organizationUnits'),
+            // },
+            // {
+            //   path: 'claimTypes',
+            //   name: '声明类型',
+            //   meta: {
+            //     authority: 'AbpIdentity.ClaimTypes',
+            //   },
+            //   component: () => import('@/pages/systemManagement/claimType/claimTypes'),
+            // },
+            // {
+            //   path: 'securityLogs',
+            //   name: '安全日志',
+            //   meta: {
+            //     authority: 'AbpIdentity.ClaimTypes',
+            //   },
+            //   component: () => import('@/pages/systemManagement/claimType/securityLogs'),
+            // },
+            // {
+            //   path: 'dataDictionary',
+            //   name: '数据字典',
+            //   meta: {
+            //     authority: 'EasyAbp.Abp.DataDictionary.DataDictionary',
+            //   },
+            //   component: () => import('@/pages/systemManagement/dataDictionary/DataDictionary')
+            // },
+            // {
+            //   path: 'auditLog',
+            //   name: '审计日志',
+            //   meta: {
+            //     authority: 'AbpAuditLogging.Default',
+            //   },
+            //   component: () => import('@/pages/systemManagement/auditlogging/List'),
+            // },
+            // {
+            //   path: 'tenant',
+            //   name: '租户管理',
+            //   meta: {
+            //     authority: 'Saas.Tenants',
+            //   },
+            //   component: () => import('@/pages/systemManagement/multiTenancy/TenantList'),
+            // },
           ]
         },
       ]

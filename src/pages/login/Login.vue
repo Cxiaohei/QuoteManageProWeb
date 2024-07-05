@@ -39,7 +39,7 @@
               <a-input
                 autocomplete="autocomplete"
                 size="large"
-                placeholder="admin"
+                placeholder="请输入账户名"
                 v-decorator="[
                   'name',
                   {
@@ -55,7 +55,7 @@
             <a-form-item v-if="grant_type == 'code'">
               <a-input
                 size="large"
-                placeholder="1q2w3E*"
+                placeholder="请输入密码*"
                 autocomplete="autocomplete"
                 type="password"
                 v-decorator="[

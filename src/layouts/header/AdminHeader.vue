@@ -18,7 +18,7 @@
             </a>
           </a-tooltip> -->
           <!-- <header-notice class="header-item"/> -->
-          <header-avatar class="header-item" style="margin-top: 20px;"/>
+          <header-avatar class="header-item"/>
           <!-- <a-dropdown class="lang header-item">
             <div>
               <a-icon type="global"/> {{langAlias}}

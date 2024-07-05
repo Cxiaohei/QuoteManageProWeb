@@ -39,6 +39,32 @@ export async function BomDetailDataList(Id) {
 }
 
 
+//价格策略
+export async function getPriceList() {
+    return request(`/api/app/basic-configuration/price-strategy`, METHOD.GET)
+}
+
+
+export async function setManufactureFee(params) {
+    return request("/api/app/manufacture-fee-quote/manufacture-fee-quote", METHOD.POST, params)
+}
+
+export async function editManufactureFee(params) {
+    return request("/api/app/manufacture-fee-quote/manufacture-fee-quote", METHOD.PUT, params)
+}
+
+
+export async function setOtherFee(params) {
+    return request("/api/app/manufacture-fee-quote/other-fee-quote", METHOD.POST, params)
+}
+
+export async function editOtherFee(params) {
+    return request("/api/app/manufacture-fee-quote/other-fee-quote", METHOD.PUT, params)
+}
+
+
+
+
 
 export default {
     getPageList,
@@ -46,5 +72,10 @@ export default {
     OdmDetailDataList,
     getAllProductList,
     getRdProjectsDetail,
-    BomDetailDataList
+    BomDetailDataList,
+    getPriceList,
+    setManufactureFee,
+    editManufactureFee,
+    setOtherFee,
+    editOtherFee,
 }

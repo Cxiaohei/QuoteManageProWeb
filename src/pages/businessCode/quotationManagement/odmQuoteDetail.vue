@@ -22,6 +22,7 @@
             v-model="queryFrom[item.key]"
             style="width: 250px"
             :placeholder="item.label"
+            disabled
           ></a-input>
           <!-- 产品下拉 -->
           <a-select
@@ -29,6 +30,7 @@
             v-model="queryFrom[item.key]"
             style="width: 250px"
             :placeholder="item.label"
+            disabled
             allowClear
           >
             <a-select-option
@@ -70,10 +72,43 @@
           </span>
         </a-table>
       </div>
+      <div style="padding-top: 30px;">
+        <h3>
+          加工费报价
+          <a-button type="primary" @click="addProcess" v-if="data33.length==0">添加</a-button>
+        </h3>
+        <!-- <a-table :columns="columns2" :data-source="data33" :pagination="false">
+          <span slot="action" slot-scope="text, record">
+            <a
+              href="javascript:;"
+              @click="bomDetail(record, 'detail')"
+              style="margin-right: 5px;"
+            >详情</a>
+          </span>
+        </a-table> -->
+      </div>
+      <div style="padding-top: 30px;">
+        <h3>
+          其他项费用报价
+          <a-button type="primary" @click="addOtherQuote" v-if="data44.length==0">添加</a-button>
+        </h3>
+        <!-- <a-table :columns="columns2" :data-source="data44" :pagination="false">
+          <span slot="action" slot-scope="text, record">
+            <a
+              href="javascript:;"
+              @click="bomDetail(record, 'detail')"
+              style="margin-right: 5px;"
+            >详情</a>
+          </span>
+        </a-table> -->
+      </div>
     </a-card>
 
     <OdmRdProjectsModal ref="OdmRdProjectsModalRefs" @ok="getDetail"></OdmRdProjectsModal>
     <BomQuoteModal ref="BomQuoteModalRefs" @ok="getDetail" :dsProductsId="queryFrom.dsProductsId"></BomQuoteModal>
+
+    <ProcessModal ref="ProcessModalRefs" @ok="getDetail"></ProcessModal>
+    <OtherModal ref="OtherModalRefs" @ok="getDetail"></OtherModal>
   </div>
 </template>
 
@@ -86,6 +121,10 @@ import {
 } from "@/services/businessCode/quotationManagement/odmQuote";
 import OdmRdProjectsModal from "./modules/OdmRdProjectsModal.vue";
 import BomQuoteModal from "./modules/BomQuoteModal.vue";
+import ProcessModal from "./modules/ProcessModal.vue";
+import OtherModal from "./modules/OtherModal.vue";
+
+
 
 import cloneDeep from "lodash.clonedeep";
 
@@ -134,7 +173,7 @@ const columns2 = [
 
 export default {
   name: "customerModal",
-  components: { OdmRdProjectsModal, BomQuoteModal },
+  components: { OdmRdProjectsModal, BomQuoteModal, ProcessModal,OtherModal },
   props: {},
   data() {
     return {
@@ -178,6 +217,8 @@ export default {
       columns2,
       data11: [],
       data22: [],
+      data33: [],
+      data44: [],
       developProjectId: "",
       bomQuoteId: ""
     };
@@ -227,6 +268,14 @@ export default {
     addBomQuote() {
       this.$refs.BomQuoteModalRefs.openModules("add");
     },
+    //加工费报价
+    addProcess() {
+      this.$refs.ProcessModalRefs.openModules("add");
+    },
+    //加工费报价
+    addOtherQuote() {
+      this.$refs.OtherModalRefs.openModules("add");
+    },
     //项目详情
     RdProjectsDetail(record) {
       this.$router.push({
@@ -245,52 +294,6 @@ export default {
         }
       });
     },
-    // //新增基础数据
-    // addBomDataList() {
-    //   this.logDataSource = [];
-    //   let params = {
-    //     ...this.queryFrom,
-    //     bomQuoteRelations: [...this.detailDataList1, ...this.detailDataList2]
-    //   };
-    //   addBomDataList(params)
-    //     .then(res => {
-    //       if (res.code == 1) {
-    //         this.$message.success(res.msg);
-    //         this.$emit("ok");
-    //         this.uservisible = false;
-    //       } else {
-    //         this.$message.error(res.msg);
-    //       }
-    //       this.confirmLoading = false;
-    //     })
-    //     .catch(err => {
-    //       this.loading = false;
-    //       this.confirmLoading = false;
-    //     });
-    // },
-    // //编辑基础数据
-    // editBomDataList() {
-    //   this.logDataSource = [];
-    //   let params = {
-    //     ...this.queryFrom
-    //   };
-    //   editBomDataList(params)
-    //     .then(res => {
-    //       if (res.code == 1) {
-    //         this.$message.success(res.msg);
-    //         this.$emit("ok");
-    //         this.uservisible = false;
-    //       } else {
-    //         this.$message.error(res.msg);
-    //       }
-    //       this.confirmLoading = false;
-    //     })
-    //     .catch(err => {
-    //       this.loading = false;
-    //       this.confirmLoading = false;
-    //     });
-    // },
-
     filterOption(input, option) {
       return (
         option.componentOptions.children[0].text
