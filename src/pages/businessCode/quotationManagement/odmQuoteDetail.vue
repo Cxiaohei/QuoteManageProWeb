@@ -77,7 +77,7 @@
           加工费报价
           <a-button type="primary" @click="addProcess" v-if="data33.length==0">添加</a-button>
         </h3>
-        <!-- <a-table :columns="columns2" :data-source="data33" :pagination="false">
+        <a-table :columns="columns2" :data-source="data33" :pagination="false">
           <span slot="action" slot-scope="text, record">
             <a
               href="javascript:;"
@@ -85,14 +85,14 @@
               style="margin-right: 5px;"
             >详情</a>
           </span>
-        </a-table> -->
+        </a-table>
       </div>
       <div style="padding-top: 30px;">
         <h3>
           其他项费用报价
           <a-button type="primary" @click="addOtherQuote" v-if="data44.length==0">添加</a-button>
         </h3>
-        <!-- <a-table :columns="columns2" :data-source="data44" :pagination="false">
+        <a-table :columns="columns2" :data-source="data44" :pagination="false">
           <span slot="action" slot-scope="text, record">
             <a
               href="javascript:;"
@@ -100,7 +100,7 @@
               style="margin-right: 5px;"
             >详情</a>
           </span>
-        </a-table> -->
+        </a-table>
       </div>
     </a-card>
 
