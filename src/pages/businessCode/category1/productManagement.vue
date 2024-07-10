@@ -16,6 +16,14 @@
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
+        <a-form-item>
+          <a-space>
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+              <a-button type="primary" icon="to-top">导入</a-button>
+            </a-upload>
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
+          </a-space>
+        </a-form-item>
       </a-form>
     </div>
     <a-table
@@ -35,7 +43,7 @@
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" @click="productData_edit(record)" style="margin-right: 5px;">编辑</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a> -->
+        <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
       <span slot="acceptType" slot-scope="text, record">
@@ -50,12 +58,15 @@
       </span>
     </a-table>
     <ProductManagementModal ref="ProductManagementModalRefs" @ok="getPageList"></ProductManagementModal>
-  
   </a-card>
 </template>
     
 <script>
-import { getPageList } from "@/services/businessCode/category1/productManagement";
+import {
+  getPageList,
+  importExcel,
+  downloadTemplate
+} from "@/services/businessCode/category1/productManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import ProductManagementModal from "./modules/ProductManagementModal";
@@ -170,32 +181,49 @@ export default {
     productData_edit(record) {
       this.$refs.ProductManagementModalRefs.openModules("edit", record);
     },
+    //下载模板
+    downloadTemplate() {
+      downloadTemplate();
+    },
+    //导入
+    importExcel(resData) {
+      let formData = new FormData();
+      formData.append("ImportFile", resData.file);
+      importExcel(formData).then(response => {
+        if (response.code == 1) {
+          this.$message.success("导入成功");
+          this.getPageList();
+        } else {
+          this.$message.info(response.msg);
+        }
+      });
+    },
     //获取列表数据
     getPageList() {
-        const params = {
-          skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
-          MaxResultCount: this.pagination.pageSize,
-          ...this.queryFrom
-        };
-        getPageList(params)
-          .then(res => {
-            if (res.code == 1) {
-              const pagination = {
-                ...this.pagination
-              };
-              pagination.total = res.data.totalCount;
-              this.pagination = pagination;
-              this.dataSource = res.data.items;
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.$message.error(res.message);
-            }
-          })
-          .catch(err => {
+      const params = {
+        skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
+        MaxResultCount: this.pagination.pageSize,
+        ...this.queryFrom
+      };
+      getPageList(params)
+        .then(res => {
+          if (res.code == 1) {
+            const pagination = {
+              ...this.pagination
+            };
+            pagination.total = res.data.totalCount;
+            this.pagination = pagination;
+            this.dataSource = res.data.items;
             this.loading = false;
-            console.log(err);
-          });
+          } else {
+            this.loading = false;
+            this.$message.error(res.message);
+          }
+        })
+        .catch(err => {
+          this.loading = false;
+          console.log(err);
+        });
     },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {

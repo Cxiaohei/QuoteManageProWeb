@@ -63,7 +63,14 @@ export async function editOtherFee(params) {
 }
 
 
-
+//研发项目详情
+export async function ManuDetailDataList(Id) {
+    return request(`/api/app/manufacture-fee-quote/${Id}/manufacture-fee-quote-detail`, METHOD.GET)
+}
+//bom详情
+export async function OtherDetailDataList(Id) {
+    return request(`/api/app/manufacture-fee-quote/${Id}/other-fee-quote-detail`, METHOD.GET)
+}
 
 
 export default {
@@ -78,4 +85,6 @@ export default {
     editManufactureFee,
     setOtherFee,
     editOtherFee,
+    ManuDetailDataList,
+    OtherDetailDataList
 }

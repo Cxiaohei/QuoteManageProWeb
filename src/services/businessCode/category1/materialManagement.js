@@ -15,9 +15,25 @@ export async function editEssentialDataList(params) {
     return request("/api/app/bom-details/bom-detail-info", METHOD.PUT, params)
 }
 
+//导入
+export function importExcel(params, data) {
+    return request(`/api/app/bom-details/import-dSBom-details`, METHOD.POST, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+
+export function downloadTemplate() {
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/DownTempExcel/DownDSBomDetailTempFile`;
+    download(url, '内部物料模板.xlsx');
+}
 
 export default {
     getPageList,
     addEssentialDataList,
-    editEssentialDataList
+    editEssentialDataList,
+    importExcel,
+    downloadTemplate
 }

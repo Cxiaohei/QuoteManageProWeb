@@ -16,6 +16,14 @@
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
+        <a-form-item>
+          <a-space>
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+              <a-button type="primary" icon="to-top">导入</a-button>
+            </a-upload>
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
+          </a-space>
+        </a-form-item>
       </a-form>
     </div>
     <a-table
@@ -61,7 +69,9 @@
 </template>
     
 <script>
-import { getPageList } from "@/services/businessCode/category1/priceStrategy";
+import { getPageList,
+  importExcel,
+  downloadTemplate } from "@/services/businessCode/category1/priceStrategy";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PriceStrategyModal from "./modules/PriceStrategyModal.vue";
@@ -166,6 +176,23 @@ export default {
     //编辑
     essentialData_edit(record) {
       this.$refs.PriceStrategyModalRefs.openModules("edit", record);
+    },
+    //下载模板
+    downloadTemplate() {
+      downloadTemplate();
+    },
+    //导入
+    importExcel(resData) {
+      let formData = new FormData();
+      formData.append("ImportFile", resData.file);
+      importExcel(formData).then(response => {
+        if (response.code == 1) {
+          this.$message.success("导入成功");
+          this.getPageList();
+        } else {
+          this.$message.info(response.msg);
+        }
+      });
     },
     //获取列表数据
     getPageList() {

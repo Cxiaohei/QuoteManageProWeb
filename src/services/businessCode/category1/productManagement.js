@@ -16,9 +16,25 @@ export async function editProductDataList(params) {
     return request("/api/app/product/product-info", METHOD.PUT, params)
 }
 
+//导入
+export function importExcel(params, data) {
+    return request(`/api/app/product/import-products`, METHOD.POST, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+
+export function downloadTemplate() {
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/DownTempExcel/DownProductTempFile`;
+    download(url, '产品模板.xlsx');
+}
 
 export default {
     getPageList,
     addProductDataList,
-    editProductDataList
+    editProductDataList,
+    importExcel,
+    downloadTemplate
 }

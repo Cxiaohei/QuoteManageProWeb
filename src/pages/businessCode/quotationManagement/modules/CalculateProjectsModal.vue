@@ -55,7 +55,7 @@ import {
   calculateProjectScore, //计算得分
   setProjectScore,
   getProjectScore,
-  editRdProjectsDetailList
+  editProjectScore
 } from "@/services/businessCode/quotationManagement/rdProjects";
 
 import cloneDeep from "lodash.clonedeep";
@@ -164,9 +164,10 @@ export default {
         this.title = "评分";
         this.detailDataList = [{ developProjectId: record.id }];
       } else {
-        this.title = "查看";
+        this.title = "编辑";
         getProjectScore(record.id).then(res => {
           this.detailDataList[0] = res.data;
+          this.$forceUpdate();
         });
       }
       this.uservisible = true;
@@ -177,8 +178,8 @@ export default {
       if (this.title == "评分") {
         this.setProjectScore();
       } else {
-        this.uservisible = true;
-        // this.editRdProjectsDetailList();
+        // this.uservisible = true;
+        this.editProjectScore();
       }
     },
     handleCancel() {
@@ -220,11 +221,12 @@ export default {
         });
     },
     //编辑基础数据
-    editRdProjectsDetailList() {
+    editProjectScore() {
       let params = {
-        ...this.detailDataList[0]
+        ...this.detailDataList[0],
+        ProjectScoreId: this.detailDataList[0].id
       };
-      editRdProjectsDetailList(params)
+      editProjectScore(params)
         .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);

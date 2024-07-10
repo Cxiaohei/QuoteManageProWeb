@@ -150,6 +150,28 @@ const options = {
             },
           ]
         },
+
+
+        {
+          path: 'approveManagement',
+          name: '审批管理',
+          meta: {
+            icon: 'setting'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'scoreApprove',
+              name: '项目得分',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/scoreApprove'),
+            },
+          ]
+        },
+        
+
         {
           path: 'system',
           name: '系统管理',

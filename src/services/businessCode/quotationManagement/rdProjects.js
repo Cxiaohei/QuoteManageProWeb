@@ -46,7 +46,15 @@ export async function setProjectScore(params) {
 export async function getProjectScore(Id) {
     return request(`/api/app/develop-project/project-score-detail/${Id}`, METHOD.GET)
 }
+//获取项目得分详情
+export async function editProjectScore(params) {
+    return request(`/api/app/develop-project/project-score-info`, METHOD.PUT, params)
+}
 
+//创建审批
+export async function setAudite(params) {
+    return request(`/api/app/develop-project/quote-audite`, METHOD.POST, params)
+}
 
 
 
@@ -60,5 +68,7 @@ export default {
     deleteRdProjectsDetailList,
     getTradesList,
     calculateProjectScore,
-    setProjectScore
+    setProjectScore,
+    editProjectScore,
+    setAudite
 }

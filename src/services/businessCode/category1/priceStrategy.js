@@ -20,9 +20,26 @@ export async function getParentBase() {
     return request("/api/app/basic-configuration/parent-base-datas", METHOD.GET)
 }
 
+//导入
+export function importExcel(params, data) {
+    return request(`/api/app/basic-configuration/import-price-strategys`, METHOD.POST, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+
+export function downloadTemplate() {
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/DownTempExcel/DownPriceStrategyTempFile`;
+    download(url, '价格策略模版.xlsx');
+}
+
 export default {
     getPageList,
     addPriceStrategyDataList,
     editPriceStrategyDataList,
-    getParentBase
+    getParentBase,
+    importExcel,
+    downloadTemplate
 }

@@ -30,9 +30,10 @@
       :pagination="pagination"
       :loading="loading"
       :selectedRows.sync="selectedRows"
-      childrenColumnName="childrens"
       bordered
     >
+    
+    <!-- childrenColumnName="childrens" -->
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" @click="essentialData_edit(record)" style="margin-right: 5px;">编辑</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
@@ -56,24 +57,24 @@
       </span>
     </a-table>
 
-    <EssentialDataModel ref="EssentialDataModelRefs" @ok="getPageList"></EssentialDataModel>
+    <EssentialDataModel ref="EssentialDataModelRefs" @ok="getPageListTwoData"></EssentialDataModel>
   </a-card>
 </template>
     
 <script>
-import { getPageList } from "@/services/businessCode/category1/essentialData";
+import { getPageListTwoData } from "@/services/businessCode/category1/essentialData";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import EssentialDataModel from "./modules/EssentialDataModal.vue";
 
 const columns = [
-  {
-    width: 150,
-    title: "操作",
-    scopedSlots: {
-      customRender: "action"
-    }
-  },
+  // {
+  //   width: 150,
+  //   title: "操作",
+  //   scopedSlots: {
+  //     customRender: "action"
+  //   }
+  // },
   {
     title: "类别名称",
     dataIndex: "categoryName",
@@ -124,7 +125,7 @@ export default {
   },
   mounted() {},
   created() {
-    this.getPageList();
+    this.getPageListTwoData();
   },
   computed: {
     ...mapGetters("account", ["organizationId"])
@@ -140,13 +141,13 @@ export default {
       this.$refs.EssentialDataModelRefs.openModules("edit", record);
     },
     //获取列表数据
-    getPageList() {
+    getPageListTwoData() {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
         ...this.queryFrom
       };
-      getPageList(params)
+      getPageListTwoData(params)
         .then(res => {
           if (res.code == 1) {
             const pagination = {
@@ -154,7 +155,7 @@ export default {
             };
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
-            this.dataSource = res.data.items;
+            this.dataSource = res.data;
             // this.dataSource = this.buildTree(res.data.items);
             this.loading = false;
           } else {
@@ -211,22 +212,22 @@ export default {
       };
       pager.current = pagination.current;
       this.pagination = pager;
-      this.getPageList();
+      this.getPageListTwoData();
     },
     //重置
     reset_pagelists() {
       this.pagination.current = 1;
       this.queryFrom = {};
-      this.getPageList();
+      this.getPageListTwoData();
     },
     //查询
     search_pagelist() {
       this.pagination.current = 1;
-      this.getPageList();
+      this.getPageListTwoData();
     },
     // 刷新
     user_success() {
-      this.getPageList();
+      this.getPageListTwoData();
     },
     //下拉筛选
     filterOption(input, option) {

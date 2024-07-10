@@ -16,6 +16,14 @@
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
+        <a-form-item>
+          <a-space>
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+              <a-button type="primary" icon="to-top">导入</a-button>
+            </a-upload>
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
+          </a-space>
+        </a-form-item>
       </a-form>
     </div>
     <a-table
@@ -54,7 +62,11 @@
 </template>
     
 <script>
-import { getPageList } from "@/services/businessCode/category1/materialManagement";
+import {
+  getPageList,
+  importExcel,
+  downloadTemplate
+} from "@/services/businessCode/category1/materialManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import MaterialManagementModal from "./modules/MaterialManagementModal";
@@ -171,6 +183,23 @@ export default {
     //新增
     add_pagelist() {
       this.$refs.MaterialManagementModalRefs.openModules("add");
+    },
+    //下载模板
+    downloadTemplate() {
+      downloadTemplate();
+    },
+    //导入
+    importExcel(resData) {
+      let formData = new FormData();
+      formData.append("ImportFile", resData.file);
+      importExcel(formData).then(response => {
+        if (response.code == 1) {
+          this.$message.success("导入成功");
+          this.getPageList();
+        } else {
+          this.$message.info(response.msg);
+        }
+      });
     },
     //编辑
     essentialData_edit(record) {

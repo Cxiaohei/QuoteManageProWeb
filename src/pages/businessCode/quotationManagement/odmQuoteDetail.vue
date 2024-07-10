@@ -77,7 +77,7 @@
           加工费报价
           <a-button type="primary" @click="addProcess" v-if="data33.length==0">添加</a-button>
         </h3>
-        <a-table :columns="columns2" :data-source="data33" :pagination="false">
+        <a-table :columns="columns3" :data-source="data33" :pagination="false">
           <span slot="action" slot-scope="text, record">
             <a
               href="javascript:;"
@@ -92,7 +92,7 @@
           其他项费用报价
           <a-button type="primary" @click="addOtherQuote" v-if="data44.length==0">添加</a-button>
         </h3>
-        <a-table :columns="columns2" :data-source="data44" :pagination="false">
+        <a-table :columns="columns4" :data-source="data44" :pagination="false">
           <span slot="action" slot-scope="text, record">
             <a
               href="javascript:;"
@@ -117,14 +117,14 @@ import {
   getAllProductList,
   OdmDetailDataList,
   getRdProjectsDetail,
-  BomDetailDataList
+  BomDetailDataList,
+  ManuDetailDataList,
+  OtherDetailDataList
 } from "@/services/businessCode/quotationManagement/odmQuote";
 import OdmRdProjectsModal from "./modules/OdmRdProjectsModal.vue";
 import BomQuoteModal from "./modules/BomQuoteModal.vue";
 import ProcessModal from "./modules/ProcessModal.vue";
 import OtherModal from "./modules/OtherModal.vue";
-
-
 
 import cloneDeep from "lodash.clonedeep";
 
@@ -170,10 +170,54 @@ const columns2 = [
     key: "remarks"
   }
 ];
+const columns3 = [
+  { dataIndex: "bomSpecies", title: "物料种类" },
+  { dataIndex: "dipPointNum", title: "插件点数" },
+  { dataIndex: "manualWeldingPointNum", title: "手焊点数" },
+  { dataIndex: "patchPointNum", title: "贴片点数" },
+  { dataIndex: "smtPrice", title: "SMT价格" },
+  { dataIndex: "dipPrice", title: "插件价格" },
+  { dataIndex: "manualWeldingPrice", title: "手焊价格" },
+  { dataIndex: "pcbaTestPrice", title: "PCBA测试价格" },
+  { dataIndex: "pcbaAssemblyPrice", title: "PCBA组装价格" },
+  { dataIndex: "finishedProductTestPrice", title: "成品测试价格" },
+  { dataIndex: "finishedProductAssemblyPrice", title: "成品组装价格" },
+  { dataIndex: "pcbaTotalPrice", title: "PCBA价格" },
+  { dataIndex: "assemblyTotalPrice", title: "组装价格" },
+  { dataIndex: "productTotalPrice", title: "加工费总价" },
+  { dataIndex: "remarks", title: "备注" }
+];
+
+const columns4 = [
+  {
+    dataIndex: "materialConsumptionRate",
+    title: "物耗费用系数"
+  },
+  {
+    dataIndex: "materialConsumptionPrice",
+    title: "物耗费用",
+    help: "BOM报价单价格*比例"
+  },
+  { dataIndex: "materialConsumptionDescription", title: "物耗费用比例描述" },
+  { dataIndex: "managementRate", title: "管理费用系数", help: "默认10%" },
+  {
+    dataIndex: "managementPrice",
+    title: "物耗费用",
+    help: "BOM报价单价格*比例"
+  },
+  { dataIndex: "managementDescription", title: "物耗费用比例描述" },
+  { dataIndex: "transportRate", title: "运输费用系数", help: "默认10%" },
+  { dataIndex: "transportPrice", title: "运输费用", help: "计算方式待确认" },
+  { dataIndex: "transportDescription", title: "物耗费用比例描述" },
+  { dataIndex: "smallOrderPrice", title: "小单费", help: "计算方式待确认" },
+  { dataIndex: "profitMoney", title: "利润", help: "计算方式待确认" },
+  { dataIndex: "otherFeeTotalPrice", title: "总价" },
+  { dataIndex: "remarks", title: "备注" }
+];
 
 export default {
   name: "customerModal",
-  components: { OdmRdProjectsModal, BomQuoteModal, ProcessModal,OtherModal },
+  components: { OdmRdProjectsModal, BomQuoteModal, ProcessModal, OtherModal },
   props: {},
   data() {
     return {
@@ -215,12 +259,16 @@ export default {
       },
       columns1,
       columns2,
+      columns3,
+      columns4,
       data11: [],
       data22: [],
       data33: [],
       data44: [],
       developProjectId: "",
-      bomQuoteId: ""
+      bomQuoteId: "",
+      manufactureFeeQuoteId: "",
+      otherFeeQuoteId: ""
     };
   },
   created() {
@@ -238,6 +286,8 @@ export default {
         console.log(res.data);
         this.developProjectId = res.data.developProjectId;
         this.bomQuoteId = res.data.bomQuoteId;
+        this.manufactureFeeQuoteId = res.data.manufactureFeeQuoteId;
+        this.otherFeeQuoteId = res.data.otherFeeQuoteId;
         // console.log("项目详情");
         getRdProjectsDetail(res.data.developProjectId).then(resDev => {
           console.log(resDev.data);
@@ -252,6 +302,26 @@ export default {
             this.data22 = [resBom.data];
           }
         });
+        // console.log("加工费");
+        if (this.manufactureFeeQuoteId) {
+          ManuDetailDataList(this.manufactureFeeQuoteId).then(res => {
+            console.log("加工费");
+            console.log(res);
+            if (res.data) {
+              this.data33 = [res.data];
+            }
+          });
+        }
+        // console.log("其他项费用");
+        if (this.otherFeeQuoteId) {
+          OtherDetailDataList(this.otherFeeQuoteId).then(res => {
+            console.log("其他项费用");
+            console.log(res);
+            if (res.data) {
+              this.data44 = [res.data];
+            }
+          });
+        }
       });
 
       //获取产品列表

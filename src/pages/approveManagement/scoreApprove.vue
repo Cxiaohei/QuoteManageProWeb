@@ -2,11 +2,11 @@
   <a-card>
     <div class="queryFromBox">
       <a-form :model="queryFrom" layout="inline">
-        <a-form-item>
+        <!-- <a-form-item>
           <a-space>
             <a-button type="primary" @click="add_pagelist">新增</a-button>
           </a-space>
-        </a-form-item>
+        </a-form-item>-->
         <a-form-item>
           <a-input v-model.trim="queryFrom.Filter" style="width: 120px" placeholder="关键字"></a-input>
         </a-form-item>
@@ -21,9 +21,9 @@
     <a-table
       rowKey="id"
       :row-selection="{
-        selectedRowKeys: selectedRowKeys,
-        onChange: onSelectChange,
-      }"
+            selectedRowKeys: selectedRowKeys,
+            onChange: onSelectChange,
+          }"
       :columns="columns"
       :dataSource="dataSource"
       @change="handleTableChange"
@@ -33,50 +33,43 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a
-          href="javascript:;"
-          @click="rdProjectsDetail(record, 'detail')"
-          style="margin-right: 5px;"
-        >详情</a>
-        <!-- <a href="javascript:;" @click="calculateProjects(record, 'detail')">评分</a> -->
-        <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
+        <a href="javascript:;" v-if="record.status==0" @click="productData_edit(record)" style="margin-right: 5px;">审核</a>
+        <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
+        <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
-      <span slot="categoryLevel" slot-scope="text, record">
+      <span slot="status" slot-scope="text, record">
         {{
-        record.categoryLevel == 0
-        ? "初级"
-        : record.categoryLevel == 1
-        ? "中级"
-        : record.categoryLevel == 2
-        ? "高级"
-        : "资深"
+        record.status == 0 ?"待审核":
+        record.status == 1 ?"通过":
+        "不通过"
         }}
       </span>
-      <span
-        slot="categoryType"
-        slot-scope="text, record"
-      >{{ record.categoryType == 0 ? "岗位" : "-" }}</span>
       <span slot="creationTime" slot-scope="text, record">
         {{
-        record.creationTime
-        ? record.creationTime.substring(0, 19).replace("T", "/")
-        : "/"
+        record.creationTime?record.creationTime.substring(0,19).replace('T','/'):"/"
         }}
       </span>
     </a-table>
 
-    <RdProjectsModal ref="RdProjectsModalRefs" @ok="getPageList"></RdProjectsModal>
-    <CalculateProjectsModal ref="CalculateProjectsModalRefs" @ok="getPageList"></CalculateProjectsModal>
+    <a-modal title="审批" :visible="visibleAudite" @ok="handleOkAudite" @cancel="visibleAudite=false">
+      状态：
+      <a-radio-group v-model="statusAudite">
+        <!-- <a-radio :value="0">待审核</a-radio> -->
+        <a-radio :value="1">通过</a-radio>
+        <a-radio :value="10">不通过</a-radio>
+      </a-radio-group>
+      <br />
+      <br />说明：
+      <a-input v-model="auditeRemarks" style="width: 80%;"></a-input>
+    </a-modal>
   </a-card>
 </template>
-      
-  <script>
-import { getPageList } from "@/services/businessCode/quotationManagement/rdProjects";
+    
+<script>
+import { getPageList ,checkAudite } from "@/services/approveManagement/scoreApprove";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import RdProjectsModal from "./modules/RdProjectsModal.vue";
-import CalculateProjectsModal from "./modules/CalculateProjectsModal.vue";
 
 const columns = [
   {
@@ -87,50 +80,36 @@ const columns = [
     }
   },
   {
-    title: "研发项目编号",
-    dataIndex: "projectNo",
+    title: "编号",
+    dataIndex: "auditeNo",
     scopedSlots: {
-      customRender: "projectNo"
+      customRender: "auditeNo"
     }
   },
   {
-    title: "研发项目名称",
-    dataIndex: "projectName",
+    title: "得分",
+    dataIndex: "finalScore",
     scopedSlots: {
-      customRender: "projectName"
+      customRender: "finalScore"
     }
   },
   {
-    title: "发起人姓名",
-    dataIndex: "createUserName",
+    title: "状态",
+    dataIndex: "status",
     scopedSlots: {
-      customRender: "createUserName"
+      customRender: "status"
     }
   },
   {
-    title: "项目总费用",
-    dataIndex: "totalFee",
+    title: "备注",
+    dataIndex: "remarks",
     scopedSlots: {
-      customRender: "totalFee"
-    }
-  },
-  {
-    title: "人工总费用",
-    dataIndex: "laborCost",
-    scopedSlots: {
-      customRender: "laborCost"
-    }
-  },
-  {
-    title: "其他费用",
-    dataIndex: "otherFee",
-    scopedSlots: {
-      customRender: "otherFee"
+      customRender: "remarks"
     }
   }
 ];
+
 export default {
-  components: { RdProjectsModal, CalculateProjectsModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -145,38 +124,51 @@ export default {
         pageSize: 10,
         current: 1,
         showTotal: total => `总计 ${total} 条`
-      }
+      },
+      visibleAudite: false,
+      scoreApproveId: "",
+      statusAudite: 1,
+      auditeRemarks: ""
     };
   },
+  components: {},
   mounted() {},
   created() {
     this.getPageList();
   },
+  activated() {},
   computed: {
     ...mapGetters("account", ["organizationId"])
   },
   methods: {
     checkPermission,
-    //新增
-    add_pagelist() {
-      this.$refs.RdProjectsModalRefs.openModules("add");
+    //审核确认
+    handleOkAudite() {
+      let params = {
+        auditeId: this.scoreApproveId,
+        status: this.statusAudite,
+        remarks: this.auditeRemarks
+      };
+      checkAudite(params)
+        .then(res => {
+          if (res.code == 1) {
+            this.$message.success("审核成功");
+            this.getPageList();
+          } else {
+            this.$message.error(res.message);
+          }
+        })
+        .catch(err => {
+          this.$message.error(err.message);
+        });
+      this.visibleAudite = false;
     },
     //编辑
-    essentialData_edit(record) {
-      this.$refs.RdProjectsModalRefs.openModules("edit", record);
-    },
-    //详情页
-    rdProjectsDetail(record) {
-      this.$router.push({
-        path: "rdProjectsDetail",
-        query: {
-          id: record.id
-        }
-      });
-    },
-    //评分
-    calculateProjects(record) {
-      this.$refs.CalculateProjectsModalRefs.openModules(record, "add");
+    productData_edit(record) {
+      this.scoreApproveId = record.id;
+      this.statusAudite = 1;
+      this.auditeRemarks = "";
+      this.visibleAudite = true;
     },
     //获取列表数据
     getPageList() {
@@ -208,6 +200,16 @@ export default {
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys;
+    },
+    // 编辑
+    pinbanOrder_edit(record, type) {
+      this.$router.push({
+        path: "actionFixedAssets",
+        query: {
+          id: record.id,
+          type
+        }
+      });
     },
     //页数切换
     handleTableChange(pagination) {
@@ -244,8 +246,8 @@ export default {
   }
 };
 </script>
-      
-      <style lang="less" scoped>
+    
+    <style lang="less" scoped>
 .queryFromBox {
   margin-bottom: 5px;
   .btnListBox {
@@ -256,4 +258,4 @@ export default {
   }
 }
 </style>
-      
+    

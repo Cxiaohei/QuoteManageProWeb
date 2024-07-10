@@ -5,6 +5,10 @@ import qs from 'querystring'
 export async function getPageList(params) {
     return request("/api/app/basic-configuration/base-data-list", METHOD.GET, transformAbpListQuery(params))
 }
+
+
+
+
 //新增基础数据
 export async function addEssentialDataList(params) {
     return request("/api/app/basic-configuration/base-data", METHOD.POST, params)
@@ -21,9 +25,14 @@ export async function getParentBase() {
     return request("/api/app/basic-configuration/parent-base-datas", METHOD.GET)
 }
 
+export async function getPageListTwoData() {
+    return request("/api/app/basic-configuration/base-datas-by-parent-id", METHOD.GET)
+}
+
 export default {
     getPageList,
     addEssentialDataList,
     editEssentialDataList,
-    getParentBase
+    getParentBase,
+    getPageListTwoData
 }
