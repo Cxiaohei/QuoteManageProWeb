@@ -239,6 +239,7 @@ export default {
     afterLogin(res) {
       this.logging = false;
       const loginRes = res;
+      console.log(loginRes)
       if (loginRes) {
         // const { user, permissions, roles } = loginRes.data;
         // this.setUser(user);
@@ -246,7 +247,7 @@ export default {
         // this.setRoles(roles);
         setAuthorization({
           token: loginRes.access_token,
-          expireAt: new Date(new Date().getTime() + loginRes.expires_in)
+          expireAt: new Date(new Date().getTime() + loginRes.expires_in * 1000)
         });
         // 获取路由配置
         // getRoutesConfig().then((result) => {
