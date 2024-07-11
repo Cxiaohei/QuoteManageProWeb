@@ -38,6 +38,15 @@
             >{{item.productNo}}</a-select-option>
           </a-select>
         </a-form-model-item>
+        <a-form-item>
+          <a-space>
+            <h2>导入物料明细</h2>
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+              <a-button type="primary" icon="to-top">导入</a-button>
+            </a-upload>
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
+          </a-space>
+        </a-form-item>
       </a-form-model>
       <!-- {{detailDataList1}} -->
       <div style="padding-top:20px">
@@ -250,7 +259,9 @@ import {
   BomDetailDataList,
   deleteBomDetail,
   addBomDetail,
-  editBomDetail
+  editBomDetail,
+  importExcel,
+  downloadTemplate
   // editBomDataList
 } from "@/services/businessCode/quotationManagement/bomQuote";
 import cloneDeep from "lodash.clonedeep";
@@ -390,8 +401,8 @@ export default {
         //   type: "boolean"
         // }
       ],
-      detailDataList1: [{}],
-      detailDataList2: [{}],
+      detailDataList1: [],
+      detailDataList2: [],
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
@@ -427,12 +438,12 @@ export default {
           }
           this.detailDataList1 = arr1;
           this.detailDataList2 = arr2;
-          if (arr1.length == 0) {
-            this.detailDataList1 = [{ dsBaseDataType: 0 }];
-          }
-          if (arr2.length == 0) {
-            this.detailDataList2 = [{ dsBaseDataType: 1 }];
-          }
+          // if (arr1.length == 0) {
+          //   this.detailDataList1 = [{ dsBaseDataType: 0 }];
+          // }
+          // if (arr2.length == 0) {
+          //   this.detailDataList2 = [{ dsBaseDataType: 1 }];
+          // }
         });
       });
 
@@ -486,6 +497,9 @@ export default {
         bomQuoteRelations: [record]
       };
       params.bomQuoteRelations[0].id = "";
+      params.bomQuoteRelations.map(item => {
+        item.bomQuoteId = this.$route.query.id;
+      });
       addBomDetail(params).then(res => {
         if (res.code == 1) {
           this.$message.success("添加成功");
@@ -506,7 +520,7 @@ export default {
     editDetailDataList(record) {
       editBomDetail(record).then(() => {
         this.$message.success("编辑成功");
-        this.getDetail();
+        // this.getDetail();
       });
     },
     onChange(record, type) {
@@ -521,19 +535,6 @@ export default {
         // this.seachData = Array.from(new Set(newArr));
       });
     },
-    // // 确定
-    // handleOk() {
-    //   this.$refs.userRefs.validate(valid => {
-    //     if (valid) {
-    //       this.confirmLoading = true;
-    //       if (this.title == "新增") {
-    //         this.addBomDataList();
-    //       } else {
-    //         this.editBomDataList();
-    //       }
-    //     }
-    //   });
-    // },
     //新增基础数据
     addDetailDataList1() {
       let hasadd = false;
@@ -544,7 +545,7 @@ export default {
         this.$message.error("请先保存新增数据");
         return false;
       }
-      this.detailDataList1.unshift({ isadd: true });
+      this.detailDataList1.unshift({ isadd: true, dsBaseDataType: 0 });
     },
     //删除表格
     removeDetailDataList1(index) {
@@ -560,11 +561,43 @@ export default {
         this.$message.error("请先保存新增数据");
         return false;
       }
-      this.detailDataList2.unshift({ isadd: true });
+      this.detailDataList2.unshift({ isadd: true, dsBaseDataType: 1 });
     },
     //删除表格
     removeDetailDataList2(index) {
       this.detailDataList2.splice(index, 1);
+    },
+    //下载模板
+    downloadTemplate() {
+      downloadTemplate();
+    },
+    //导入
+    importExcel(resData) {
+      let formData = new FormData();
+      formData.append("ImportFile", resData.file);
+      importExcel(formData).then(response => {
+        if (response.code == 1) {
+          const params = {
+            bomQuoteId: this.$route.query.id,
+            bomQuoteRelations: response.data
+          };
+          params.bomQuoteRelations[0].id = "";
+          params.bomQuoteRelations.map(item => {
+            item.bomQuoteId = this.$route.query.id;
+          });
+          addBomDetail(params).then(res => {
+            if (res.code == 1) {
+              this.$message.success("导入成功");
+              // this.$message.success("添加成功");
+              this.getDetail();
+            } else {
+              this.$message.error(res.msg);
+            }
+          });
+        } else {
+          this.$message.info(response.msg);
+        }
+      });
     },
     // handleCancel() {
     //   this.uservisible = false;

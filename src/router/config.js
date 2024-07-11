@@ -96,6 +96,15 @@ const options = {
               component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetail'),
             },
             {
+              path: 'rdProjectsDetailLook',
+              name: '查看研发项目',
+              meta: {
+                invisible: true,
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetailLook'),
+            },
+            {
               path: 'odmQuote',
               name: 'ODM报价',
               meta: {

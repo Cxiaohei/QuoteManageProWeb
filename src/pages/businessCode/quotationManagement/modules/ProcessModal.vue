@@ -8,6 +8,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
     >
+    <!-- {{queryFrom}} -->
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -49,8 +50,8 @@
               <a-select-option
                 v-for="item in seachData"
                 :key="item.id"
-                :value="item.value"
-              >{{ item.value }}</a-select-option>
+                :value="item.processRote"
+              >{{ item.processRote }}</a-select-option>
             </template>
           </a-auto-complete>
         </a-form-model-item>
@@ -72,7 +73,8 @@
 import {
   setManufactureFee,
   editManufactureFee,
-  getPriceList
+  getPriceList,
+  FilterPrice
 } from "@/services/businessCode/quotationManagement/odmQuote";
 import cloneDeep from "lodash.clonedeep";
 
@@ -138,12 +140,28 @@ export default {
       }
       this.uservisible = true;
     },
-    onSelect() {
-      this.seachData = [{ id: "1", value: "1" }];
+    onSelect(value) {
+      let checkObj = {};
+      this.seachData.map(Sitem => {
+        if (Sitem.id == value) {
+          checkObj = Sitem;
+        }
+      });
+      console.log(checkObj);
+
+      // for (let key in checkObj) {
+      //   this.queryFrom[key] = checkObj[key];
+      // }
+
+
+      // this.seachData = [{ id: "1", value: "1" }];
       this.$forceUpdate();
     },
-    onChange() {
-      this.seachData = [{ id: "1", value: "1" }];
+    onChange(value) {
+      FilterPrice(value).then(res => {
+        console.log(res);
+        this.seachData = res.data;
+      });
     },
     // 确定
     handleOk() {

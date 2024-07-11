@@ -49,7 +49,20 @@ export async function deleteBomDetail(Id) {
     return request(`/api/app/bom-quote/bom-quote-relation/${Id}`, METHOD.DELETE)
 }
 
+//导入
+export function importExcel(params, data) {
+    return request(`/api/app/bom-quote/import-dSBom-details`, METHOD.POST, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
 
+
+export function downloadTemplate() {
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/DownTempExcel/DownBomQuoteTempFile`;
+    download(url, 'BOM模版.xlsx');
+}
 
 export default {
     getPageList,
@@ -60,5 +73,7 @@ export default {
     deleteBomDetail,
     getAllProductList,
     getCategoryTypeData,
-    bomfilterApi
+    bomfilterApi,
+    importExcel,
+    downloadTemplate
 }

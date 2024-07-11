@@ -47,6 +47,15 @@
           </a-select>
         </a-form-model-item>
       </a-form-model>
+
+      <a-form-item>
+          <a-space>
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+              <a-button type="primary" icon="to-top">导入</a-button>
+            </a-upload>
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
+          </a-space>
+        </a-form-item>
       <!-- {{detailDataList1}} -->
       <div style="padding-top:20px">
         <h3>结构料</h3>
@@ -210,7 +219,9 @@ import {
   addBomDataList,
   getAllProductList,
   getCategoryTypeData,
-  bomfilterApi
+  bomfilterApi,
+  importExcel,
+  downloadTemplate
   // editBomDataList
 } from "@/services/businessCode/quotationManagement/bomQuote";
 import cloneDeep from "lodash.clonedeep";
@@ -491,6 +502,44 @@ export default {
     handleCancel() {
       this.uservisible = false;
       this.$refs.userRefs.resetFields();
+    },
+    //下载模板
+    downloadTemplate() {
+      downloadTemplate();
+    },
+    //导入
+    importExcel(resData) {
+      let formData = new FormData();
+      formData.append("ImportFile", resData.file);
+      importExcel(formData).then(response => {
+        if (response.code == 1) {
+          this.$message.success("导入成功");
+          var arr1=[];
+           var arr2=[];
+          response.data.map(item => {
+            if (item.dsBaseDataType == 0) {
+              arr1.push(item);
+            } else {
+              arr2.push(item);
+            }
+          });
+          this.detailDataList1 = arr1;
+          this.detailDataList2 = arr2;
+          if (arr1.length == 0) {
+            this.detailDataList1 = [{ dsBaseDataType: 0 }];
+          }
+          if (arr2.length == 0) {
+            this.detailDataList2 = [{ dsBaseDataType: 1 }];
+          }
+          // this.detailDataList1 = this.detailDataList1.concat(arr1);
+          // this.detailDataList2 = this.detailDataList2.concat(arr2);
+
+
+          // this.getPageList();
+        } else {
+          this.$message.info(response.msg);
+        }
+      });
     },
     //新增基础数据
     addBomDataList() {

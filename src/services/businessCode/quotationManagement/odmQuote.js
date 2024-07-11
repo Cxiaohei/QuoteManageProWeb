@@ -72,6 +72,10 @@ export async function OtherDetailDataList(Id) {
     return request(`/api/app/manufacture-fee-quote/${Id}/other-fee-quote-detail`, METHOD.GET)
 }
 
+export async function FilterPrice(Filter) {
+    return request(`/api/app/basic-configuration/price-strategy?Filter=${Filter}`, METHOD.GET)
+}
+
 
 export default {
     getPageList,
@@ -86,5 +90,6 @@ export default {
     setOtherFee,
     editOtherFee,
     ManuDetailDataList,
-    OtherDetailDataList
+    OtherDetailDataList,
+    FilterPrice
 }

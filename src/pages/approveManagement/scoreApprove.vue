@@ -34,6 +34,7 @@
     >
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" v-if="record.status==0" @click="productData_edit(record)" style="margin-right: 5px;">审核</a>
+        <a href="javascript:;" @click="lookProduct(record)" style="margin-right: 5px;">查看项目</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
@@ -73,7 +74,7 @@ import { mapGetters } from "vuex";
 
 const columns = [
   {
-    width: 100,
+    width: 140,
     title: "操作",
     scopedSlots: {
       customRender: "action"
@@ -200,6 +201,15 @@ export default {
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys;
+    },
+    //查看项目
+    lookProduct(record, type) {
+      this.$router.push({
+        path: "/quotationManagement/rdProjectsDetailLook",
+        query: {
+          id: record.developProjectId
+        }
+      });
     },
     // 编辑
     pinbanOrder_edit(record, type) {
