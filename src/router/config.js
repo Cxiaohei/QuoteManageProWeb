@@ -237,14 +237,14 @@ const options = {
               },
               component: () => import('@/pages/systemManagement/identity/UserList'),
             },
-            // {
-            //   path: 'organization',
-            //   name: '组织机构',
-            //   meta: {
-            //     // authority: 'AbpIdentity.OrganizationUnits',
-            //   },
-            //   component: () => import('@/pages/systemManagement/organization/organizationUnits'),
-            // },
+            {
+              path: 'organization',
+              name: '组织机构',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/systemManagement/organization/organizationUnits'),
+            },
             // {
             //   path: 'claimTypes',
             //   name: '声明类型',
