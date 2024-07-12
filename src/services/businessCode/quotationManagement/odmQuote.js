@@ -73,7 +73,7 @@ export async function OtherDetailDataList(Id) {
 }
 
 export async function FilterPrice(Filter) {
-    return request(`/api/app/basic-configuration/price-strategy?Filter=${Filter}`, METHOD.GET)
+    return request(`/api/app/basic-configuration/process-rote-list?Filter=${Filter}`, METHOD.GET)
 }
 
 

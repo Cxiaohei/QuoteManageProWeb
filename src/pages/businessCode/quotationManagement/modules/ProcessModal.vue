@@ -40,7 +40,6 @@
           </a-select>-->
           <a-auto-complete
             v-model="queryFrom.processRote"
-            :data-source="seachData"
             style="width: 150px"
             placeholder="请输入内容查询"
             @select="onSelect"
@@ -62,7 +61,7 @@
           v-for="(item,index) in processRoteList"
           :key="index"
         >
-          <a-input v-model="item[item.key]" style="width: 150px" :placeholder="item.title"></a-input>
+          <a-input v-model="queryFrom[item.key]" style="width: 150px" :placeholder="item.title"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -143,24 +142,21 @@ export default {
     onSelect(value) {
       let checkObj = {};
       this.seachData.map(Sitem => {
-        if (Sitem.id == value) {
+        // if (Sitem.id == value) {
+        if (Sitem.processRote == value) {
           checkObj = Sitem;
         }
       });
-      console.log(checkObj);
-
-      // for (let key in checkObj) {
-      //   this.queryFrom[key] = checkObj[key];
-      // }
-
-
+      for (let key in checkObj) {
+        this.queryFrom[key] = checkObj[key];
+      }
       // this.seachData = [{ id: "1", value: "1" }];
       this.$forceUpdate();
     },
     onChange(value) {
       FilterPrice(value).then(res => {
         console.log(res);
-        this.seachData = res.data;
+        this.seachData = res.data.items;
       });
     },
     // 确定

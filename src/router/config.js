@@ -206,6 +206,14 @@ const options = {
               component: () => import('@/pages/businessCode/category1/essentialTwoData'),
             },
             {
+              path: 'craftLine',
+              name: '工艺线路',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/craftLine'),
+            },
+            {
               path: 'priceStrategy',
               name: '价格策略',
               meta: {
