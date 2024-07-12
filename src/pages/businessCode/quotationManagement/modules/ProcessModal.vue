@@ -216,7 +216,6 @@ export default {
         };
         QuoteCalculate(params).then((res) => {
           for (let key in res.data) {
-            console.log(key);
             this.queryFrom[key] = res.data[key];
           }
           this.$forceUpdate();
@@ -237,12 +236,10 @@ export default {
       // }
       this.queryFrom.priceStrategyName = checkObj.priceStrategyName;
       this.queryFrom.priceStrategyId = checkObj.id;
-      // this.seachData = [{ id: "1", value: "1" }];
       this.$forceUpdate();
     },
     onChangePric(value) {
       FilterPriceStrategyId(value).then((res) => {
-        console.log(res);
         this.seachPriceData = res.data;
       });
     },
