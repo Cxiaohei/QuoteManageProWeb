@@ -84,6 +84,12 @@ export async function FilterPriceStrategyId(Filter) {
 
 
 
+//计算加工费
+export async function QuoteCalculate(params) {
+    return request("/api/app/manufacture-fee-quote/calculate-manufacture-fee", METHOD.POST, params)
+}
+
+
 
 export default {
     getPageList,
@@ -100,5 +106,6 @@ export default {
     ManuDetailDataList,
     OtherDetailDataList,
     FilterPrice,
-    FilterPriceStrategyId
+    FilterPriceStrategyId,
+    QuoteCalculate
 }
