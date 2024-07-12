@@ -72,9 +72,17 @@ export async function OtherDetailDataList(Id) {
     return request(`/api/app/manufacture-fee-quote/${Id}/other-fee-quote-detail`, METHOD.GET)
 }
 
+//工艺线路
 export async function FilterPrice(Filter) {
     return request(`/api/app/basic-configuration/process-rote-list?Filter=${Filter}`, METHOD.GET)
 }
+
+//价格策略
+export async function FilterPriceStrategyId(Filter) {
+    return request(`/api/app/basic-configuration/price-strategy?Filter=${Filter}`, METHOD.GET)
+}
+
+
 
 
 export default {
@@ -91,5 +99,6 @@ export default {
     editOtherFee,
     ManuDetailDataList,
     OtherDetailDataList,
-    FilterPrice
+    FilterPrice,
+    FilterPriceStrategyId
 }

@@ -8,7 +8,7 @@
       @ok="handleOk"
       @cancel="handleCancel"
     >
-    <!-- {{queryFrom}} -->
+      <!-- {{queryFrom}} -->
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -54,6 +54,23 @@
             </template>
           </a-auto-complete>
         </a-form-model-item>
+        <a-form-model-item style="width: 31%" label="引用价格策略">
+          <a-auto-complete
+            v-model="queryFrom.priceStrategyId"
+            style="width: 150px"
+            placeholder="请输入内容查询"
+            @select="onSelectPric"
+            @change="onChangePric"
+          >
+            <template slot="dataSource">
+              <a-select-option
+                v-for="item in seachPriceData"
+                :key="item.id"
+                :value="item.id"
+              >{{ item.priceStrategyName }}</a-select-option>
+            </template>
+          </a-auto-complete>
+        </a-form-model-item>
 
         <a-form-model-item
           style="width: 31%"
@@ -73,7 +90,8 @@ import {
   setManufactureFee,
   editManufactureFee,
   getPriceList,
-  FilterPrice
+  FilterPrice,
+  FilterPriceStrategyId
 } from "@/services/businessCode/quotationManagement/odmQuote";
 import cloneDeep from "lodash.clonedeep";
 
@@ -88,6 +106,7 @@ export default {
       confirmLoading: false,
       PriceList: [],
       seachData: [],
+      seachPriceData: [], //价格策略
       rules: {
         // categoryName: [
         //   { required: true, message: "请输入类别名称", trigger: "change" }
@@ -139,6 +158,7 @@ export default {
       }
       this.uservisible = true;
     },
+    //工艺线路
     onSelect(value) {
       let checkObj = {};
       this.seachData.map(Sitem => {
@@ -150,13 +170,36 @@ export default {
       for (let key in checkObj) {
         this.queryFrom[key] = checkObj[key];
       }
-      // this.seachData = [{ id: "1", value: "1" }];
+      this.queryFrom.referenceProcessRoteId = checkObj.id;
       this.$forceUpdate();
     },
     onChange(value) {
       FilterPrice(value).then(res => {
         console.log(res);
         this.seachData = res.data.items;
+      });
+    },
+    //价格策略
+    onSelectPric(value) {
+      let checkObj = {};
+      this.seachPriceData.map(Sitem => {
+        // if (Sitem.id == value) {
+        if (Sitem.id == value) {
+          checkObj = Sitem;
+        }
+      });
+      // for (let key in checkObj) {
+      //   this.queryFrom[key] = checkObj[key];
+      // }
+      this.queryFrom.priceStrategyName = checkObj.priceStrategyName;
+      this.queryFrom.priceStrategyId = checkObj.id;
+      // this.seachData = [{ id: "1", value: "1" }];
+      this.$forceUpdate();
+    },
+    onChangePric(value) {
+      FilterPriceStrategyId(value).then(res => {
+        console.log(res);
+        this.seachPriceData = res.data
       });
     },
     // 确定
