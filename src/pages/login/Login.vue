@@ -395,6 +395,7 @@ export default {
       height: 100%;
       margin: auto auto;
       background: #fff;
+      box-shadow: 0 0 10px #ddd;
       padding: 40px 75px 0;
       position: relative;
       .login-footer {

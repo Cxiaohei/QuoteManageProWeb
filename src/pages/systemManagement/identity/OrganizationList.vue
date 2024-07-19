@@ -2,15 +2,17 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')" @click="$refs.createModal.openModal({})" type="primary"
-          >新建</a-button
-        >
+        <a-button
+          v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')"
+          @click="$refs.createModal.openModal({})"
+          type="primary"
+        >新建</a-button>
         <!-- <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
             <a-menu-item key="delete">删除</a-menu-item>
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
-        </a-dropdown> -->
+        </a-dropdown>-->
       </div>
       <standard-table
         rowKey="id"
@@ -19,11 +21,22 @@
         :selectedRows.sync="selectedRows"
         :loading="loading"
       >
-        <span slot="creationTime" slot-scope="{ text }">{{
+        <span slot="creationTime" slot-scope="{ text }">
+          {{
           text | moment
-        }}</span>
+          }}
+        </span>
         <div slot="action" slot-scope="{ record }">
-          <template>
+          <a
+            href="javascript:;" v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')"
+            @click="$refs.createModal.openModal({ parentId: record.id},`${record.displayName}(${record.code})`)"
+          >添加子项</a>
+          <a href="javascript:;" v-if="checkPermission('AbpIdentity.OrganitaionUnits.Update')" @click="$refs.createModal.openModal(record)">编辑</a>
+          <a-popconfirm title="确定要删除吗？" v-if="checkPermission('AbpIdentity.OrganitaionUnits.Delete')" @confirm="handleDel(record.id)">
+            <a href="javascript:;">删除</a>
+          </a-popconfirm>
+
+          <!-- <template>
             <a-dropdown>
               <a class="ant-dropdown-link" href="javascript:;">
                 操作
@@ -36,27 +49,19 @@
                     @click="
                       $refs.createModal.openModal({ parentId: record.id},`${record.displayName}(${record.code})`)
                     "
-                    >添加子项</a
-                  >
+                  >添加子项</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.OrganitaionUnits.Update')">
-                  <a
-                    href="javascript:;"
-                    @click="$refs.createModal.openModal(record)"
-                    >编辑</a
-                  >
+                  <a href="javascript:;" @click="$refs.createModal.openModal(record)">编辑</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.OrganitaionUnits.Delete')">
-                  <a-popconfirm
-                    title="确定要删除吗？"
-                    @confirm="handleDel(record.id)"
-                  >
+                  <a-popconfirm title="确定要删除吗？" @confirm="handleDel(record.id)">
                     <a href="javascript:;">删除</a>
                   </a-popconfirm>
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
-          </template>
+          </template> -->
         </div>
       </standard-table>
     </div>
@@ -66,28 +71,31 @@
 
 <script>
 import StandardTable from "@/components/table/StandardTable";
-import { deleteOrganization as del,getOrganizationsAll } from "@/services/identity/organization";
+import {
+  deleteOrganization as del,
+  getOrganizationsAll
+} from "@/services/identity/organization";
 import CreateForm from "./modules/OrganizationForm";
-import { checkPermission } from '@/utils/abp';
+import { checkPermission } from "@/utils/abp";
 const columns = [
   {
     title: "编码",
-    dataIndex: "code",
+    dataIndex: "code"
   },
   {
     title: "名称",
-    dataIndex: "displayName",
+    dataIndex: "displayName"
   },
   {
     title: "创建时间",
     dataIndex: "creationTime",
     scopedSlots: { customRender: "creationTime" },
-    sorter: true,
+    sorter: true
   },
   {
     title: "操作",
-    scopedSlots: { customRender: "action" },
-  },
+    scopedSlots: { customRender: "action" }
+  }
 ];
 let that;
 export default {
@@ -99,14 +107,14 @@ export default {
       dataSource: [],
       selectedRows: [],
       loading: false,
-      queryParam: {},
+      queryParam: {}
     };
   },
   // authorize: {
   //   deleteRecord: "delete",
   // },
   mounted() {
-    that=this;
+    that = this;
     this.loadData();
   },
   methods: {
@@ -115,7 +123,7 @@ export default {
       this.advanced = !this.advanced;
     },
     handleDel(id) {
-      del(id).then((res) => {
+      del(id).then(res => {
         this.loadData();
         this.$message.info("删除成功");
       });
@@ -144,7 +152,7 @@ export default {
     loadData() {
       this.loading = true;
       getOrganizationsAll()
-        .then((res) => {
+        .then(res => {
           this.handleData(res.items);
           this.dataSource = res.items;
         })
@@ -152,17 +160,16 @@ export default {
           this.loading = false;
         });
     },
-    handleData(data){
+    handleData(data) {
       data.forEach(x => {
-        if(!x.children||x.children.length==0){
-          delete x.children
-        }
-        else{
+        if (!x.children || x.children.length == 0) {
+          delete x.children;
+        } else {
           this.handleData(x.children);
         }
       });
     }
-  },
+  }
 };
 </script>
 

@@ -16,7 +16,7 @@
         ref="userRefs"
       >
         <!-- <a-form-model-item style="width: 31%;" label="报价策略名称" prop="priceStrategyName">
-          <a-input v-model="queryFrom.priceStrategyName" style="width: 150px" placeholder="报价策略名称"></a-input>
+          <a-input v-model="queryFrom.priceStrategyName" style="width: 180px" placeholder="报价策略名称"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="数据类型" prop="categoryType">
           <a-select v-model="queryFrom.categoryType" style="width: 150px;" placeholder="数据类型">

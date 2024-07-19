@@ -20,14 +20,14 @@
           <a-input
             v-else-if="item.type == 'string'"
             v-model="queryFrom[item.key]"
-            style="width: 150px"
+            style="width: 300px"
             :placeholder="item.label"
           ></a-input>
           <!-- 产品下拉 -->
           <a-select
             v-else-if="item.label == '产品'"
             v-model="queryFrom[item.key]"
-            style="width: 150px"
+            style="width: 300px"
             :placeholder="item.label"
             allowClear
           >

@@ -16,7 +16,7 @@
         ref="userRefs"
       >
         <a-form-model-item style="width: 31%" label="报价单名称">
-          <a-input v-model="queryFrom.odmQuoteName" style="width: 150px" placeholder="报价单名称"></a-input>
+          <a-input v-model="queryFrom.odmQuoteName" style="width: 180px" placeholder="报价单名称"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%" label="产品">
           <!-- 产品下拉 -->
@@ -35,7 +35,7 @@
         </a-form-model-item>
 
         <a-form-model-item style="width: 31%" label="备注">
-          <a-input v-model="queryFrom.remarks" style="width: 150px" placeholder="备注"></a-input>
+          <a-input v-model="queryFrom.remarks" style="width: 180px" placeholder="备注"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>

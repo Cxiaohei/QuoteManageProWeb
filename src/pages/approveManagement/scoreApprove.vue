@@ -8,7 +8,7 @@
           </a-space>
         </a-form-item>-->
         <a-form-item>
-          <a-input v-model.trim="queryFrom.Filter" style="width: 120px" placeholder="关键字"></a-input>
+          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
         </a-form-item>
         <a-form-item>
           <a-space>

@@ -16,43 +16,43 @@
         ref="userRefs"
       >
         <a-form-model-item style="width: 31%;" label="工艺路线" prop="processRote">
-          <a-input v-model="queryFrom.processRote" style="width: 150px" placeholder="工艺路线"></a-input>
+          <a-input v-model="queryFrom.processRote" style="width: 180px" placeholder="工艺路线"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="PCBA测试时间" prop="pcbaTestMinutes">
-          <a-input v-model="queryFrom.pcbaTestMinutes" style="width: 150px" placeholder="PCBA测试时间"></a-input>
+          <a-input v-model="queryFrom.pcbaTestMinutes" style="width: 180px" placeholder="PCBA测试时间"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="PCBA组装时间" prop="pcbaAssemblyMinutes">
-          <a-input v-model="queryFrom.pcbaAssemblyMinutes" style="width: 150px" placeholder="PCBA组装时间"></a-input>
+          <a-input v-model="queryFrom.pcbaAssemblyMinutes" style="width: 180px" placeholder="PCBA组装时间"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="成品测试时间" prop="finishedProductTestMinutes">
-          <a-input v-model="queryFrom.finishedProductTestMinutes" style="width: 150px" placeholder="成品测试时间"></a-input>
+          <a-input v-model="queryFrom.finishedProductTestMinutes" style="width: 180px" placeholder="成品测试时间"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="成品组装时间" prop="finishedProductAssemblyMinutes">
-          <a-input v-model="queryFrom.finishedProductAssemblyMinutes" style="width: 150px" placeholder="成品组装时间"></a-input>
+          <a-input v-model="queryFrom.finishedProductAssemblyMinutes" style="width: 180px" placeholder="成品组装时间"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="物料种类" prop="bomSpecies">
-          <a-input v-model="queryFrom.bomSpecies" style="width: 150px" placeholder="物料种类"></a-input>
+          <a-input v-model="queryFrom.bomSpecies" style="width: 180px" placeholder="物料种类"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="插件点数" prop="dipPointNum">
-          <a-input v-model="queryFrom.dipPointNum" style="width: 150px" placeholder="插件点数"></a-input>
+          <a-input v-model="queryFrom.dipPointNum" style="width: 180px" placeholder="插件点数"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="手焊点数" prop="manualWeldingPointNum">
-          <a-input v-model="queryFrom.manualWeldingPointNum" style="width: 150px" placeholder="手焊点数"></a-input>
+          <a-input v-model="queryFrom.manualWeldingPointNum" style="width: 180px" placeholder="手焊点数"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="贴片点数" prop="patchPointNum">
-          <a-input v-model="queryFrom.patchPointNum" style="width: 150px" placeholder="贴片点数"></a-input>
+          <a-input v-model="queryFrom.patchPointNum" style="width: 180px" placeholder="贴片点数"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="SMT价格" prop="smtPrice">
-          <a-input v-model="queryFrom.smtPrice" style="width: 150px" placeholder="SMT价格"></a-input>
+          <a-input v-model="queryFrom.smtPrice" style="width: 180px" placeholder="SMT价格"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="PCBA价格" prop="pcbaTotalPrice">
-          <a-input v-model="queryFrom.pcbaTotalPrice" style="width: 150px" placeholder="PCBA价格"></a-input>
+          <a-input v-model="queryFrom.pcbaTotalPrice" style="width: 180px" placeholder="PCBA价格"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="组装价格" prop="assemblyTotalPrice">
-          <a-input v-model="queryFrom.assemblyTotalPrice" style="width: 150px" placeholder="组装价格"></a-input>
+          <a-input v-model="queryFrom.assemblyTotalPrice" style="width: 180px" placeholder="组装价格"></a-input>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="加工费总价" prop="productTotalPrice">
-          <a-input v-model="queryFrom.productTotalPrice" style="width: 150px" placeholder="加工费总价"></a-input>
+          <a-input v-model="queryFrom.productTotalPrice" style="width: 180px" placeholder="加工费总价"></a-input>
         </a-form-model-item>
 
         <!-- <a-form-model-item

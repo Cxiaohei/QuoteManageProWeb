@@ -16,7 +16,7 @@
         ref="userRefs"
       >
         <a-form-model-item style="width: 31%;" label="类别名称" prop="categoryName">
-          <a-input v-model="queryFrom.categoryName" style="width: 150px" placeholder="类别名称"></a-input>
+          <a-input v-model="queryFrom.categoryName" style="width: 180px" placeholder="类别名称"></a-input>
         </a-form-model-item>
 
         <a-form-model-item style="width: 31%;" label="等级" prop="categoryLevel">
@@ -59,7 +59,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item style="width: 31%;" label="单价" prop="unitPrice">
-          <a-input v-model="queryFrom.unitPrice" style="width: 150px" placeholder="类别名称"></a-input>
+          <a-input v-model="queryFrom.unitPrice" style="width: 180px" placeholder="类别名称"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>

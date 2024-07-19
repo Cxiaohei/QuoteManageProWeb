@@ -48,7 +48,7 @@ const options = {
           path: 'category1',
           name: '物料管理',
           meta: {
-            icon: 'setting'
+            icon: 'slack'
           },
           component: PageView,
           children: [
@@ -69,6 +69,32 @@ const options = {
               component: () => import('@/pages/businessCode/category1/outMaterialManagement'),
             },
           ]
+        }, 
+        {
+          path: 'product',
+          name: '产品管理',
+          meta: {
+            icon: 'codepen-circle'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'productManagement',
+              name: '标准产品',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/productManagement'),
+            },
+            {
+              path: 'productNormManagement',
+              name: '非标产品',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/productNormManagement'),
+            },
+          ]
         },
         {
           path: 'quotationManagement',
@@ -80,7 +106,7 @@ const options = {
           children: [
             {
               path: 'rdProjects',
-              name: '研发项目',
+              name: '研发费报价',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
@@ -88,7 +114,7 @@ const options = {
             },
             {
               path: 'rdProjectsDetail',
-              name: '研发项目详情',
+              name: '研发费报价详情',
               meta: {
                 invisible: true,
                 // authority: 'AbpIdentity.OrganizationUnits',
@@ -97,7 +123,7 @@ const options = {
             },
             {
               path: 'rdProjectsDetailLook',
-              name: '查看研发项目',
+              name: '查看研发费报价',
               meta: {
                 invisible: true,
                 // authority: 'AbpIdentity.OrganizationUnits',
@@ -123,7 +149,7 @@ const options = {
             },
             {
               path: 'bomQuote',
-              name: 'BOM报价',
+              name: 'OEM报价',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
@@ -131,7 +157,7 @@ const options = {
             },
             {
               path: 'bomQuoteDetail',
-              name: 'BOM报价详情',
+              name: 'OEM报价详情',
               meta: {
                 invisible: true,
                 // authority: 'AbpIdentity.OrganizationUnits',
@@ -142,30 +168,56 @@ const options = {
         },
 
         {
-          path: 'category2',
-          name: '产品管理',
+          path: 'performance',
+          name: '管理绩效(夸克)',
           meta: {
-            icon: 'setting'
+            icon: 'ant-cloud'
           },
           component: PageView,
           children: [
             {
-              path: 'productManagement',
-              name: '产品管理',
+              path: 'performanceManagement',
+              name: '项目',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/businessCode/category1/productManagement'),
+              component: () => import('@/pages/businessCode/performance/performanceManagement'),
             },
           ]
         },
+        // {
+        //   path: 'category2',
+        //   name: '审批管理',
+        //   meta: {
+        //     icon: 'switcher'
+        //   },
+        //   component: PageView,
+        //   children: [
+        //     {
+        //       path: 'productManagement',
+        //       name: '标准产品',
+        //       meta: {
+        //         // authority: 'AbpIdentity.OrganizationUnits',
+        //       },
+        //       component: () => import('@/pages/businessCode/category1/productManagement'),
+        //     },
+        //     {
+        //       path: 'productNormManagement',
+        //       name: '非标产品',
+        //       meta: {
+        //         // authority: 'AbpIdentity.OrganizationUnits',
+        //       },
+        //       component: () => import('@/pages/businessCode/category1/productNormManagement'),
+        //     },
+        //   ]
+        // },
 
 
         {
           path: 'approveManagement',
           name: '审批管理',
           meta: {
-            icon: 'setting'
+            icon: 'laptop'
           },
           component: PageView,
           children: [
@@ -179,32 +231,24 @@ const options = {
             },
           ]
         },
-        
 
         {
           path: 'system',
-          name: '系统管理',
+          name: '系统设置',
           meta: {
             icon: 'setting'
           },
           component: PageView,
           children: [
-            {
-              path: 'essentialData',
-              name: '基础数据',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/essentialData'),
-            },
-            {
-              path: 'essentialTwoData',
-              name: '二级基础数据',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/essentialTwoData'),
-            },
+            // {
+            //   path: 'essentialData',
+            //   name: '基础数据',
+            //   meta: {
+            //     // authority: 'AbpIdentity.OrganizationUnits',
+            //   },
+            //   component: () => import('@/pages/businessCode/category1/essentialData'),
+            // },
+
             {
               path: 'craftLine',
               name: '工艺线路',
@@ -287,6 +331,33 @@ const options = {
             // },
           ]
         },
+
+        {
+          path: 'essentialData',
+          name: '基础数据',
+          meta: {
+            icon: 'profile'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'essentialData',
+              name: '基础数据',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/essentialData'),
+            }, {
+              path: 'essentialTwoData',
+              name: '二级基础数据',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/essentialTwoData'),
+            },
+          ]
+        },
+
       ]
     }
   ]

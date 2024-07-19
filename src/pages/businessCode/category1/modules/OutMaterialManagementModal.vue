@@ -21,12 +21,12 @@
           :key="index"
           :label="item.label"
         >
-        <a-select v-model="queryFrom[item.key]" style="width: 150px;" placeholder="物料工艺" v-if="item.key=='bomCraft'">
+        <a-select v-model="queryFrom[item.key]" style="width: 200px;" placeholder="物料工艺" v-if="item.key=='bomCraft'">
             <a-select-option :value="0">贴片</a-select-option>
             <a-select-option :value="5">插件</a-select-option>
             <a-select-option :value="10">手工焊</a-select-option>
           </a-select>
-          <a-input v-else v-model="queryFrom[item.key]" style="width: 150px" :placeholder="item.label"></a-input>
+          <a-input v-else v-model="queryFrom[item.key]" style="width: 200px" :placeholder="item.label"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>

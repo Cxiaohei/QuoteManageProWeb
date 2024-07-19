@@ -2,9 +2,11 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button v-if="checkPermission('AbpIdentity.Roles.Create')" @click="$refs.createModal.openModal({})" type="primary"
-          >新建</a-button
-        >
+        <a-button
+          v-if="checkPermission('AbpIdentity.Roles.Create')"
+          @click="$refs.createModal.openModal({})"
+          type="primary"
+        >新建</a-button>
       </div>
       <standard-table
         rowKey="id"
@@ -22,38 +24,37 @@
         </span>
         <div slot="action" slot-scope="{ record }">
           <template>
-            <a-dropdown>
+            <a href="javascript:;" @click="$refs.createModal.openModal(record)" v-if="checkPermission('AbpIdentity.Roles.Update')" style="margin-right: 5px;">编辑</a>
+            <a href="javascript:;" @click="$refs.permissionModal.openModal(record)" v-if="checkPermission('AbpIdentity.Roles.ManagePermissions')" style="margin-right: 5px;">权限</a>
+            <a-popconfirm title="确定要删除吗？" @confirm="handleDel(record.id)" v-if="checkPermission('AbpIdentity.Roles.Delete')">
+              <a href="javascript:;">删除</a>
+            </a-popconfirm>
+
+            <!-- <a-dropdown>
               <a class="ant-dropdown-link" href="javascript:;">
                 操作
                 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
                 <a-menu-item v-if="checkPermission('AbpIdentity.Roles.Update')">
-                  <a
-                    href="javascript:;"
-                    @click="$refs.createModal.openModal(record)"
-                    >编辑</a
-                  >
+                  <a href="javascript:;" @click="$refs.createModal.openModal(record)">编辑</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.Roles.ManagePermissions')">
                   <a href="javascript:;" @click="$refs.permissionModal.openModal(record)">权限</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.Roles.Delete')">
-                  <a-popconfirm
-                    title="确定要删除吗？"
-                    @confirm="handleDel(record.id)"
-                  >
+                  <a-popconfirm title="确定要删除吗？" @confirm="handleDel(record.id)">
                     <a href="javascript:;">删除</a>
                   </a-popconfirm>
                 </a-menu-item>
               </a-menu>
-            </a-dropdown>
+            </a-dropdown> -->
           </template>
         </div>
       </standard-table>
     </div>
     <create-form ref="createModal" @ok="handleOk" />
-    <permission-form ref="permissionModal" provider-name="R"/>
+    <permission-form ref="permissionModal" provider-name="R" />
   </a-card>
 </template>
 
@@ -62,22 +63,22 @@ import StandardTable from "@/components/table/StandardTable";
 import { getList, del } from "@/services/identity/role";
 import CreateForm from "./modules/RoleForm";
 import PermissionForm from "./modules/PermissionForm";
-import { checkPermission } from '@/utils/abp';
+import { checkPermission } from "@/utils/abp";
 const columns = [
   {
     title: "角色名称",
     dataIndex: "name",
-    scopedSlots: { customRender: "roleName" },
+    scopedSlots: { customRender: "roleName" }
   },
   {
     title: "操作",
-    scopedSlots: { customRender: "action" },
-  },
+    scopedSlots: { customRender: "action" }
+  }
 ];
 let that;
 export default {
   name: "RoleList",
-  components: { StandardTable, CreateForm,PermissionForm },
+  components: { StandardTable, CreateForm, PermissionForm },
   data() {
     return {
       advanced: true,
@@ -86,23 +87,23 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        showQuickJumper:true,
-        showTotal:total => `总计 ${total} 条`
+        showQuickJumper: true,
+        showTotal: total => `总计 ${total} 条`
       },
       sorter: {
         field: "id",
-        order: "desc",
+        order: "desc"
       },
       loading: false,
       queryParam: {},
-      categorys: [],
+      categorys: []
     };
   },
   // authorize: {
   //   deleteRecord: "delete",
   // },
   mounted() {
-    that=this;
+    that = this;
     this.loadData();
   },
   methods: {
@@ -114,7 +115,7 @@ export default {
       this.$message.info("选中行改变了");
     },
     handleDel(id) {
-      del(id).then((res) => {
+      del(id).then(res => {
         this.loadData();
         this.$message.info("删除成功");
       });
@@ -126,7 +127,7 @@ export default {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
-      if(sorter.field) this.sorter = sorter;
+      if (sorter.field) this.sorter = sorter;
       this.loadData();
     },
     loadData() {
@@ -134,10 +135,10 @@ export default {
       let params = {
         ...this.pagination,
         ...this.queryParam,
-        sorter: this.sorter,
+        sorter: this.sorter
       };
       getList(params)
-        .then((res) => {
+        .then(res => {
           const pagination = { ...this.pagination };
           pagination.total = res.totalCount;
           this.pagination = pagination;
@@ -150,8 +151,8 @@ export default {
     refresh() {
       this.pagination.current = 1;
       this.loadData();
-    },
-  },
+    }
+  }
 };
 </script>
 
