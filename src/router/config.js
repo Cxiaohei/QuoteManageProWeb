@@ -333,7 +333,7 @@ const options = {
         },
 
         {
-          path: 'essentialData',
+          path: 'basicsSeting',
           name: '基础数据',
           meta: {
             icon: 'profile'
@@ -354,6 +354,22 @@ const options = {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
               component: () => import('@/pages/businessCode/category1/essentialTwoData'),
+            },
+            {
+              path: 'productType',
+              name: '产品类型',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/basicsSeting/productType'),
+            },
+            {
+              path: 'productXian',
+              name: '产品线',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/basicsSeting/productXian'),
             },
           ]
         },

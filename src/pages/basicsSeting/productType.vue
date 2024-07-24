@@ -16,14 +16,14 @@
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
-        <a-form-item>
+        <!-- <a-form-item>
           <a-space>
             <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
               <a-button type="primary" icon="to-top">导入</a-button>
             </a-upload>
             <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
           </a-space>
-        </a-form-item>
+        </a-form-item> -->
       </a-form>
     </div>
     <a-table
@@ -57,7 +57,7 @@
         }}
       </span>
     </a-table>
-    <ProductManagementModal ref="ProductManagementModalRefs" @ok="getPageList"></ProductManagementModal>
+    <ProductTypeModal ref="ProductTypeModalRefs" @ok="getPageList"></ProductTypeModal>
   </a-card>
 </template>
     
@@ -66,10 +66,10 @@ import {
   getPageList,
   importExcel,
   downloadTemplate
-} from "@/services/businessCode/category1/productManagement";
+} from "@/services/basicsSeting/productType";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import ProductManagementModal from "./modules/ProductManagementModal";
+import ProductTypeModal from "./modules/ProductTypeModal";
 
 const columns = [
   {
@@ -80,59 +80,24 @@ const columns = [
     }
   },
   {
-    title: "编号",
-    dataIndex: "productNo",
+    title: "产品类型名称",
+    dataIndex: "productTypeName",
     scopedSlots: {
-      customRender: "productNo"
+      customRender: "productTypeName"
     }
   },
   {
-    title: "名称",
-    dataIndex: "productName",
+    title: "产品线名称",
+    dataIndex: "productLineName",
     scopedSlots: {
-      customRender: "productName"
+      customRender: "productLineName"
     }
   },
   {
-    title: "产品线",
-    dataIndex: "productLine",
+    title: "基准毛利",
+    dataIndex: "standardGrossProfit",
     scopedSlots: {
-      customRender: "productLine"
-    }
-  },
-  {
-    title: "产品描述",
-    dataIndex: "description",
-    scopedSlots: {
-      customRender: "description"
-    }
-  },
-  {
-    title: "标准价格",
-    dataIndex: "standardPrice",
-    scopedSlots: {
-      customRender: "standardPrice"
-    }
-  },
-  {
-    title: "成本价",
-    dataIndex: "costPrice",
-    scopedSlots: {
-      customRender: "costPrice"
-    }
-  },
-  {
-    title: "当前报价",
-    dataIndex: "currentPrice",
-    scopedSlots: {
-      customRender: "currentPrice"
-    }
-  },
-  {
-    title: "最后一次报价时间",
-    dataIndex: "lastQuoteTime",
-    scopedSlots: {
-      customRender: "lastQuoteTime"
+      customRender: "standardGrossProfit"
     }
   },
   {
@@ -141,7 +106,14 @@ const columns = [
     scopedSlots: {
       customRender: "remarks"
     }
-  }
+  },
+  {
+    title: "备用1",
+    dataIndex: "spareColumOne",
+    scopedSlots: {
+      customRender: "spareColumOne"
+    }
+  },
 ];
 
 export default {
@@ -162,7 +134,7 @@ export default {
       }
     };
   },
-  components: { ProductManagementModal },
+  components: { ProductTypeModal },
   mounted() {},
   created() {
     this.getPageList();
@@ -175,11 +147,11 @@ export default {
     checkPermission,
     //新增
     add_pagelist() {
-      this.$refs.ProductManagementModalRefs.openModules("add");
+      this.$refs.ProductTypeModalRefs.openModules("add");
     },
     //编辑
     productData_edit(record) {
-      this.$refs.ProductManagementModalRefs.openModules("edit", record);
+      this.$refs.ProductTypeModalRefs.openModules("edit", record);
     },
     //下载模板
     downloadTemplate() {
@@ -204,7 +176,7 @@ export default {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
         ...this.queryFrom,
-        IsStandard: false
+        IsStandard: true
       };
       getPageList(params)
         .then(res => {

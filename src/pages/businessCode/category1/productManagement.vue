@@ -203,7 +203,8 @@ export default {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        ...this.queryFrom
+        ...this.queryFrom,
+        IsStandard: true
       };
       getPageList(params)
         .then(res => {
