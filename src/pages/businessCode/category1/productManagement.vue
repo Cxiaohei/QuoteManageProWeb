@@ -284,9 +284,9 @@ export default {
       };
       if (this.$route.path == "/product/productNormManagement") {
         params.IsStandard = false;
-      } else {
+      }else if (this.$route.path == "/product/productManagement") {
         params.IsStandard = true;
-      }
+      } 
       getPageList(params)
         .then(res => {
           if (res.code == 1) {

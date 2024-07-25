@@ -94,6 +94,14 @@ const options = {
               },
               component: () => import('@/pages/businessCode/category1/productManagement'),
             },
+            {
+              path: 'productAllManagement',
+              name: '全部产品',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/productManagement'),
+            },
           ]
         },
         {
@@ -104,6 +112,14 @@ const options = {
           },
           component: PageView,
           children: [
+            {
+              path: 'allProjects',
+              name: '报价单管理',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/allProjects'),
+            },
             {
               path: 'rdProjects',
               name: '研发费报价',

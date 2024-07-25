@@ -11,6 +11,10 @@ export async function getPageListSelect() {
     return request("/api/app/basic-configuration/poduct-lines", METHOD.GET)
 }
 
+export async function getPageListTypeSelect() {
+    return request("/api/app/basic-configuration/poduct-types", METHOD.GET)
+}
+
 
 //新增产品线
 export async function addProductDataList(params) {
@@ -44,5 +48,6 @@ export default {
     editProductDataList,
     importExcel,
     downloadTemplate,
-    getPageListSelect
+    getPageListSelect,
+    getPageListTypeSelect
 }
