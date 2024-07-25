@@ -79,6 +79,14 @@ const options = {
           component: PageView,
           children: [
             {
+              path: 'productAllManagement',
+              name: '全部产品',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/productManagement'),
+            },
+            {
               path: 'productManagement',
               name: '标准产品',
               meta: {
@@ -94,14 +102,7 @@ const options = {
               },
               component: () => import('@/pages/businessCode/category1/productManagement'),
             },
-            {
-              path: 'productAllManagement',
-              name: '全部产品',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/productManagement'),
-            },
+            
           ]
         },
         {
@@ -193,7 +194,23 @@ const options = {
           children: [
             {
               path: 'performanceManagement',
-              name: '项目',
+              name: '夸克项目',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/performanceManagement'),
+            },
+            {
+              path: 'projectbg',
+              name: '项目变更申请',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/performanceManagement'),
+            },
+            {
+              path: 'projectkb',
+              name: '项目看板',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
@@ -201,33 +218,6 @@ const options = {
             },
           ]
         },
-        // {
-        //   path: 'category2',
-        //   name: '审批管理',
-        //   meta: {
-        //     icon: 'switcher'
-        //   },
-        //   component: PageView,
-        //   children: [
-        //     {
-        //       path: 'productManagement',
-        //       name: '标准产品',
-        //       meta: {
-        //         // authority: 'AbpIdentity.OrganizationUnits',
-        //       },
-        //       component: () => import('@/pages/businessCode/category1/productManagement'),
-        //     },
-        //     {
-        //       path: 'productNormManagement',
-        //       name: '非标产品',
-        //       meta: {
-        //         // authority: 'AbpIdentity.OrganizationUnits',
-        //       },
-        //       component: () => import('@/pages/businessCode/category1/productNormManagement'),
-        //     },
-        //   ]
-        // },
-
 
         {
           path: 'approveManagement',
@@ -238,12 +228,106 @@ const options = {
           component: PageView,
           children: [
             {
-              path: 'scoreApprove',
-              name: '项目得分',
+              path: 'allApprove',
+              name: '审批单管理',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
               component: () => import('@/pages/approveManagement/scoreApprove'),
+            },
+            {
+              path: 'scoreApprove',
+              name: '研发费用审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/scoreApprove'),
+            },
+            {
+              path: 'productQuoteApprove',
+              name: '产品报价审批审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/scoreApprove'),
+            },
+            {
+              path: 'xmmanageApprove',
+              name: '管理项目变更审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/scoreApprove'),
+            },
+          ]
+        },
+
+        {
+          path: 'templateManagement',
+          name: '模板管理',
+          meta: {
+            icon: 'laptop'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'basetemplate',
+              name: '基础模板',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/scoreApprove'),
+            }
+          ]
+        },
+
+        {
+          path: 'priceStrategyManagement',
+          name: '价格策略',
+          meta: {
+            icon: 'laptop'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'craftLine',
+              name: '工艺线路',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/craftLine'),
+            },
+            {
+              path: 'pcbStrategy',
+              name: 'PCB报价策略',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+            },
+            {
+              path: 'zzflpriceStrategy',
+              name: '制造费率策略',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+            },
+            {
+              path: 'jgjpriceStrategy',
+              name: '结构件报价策略',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+            },
+            {
+              path: 'jgfpriceStrategy',
+              name: '加工费用报价策略',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/priceStrategy'),
             },
           ]
         },
@@ -256,31 +340,6 @@ const options = {
           },
           component: PageView,
           children: [
-            // {
-            //   path: 'essentialData',
-            //   name: '基础数据',
-            //   meta: {
-            //     // authority: 'AbpIdentity.OrganizationUnits',
-            //   },
-            //   component: () => import('@/pages/businessCode/category1/essentialData'),
-            // },
-
-            {
-              path: 'craftLine',
-              name: '工艺线路',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/craftLine'),
-            },
-            {
-              path: 'priceStrategy',
-              name: '价格策略',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/priceStrategy'),
-            },
             {
               path: 'role',
               name: '角色管理',
@@ -365,7 +424,7 @@ const options = {
               component: () => import('@/pages/businessCode/category1/essentialData'),
             }, {
               path: 'essentialTwoData',
-              name: '二级基础数据',
+              name: '物料部件',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
