@@ -8,7 +8,11 @@
         <a-timeline class="homeflow">
           <a-timeline-item color="green" v-for="(item,index) in homeflowList" :key="index">
             <p class="title">{{item.title}}</p>
-            <p v-for="(listItem,listIndex) in item.list" :key="listIndex">
+            <p
+              v-for="(listItem,listIndex) in item.list"
+              :key="listIndex"
+              style="width: 350px;border:1px solid #ddd;border-radius: 5px;padding: 5px 5px 5px 55px;"
+            >
               <router-link :to="{ path: listItem.path }">{{listItem.name}}</router-link>
             </p>
           </a-timeline-item>
@@ -18,14 +22,16 @@
         <a-timeline class="homeflow">
           <a-timeline-item color="green" v-for="(item,index) in homeflowList" :key="index">
             <p class="title">{{item.title}}</p>
-            <p v-for="(listItem,listIndex) in item.list" :key="listIndex">
+            <p
+              v-for="(listItem,listIndex) in item.list"
+              :key="listIndex"
+              style="width: 350px;border:1px solid #ddd;border-radius: 5px;padding: 5px 5px 5px 55px;"
+            >
               <router-link :to="{ path: listItem.path }">{{listItem.name}}</router-link>
             </p>
           </a-timeline-item>
         </a-timeline>
       </a-col>
-
-
     </a-row>
   </a-card>
 </template>
