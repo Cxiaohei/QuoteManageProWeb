@@ -1,5 +1,5 @@
 <template>
-  <a-card>
+  <div>
     <a-tabs default-active-key="1">
       <a-tab-pane key="1" tab="研发费报价">
         <rdProjects></rdProjects>
@@ -11,7 +11,7 @@
         <bomQuote></bomQuote>
       </a-tab-pane>
     </a-tabs>
-  </a-card>
+  </div>
 </template>
       
   <script>
