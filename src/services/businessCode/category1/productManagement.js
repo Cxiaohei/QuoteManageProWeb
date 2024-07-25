@@ -31,10 +31,16 @@ export function downloadTemplate() {
     download(url, '产品模板.xlsx');
 }
 
+//获取报价单
+export async function getProductIdList(ProductId) {
+    return request(`/api/app/product/product-relation-quotes/${ProductId}`, METHOD.GET)
+}
+
 export default {
     getPageList,
     addProductDataList,
     editProductDataList,
     importExcel,
-    downloadTemplate
+    downloadTemplate,
+    getProductIdList
 }

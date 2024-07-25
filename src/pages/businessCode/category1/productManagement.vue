@@ -42,6 +42,8 @@
     >
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" @click="productData_edit(record)" style="margin-right: 5px;">编辑</a>
+        <br />
+        <a href="javascript:;" @click="productRelation(record)" style="margin-right: 5px;">查看报价单</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
@@ -58,6 +60,49 @@
       </span>
     </a-table>
     <ProductManagementModal ref="ProductManagementModalRefs" @ok="getPageList"></ProductManagementModal>
+
+    <a-modal
+      title="关联报价单"
+      :visible="relationVisible"
+      @ok="relationVisible=false"
+      @cancel="relationVisible=false"
+    >
+      <div v-if="odmQuoteList.length>0">
+        <h3>ODM</h3>
+        <ul style="max-height: 150px;overflow-y: auto;padding:0">
+          <li
+            v-for="(item,index) in odmQuoteList"
+            :key="index"
+            style="list-style: none;line-height:26px"
+          >
+            {{item.odmQuoteName}}:
+            {{item.odmQuoteNo}}
+            <a
+              href="javascript:;"
+              @click="gotoDetail(item.id,'odm')"
+            >查看</a>
+          </li>
+        </ul>
+      </div>
+      <div v-if="oemQuoteList.length>0">
+        <h3>OEM</h3>
+        <ul style="max-height: 150px;overflow-y: auto;padding:0">
+          <li
+            v-for="(item,index) in odmQuoteList"
+            :key="index"
+            style="list-style: none;line-height:26px"
+          >
+            {{item.oemQuoteName}}:
+            {{item.oemQuoteNo}}
+            <a
+              href="javascript:;"
+              @click="gotoDetail(item.id,'oem')"
+            >查看</a>
+          </li>
+        </ul>
+      </div>
+      <div v-if="odmQuoteList.length==0&&oemQuoteList.length==0">暂无数据</div>
+    </a-modal>
   </a-card>
 </template>
     
@@ -65,7 +110,8 @@
 import {
   getPageList,
   importExcel,
-  downloadTemplate
+  downloadTemplate,
+  getProductIdList
 } from "@/services/businessCode/category1/productManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
@@ -73,7 +119,7 @@ import ProductManagementModal from "./modules/ProductManagementModal";
 
 const columns = [
   {
-    width: 100,
+    width: 110,
     title: "操作",
     scopedSlots: {
       customRender: "action"
@@ -159,7 +205,10 @@ export default {
         pageSize: 10,
         current: 1,
         showTotal: total => `总计 ${total} 条`
-      }
+      },
+      relationVisible: false,
+      odmQuoteList: [],
+      oemQuoteList: []
     };
   },
   components: { ProductManagementModal },
@@ -180,6 +229,33 @@ export default {
     //编辑
     productData_edit(record) {
       this.$refs.ProductManagementModalRefs.openModules("edit", record);
+    },
+    productRelation(record) {
+      this.odmQuoteList = [];
+      this.oemQuoteList = [];
+      getProductIdList(record.id).then(res => {
+        this.relationVisible = true;
+        this.odmQuoteList = res.data.odmQuoteList;
+        this.oemQuoteList = res.data.oemQuoteList;
+      });
+    },
+    gotoDetail(id, type) {
+      this.relationVisible = false;
+      if (type == "odm") {
+        this.$router.push({
+          path: "/quotationManagement/odmQuoteDetail",
+          query: {
+            id: id
+          }
+        });
+      } else {
+        this.$router.push({
+          path: "/quotationManagement/oemQuoteDetail",
+          query: {
+            id: id
+          }
+        });
+      }
     },
     //下载模板
     downloadTemplate() {
@@ -204,8 +280,13 @@ export default {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
         ...this.queryFrom,
-        IsStandard: true
+        // IsStandard: false
       };
+      if (this.$route.path == "/product/productNormManagement") {
+        params.IsStandard = false;
+      } else {
+        params.IsStandard = true;
+      }
       getPageList(params)
         .then(res => {
           if (res.code == 1) {

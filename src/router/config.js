@@ -92,7 +92,7 @@ const options = {
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/businessCode/category1/productNormManagement'),
+              component: () => import('@/pages/businessCode/category1/productManagement'),
             },
           ]
         },
