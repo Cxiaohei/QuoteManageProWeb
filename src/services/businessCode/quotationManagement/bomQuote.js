@@ -64,6 +64,18 @@ export function downloadTemplate() {
     download(url, 'BOM模版.xlsx');
 }
 
+
+
+/// Oem报价日志 0
+/// 制作费用报价日志 1
+/// 研发费用报价日志 2
+/// Odm报价日志 3
+/// 审批日志 4
+export async function getLogList(params) {
+    return request("/api/app/quote-log/quote-log-list", METHOD.GET, transformAbpListQuery(params))
+}
+
+
 export default {
     getPageList,
     addBomDataList,
@@ -75,5 +87,6 @@ export default {
     getCategoryTypeData,
     bomfilterApi,
     importExcel,
-    downloadTemplate
+    downloadTemplate,
+    getLogList
 }

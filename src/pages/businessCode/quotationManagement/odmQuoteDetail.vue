@@ -42,66 +42,76 @@
         </a-form-model-item>
       </a-form-model>
 
-      <div style="padding-top: 30px;">
-        <h3>
-          研发项目
-          <a-button type="primary" @click="addOdmRdProjects" v-if="data11.length==0">添加</a-button>
-        </h3>
-        <a-table :columns="columns1" :data-source="data11" :pagination="false">
-          <span slot="action" slot-scope="text, record">
-            <a
-              href="javascript:;"
-              @click="RdProjectsDetail(record, 'detail')"
-              style="margin-right: 5px;"
-            >详情</a>
-          </span>
-        </a-table>
-      </div>
-      <div style="padding-top: 30px;">
-        <h3>
-          BOM报价
-          <a-button type="primary" @click="addBomQuote" v-if="data22.length==0">添加</a-button>
-        </h3>
-        <a-table :columns="columns2" :data-source="data22" :pagination="false">
-          <span slot="action" slot-scope="text, record">
-            <a
-              href="javascript:;"
-              @click="bomDetail(record, 'detail')"
-              style="margin-right: 5px;"
-            >详情</a>
-          </span>
-        </a-table>
-      </div>
-      <div style="padding-top: 30px;">
-        <h3>
-          加工费报价
-          <a-button type="primary" @click="addProcess" v-if="data33.length==0">添加</a-button>
-        </h3>
-        <a-table :columns="columns3" :data-source="data33" :pagination="false">
-          <span slot="action" slot-scope="text, record">
-            <a
-              href="javascript:;"
-              @click="bomDetail(record, 'detail')"
-              style="margin-right: 5px;"
-            >详情</a>
-          </span>
-        </a-table>
-      </div>
-      <div style="padding-top: 30px;">
-        <h3>
-          其他项费用报价
-          <a-button type="primary" @click="addOtherQuote" v-if="data44.length==0">添加</a-button>
-        </h3>
-        <a-table :columns="columns4" :data-source="data44" :pagination="false">
-          <span slot="action" slot-scope="text, record">
-            <a
-              href="javascript:;"
-              @click="bomDetail(record, 'detail')"
-              style="margin-right: 5px;"
-            >详情</a>
-          </span>
-        </a-table>
-      </div>
+      <a-tabs default-active-key="1">
+        <a-tab-pane key="1" tab="研发项目">
+          <div style="padding-top: 30px;">
+            <h3>
+              研发项目
+              <a-button type="primary" @click="addOdmRdProjects" v-if="data11.length==0">添加</a-button>
+            </h3>
+            <a-table :columns="columns1" :data-source="data11" :pagination="false">
+              <span slot="action" slot-scope="text, record">
+                <a
+                  href="javascript:;"
+                  @click="RdProjectsDetail(record, 'detail')"
+                  style="margin-right: 5px;"
+                >详情</a>
+              </span>
+            </a-table>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="BOM报价" force-render>
+          <div style="padding-top: 30px;">
+            <h3>
+              BOM报价
+              <a-button type="primary" @click="addBomQuote" v-if="data22.length==0">添加</a-button>
+            </h3>
+            <a-table :columns="columns2" :data-source="data22" :pagination="false">
+              <span slot="action" slot-scope="text, record">
+                <a
+                  href="javascript:;"
+                  @click="bomDetail(record, 'detail')"
+                  style="margin-right: 5px;"
+                >详情</a>
+              </span>
+            </a-table>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="3" tab="加工费报价" force-render>
+          <div style="padding-top: 30px;">
+            <h3>
+              加工费报价
+              <a-button type="primary" @click="addProcess" v-if="data33.length==0">添加</a-button>
+            </h3>
+            <a-table :columns="columns3" :data-source="data33" :pagination="false">
+              <span slot="action" slot-scope="text, record">
+                <a
+                  href="javascript:;"
+                  @click="bomDetail(record, 'detail')"
+                  style="margin-right: 5px;"
+                >详情</a>
+              </span>
+            </a-table>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="4" tab="其他项费用报价" force-render>
+          <div style="padding-top: 30px;">
+            <h3>
+              其他项费用报价
+              <a-button type="primary" @click="addOtherQuote" v-if="data44.length==0">添加</a-button>
+            </h3>
+            <a-table :columns="columns4" :data-source="data44" :pagination="false">
+              <span slot="action" slot-scope="text, record">
+                <a
+                  href="javascript:;"
+                  @click="bomDetail(record, 'detail')"
+                  style="margin-right: 5px;"
+                >详情</a>
+              </span>
+            </a-table>
+          </div>
+        </a-tab-pane>
+      </a-tabs>
     </a-card>
 
     <OdmRdProjectsModal ref="OdmRdProjectsModalRefs" @ok="getDetail"></OdmRdProjectsModal>

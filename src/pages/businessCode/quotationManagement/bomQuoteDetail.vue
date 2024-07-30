@@ -49,203 +49,209 @@
         </a-form-item>
       </a-form-model>
       <!-- {{detailDataList1}} -->
-      <div style="padding-top:20px">
-        <h3>
-          结构料
-          <a-button type="primary" @click="addDetailDataList1">新增</a-button>
-        </h3>
-        <a-table
-          :rowKey="
+
+      <a-tabs default-active-key="1">
+        <a-tab-pane key="1" tab="结构料">
+          <div style="padding-top:20px">
+            <h3>
+              结构料
+              <a-button type="primary" @click="addDetailDataList1">新增</a-button>
+            </h3>
+            <a-table
+              :rowKey="
           (data, index) => {
             return index;
           }
         "
-          :columns="columns"
-          :dataSource="detailDataList1"
-          :pagination="false"
-          bordered
-        >
-          <span slot="action" slot-scope="text, record, index">
-            <a-popconfirm
-              v-if="record.isadd"
-              title="确定新增该条数据吗?"
-              ok-text="确定"
-              cancel-text="取消"
-              @confirm="confirmAddList(record)"
+              :columns="columns"
+              :dataSource="detailDataList1"
+              :pagination="false"
+              bordered
             >
-              <a href="javascript:;" style="margin-right: 5px">新增</a>
-            </a-popconfirm>
-            <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList1(index)">取消</a>
+              <span slot="action" slot-scope="text, record, index">
+                <a-popconfirm
+                  v-if="record.isadd"
+                  title="确定新增该条数据吗?"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="confirmAddList(record)"
+                >
+                  <a href="javascript:;" style="margin-right: 5px">新增</a>
+                </a-popconfirm>
+                <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList1(index)">取消</a>
 
-            <a
-              href="javascript:;"
-              v-if="!record.isadd"
-              style="margin-right: 5px"
-              @click="editDetailDataList(record)"
-            >保存</a>
+                <a
+                  href="javascript:;"
+                  v-if="!record.isadd"
+                  style="margin-right: 5px"
+                  @click="editDetailDataList(record)"
+                >保存</a>
 
-            <a-popconfirm
-              v-if="!record.isadd"
-              title="确定删除吗?"
-              ok-text="确定"
-              cancel-text="取消"
-              @confirm="confirmDelete(record.id)"
-            >
-              <a href="javascript:;">删除</a>
-            </a-popconfirm>
-          </span>
-          <!-- 物料结构 -->
-          <span
-            slot="dsBaseDataType"
-            slot-scope="text, record"
-          >{{ record.dsBaseDataType == 0 ?"结构料":"电子料" }}</span>
+                <a-popconfirm
+                  v-if="!record.isadd"
+                  title="确定删除吗?"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="confirmDelete(record.id)"
+                >
+                  <a href="javascript:;">删除</a>
+                </a-popconfirm>
+              </span>
+              <!-- 物料结构 -->
+              <span
+                slot="dsBaseDataType"
+                slot-scope="text, record"
+              >{{ record.dsBaseDataType == 0 ?"结构料":"电子料" }}</span>
 
-          <!-- 部件名称 -->
-          <span slot="categoryName" slot-scope="text, record">
-            <a-select
-              v-model="record.categoryName"
-              style="width: 120px"
-              show-search
-              :filter-option="filterOption"
-              placeholder="部件名称"
-            >
-              <a-select-option
-                :value="Citem.categoryName"
-                v-for="(Citem,categoryNameindex) in dataSource1"
-                :key="categoryNameindex"
-              >{{ Citem.categoryName }}</a-select-option>
-            </a-select>
-          </span>
+              <!-- 部件名称 -->
+              <span slot="categoryName" slot-scope="text, record">
+                <a-select
+                  v-model="record.categoryName"
+                  style="width: 120px"
+                  show-search
+                  :filter-option="filterOption"
+                  placeholder="部件名称"
+                >
+                  <a-select-option
+                    :value="Citem.categoryName"
+                    v-for="(Citem,categoryNameindex) in dataSource1"
+                    :key="categoryNameindex"
+                  >{{ Citem.categoryName }}</a-select-option>
+                </a-select>
+              </span>
 
-          <span
-            :slot="tdItem"
-            slot-scope="text, record"
-            v-for="(tdItem,tdIndex) in TdArr"
-            :key="tdIndex"
-          >
-            <a-auto-complete
-              v-model="record[tdItem]"
-              :data-source="seachData"
-              style="width: 100px"
-              placeholder="请输入内容查询"
-              @select="onSelect($event,record,[tdItem])"
-              @change="onChange(record,[tdItem])"
-            >
-              <template slot="dataSource">
-                <a-select-option
-                  v-for="item in seachData"
-                  :key="item.id"
-                  :value="item[tdItem]"
-                >{{ item[tdItem] }}</a-select-option>
-              </template>
-            </a-auto-complete>
-          </span>
+              <span
+                :slot="tdItem"
+                slot-scope="text, record"
+                v-for="(tdItem,tdIndex) in TdArr"
+                :key="tdIndex"
+              >
+                <a-auto-complete
+                  v-model="record[tdItem]"
+                  :data-source="seachData"
+                  style="width: 100px"
+                  placeholder="请输入内容查询"
+                  @select="onSelect($event,record,[tdItem])"
+                  @change="onChange(record,[tdItem])"
+                >
+                  <template slot="dataSource">
+                    <a-select-option
+                      v-for="item in seachData"
+                      :key="item.id"
+                      :value="item[tdItem]"
+                    >{{ item[tdItem] }}</a-select-option>
+                  </template>
+                </a-auto-complete>
+              </span>
 
-          <!-- 总价 -->
-          <span slot="totalPrice" slot-scope="text, record">
-            <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
-          </span>
-        </a-table>
-      </div>
-
-      <div style="padding-top:20px">
-        <h3>
-          电子料
-          <a-button type="primary" @click="addDetailDataList2">新增</a-button>
-        </h3>
-        <a-table
-          :rowKey="
+              <!-- 总价 -->
+              <span slot="totalPrice" slot-scope="text, record">
+                <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
+              </span>
+            </a-table>
+          </div>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="电子料" force-render>
+          <div style="padding-top:20px">
+            <h3>
+              电子料
+              <a-button type="primary" @click="addDetailDataList2">新增</a-button>
+            </h3>
+            <a-table
+              :rowKey="
           (data, index) => {
             return index;
           }
         "
-          :columns="columns"
-          :dataSource="detailDataList2"
-          :pagination="false"
-          bordered
-        >
-          <span slot="action" slot-scope="text, record, index">
-            <a-popconfirm
-              v-if="record.isadd"
-              title="确定新增该条数据吗?"
-              ok-text="确定"
-              cancel-text="取消"
-              @confirm="confirmAddList(record)"
+              :columns="columns"
+              :dataSource="detailDataList2"
+              :pagination="false"
+              bordered
             >
-              <a href="javascript:;" style="margin-right: 5px">新增</a>
-            </a-popconfirm>
-            <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList2(index)">取消</a>
+              <span slot="action" slot-scope="text, record, index">
+                <a-popconfirm
+                  v-if="record.isadd"
+                  title="确定新增该条数据吗?"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="confirmAddList(record)"
+                >
+                  <a href="javascript:;" style="margin-right: 5px">新增</a>
+                </a-popconfirm>
+                <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList2(index)">取消</a>
 
-            <a
-              href="javascript:;"
-              v-if="!record.isadd"
-              style="margin-right: 5px"
-              @click="editDetailDataList(record)"
-            >保存</a>
+                <a
+                  href="javascript:;"
+                  v-if="!record.isadd"
+                  style="margin-right: 5px"
+                  @click="editDetailDataList(record)"
+                >保存</a>
 
-            <a-popconfirm
-              v-if="!record.isadd"
-              title="确定删除吗?"
-              ok-text="确定"
-              cancel-text="取消"
-              @confirm="confirmDelete(record.id)"
-            >
-              <a href="javascript:;">删除</a>
-            </a-popconfirm>
-          </span>
-          <!-- 物料结构 -->
-          <span
-            slot="dsBaseDataType"
-            slot-scope="text, record"
-          >{{ record.dsBaseDataType == 0 ?"结构料":"电子料" }}</span>
+                <a-popconfirm
+                  v-if="!record.isadd"
+                  title="确定删除吗?"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="confirmDelete(record.id)"
+                >
+                  <a href="javascript:;">删除</a>
+                </a-popconfirm>
+              </span>
+              <!-- 物料结构 -->
+              <span
+                slot="dsBaseDataType"
+                slot-scope="text, record"
+              >{{ record.dsBaseDataType == 0 ?"结构料":"电子料" }}</span>
 
-          <!-- 部件名称 -->
-          <span slot="categoryName" slot-scope="text, record">
-            <a-select
-              v-model="record.categoryName"
-              style="width: 120px"
-              show-search
-              :filter-option="filterOption"
-              placeholder="部件名称"
-            >
-              <a-select-option
-                :value="Citem.categoryName"
-                v-for="(Citem,categoryNameindex) in dataSource2"
-                :key="categoryNameindex"
-              >{{ Citem.categoryName }}</a-select-option>
-            </a-select>
-          </span>
+              <!-- 部件名称 -->
+              <span slot="categoryName" slot-scope="text, record">
+                <a-select
+                  v-model="record.categoryName"
+                  style="width: 120px"
+                  show-search
+                  :filter-option="filterOption"
+                  placeholder="部件名称"
+                >
+                  <a-select-option
+                    :value="Citem.categoryName"
+                    v-for="(Citem,categoryNameindex) in dataSource2"
+                    :key="categoryNameindex"
+                  >{{ Citem.categoryName }}</a-select-option>
+                </a-select>
+              </span>
 
-          <span
-            :slot="tdItem"
-            slot-scope="text, record"
-            v-for="(tdItem,tdIndex) in TdArr"
-            :key="tdIndex"
-          >
-            <a-auto-complete
-              v-model="record[tdItem]"
-              :data-source="seachData"
-              style="width: 100px"
-              placeholder="请输入内容查询"
-              @select="onSelect($event,record,[tdItem])"
-              @change="onChange(record,[tdItem])"
-            >
-              <template slot="dataSource">
-                <a-select-option
-                  v-for="item in seachData"
-                  :key="item.id"
-                  :value="item[tdItem]"
-                >{{ item[tdItem] }}</a-select-option>
-              </template>
-            </a-auto-complete>
-          </span>
+              <span
+                :slot="tdItem"
+                slot-scope="text, record"
+                v-for="(tdItem,tdIndex) in TdArr"
+                :key="tdIndex"
+              >
+                <a-auto-complete
+                  v-model="record[tdItem]"
+                  :data-source="seachData"
+                  style="width: 100px"
+                  placeholder="请输入内容查询"
+                  @select="onSelect($event,record,[tdItem])"
+                  @change="onChange(record,[tdItem])"
+                >
+                  <template slot="dataSource">
+                    <a-select-option
+                      v-for="item in seachData"
+                      :key="item.id"
+                      :value="item[tdItem]"
+                    >{{ item[tdItem] }}</a-select-option>
+                  </template>
+                </a-auto-complete>
+              </span>
 
-          <!-- 总价 -->
-          <span slot="totalPrice" slot-scope="text, record">
-            <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
-          </span>
-        </a-table>
-      </div>
+              <!-- 总价 -->
+              <span slot="totalPrice" slot-scope="text, record">
+                <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
+              </span>
+            </a-table>
+          </div>
+        </a-tab-pane>
+      </a-tabs>
     </a-card>
   </div>
 </template>

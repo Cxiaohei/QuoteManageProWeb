@@ -38,6 +38,7 @@
           @click="rdProjectsDetail(record, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
+        <a href="javascript:;" @click="showLog(record)">日志</a>
         <!-- <a href="javascript:;" @click="calculateProjects(record, 'detail')">评分</a> -->
         <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
       </span>
@@ -68,6 +69,7 @@
 
     <RdProjectsModal ref="RdProjectsModalRefs" @ok="getPageList"></RdProjectsModal>
     <CalculateProjectsModal ref="CalculateProjectsModalRefs" @ok="getPageList"></CalculateProjectsModal>
+    <LogListModal ref="LogListModalRefs"></LogListModal>
   </a-card>
 </template>
       
@@ -77,6 +79,8 @@ import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import RdProjectsModal from "./modules/RdProjectsModal.vue";
 import CalculateProjectsModal from "./modules/CalculateProjectsModal.vue";
+import LogListModal from "./modules/LogListModal.vue";
+
 
 const columns = [
   {
@@ -130,7 +134,7 @@ const columns = [
   }
 ];
 export default {
-  components: { RdProjectsModal, CalculateProjectsModal },
+  components: { RdProjectsModal, CalculateProjectsModal,LogListModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -177,6 +181,9 @@ export default {
     //评分
     calculateProjects(record) {
       this.$refs.CalculateProjectsModalRefs.openModules(record, "add");
+    },
+    showLog(record) {
+      this.$refs.LogListModalRefs.openModules("2", record.id);
     },
     //获取列表数据
     getPageList() {

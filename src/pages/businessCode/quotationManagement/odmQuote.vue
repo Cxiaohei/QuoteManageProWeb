@@ -38,7 +38,7 @@
           @click="odmQuoteDetail(record, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
-        <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
+        <a href="javascript:;" @click="showLog(record)">日志</a>
       </span>
 
       <span slot="categoryLevel" slot-scope="text, record">
@@ -66,6 +66,7 @@
     </a-table>
 
     <OdmQuoteModal ref="OdmQuoteModalRefs" @ok="getPageList"></OdmQuoteModal>
+    <LogListModal ref="LogListModalRefs"></LogListModal>
   </a-card>
 </template>
       
@@ -74,6 +75,8 @@ import { getPageList } from "@/services/businessCode/quotationManagement/odmQuot
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import OdmQuoteModal from "./modules/OdmQuoteModal.vue";
+import LogListModal from "./modules/LogListModal.vue";
+
 
 const columns = [
   {
@@ -113,7 +116,7 @@ const columns = [
   },
 ];
 export default {
-  components: { OdmQuoteModal },
+  components: { OdmQuoteModal,LogListModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -147,6 +150,9 @@ export default {
     //编辑
     essentialData_edit(record) {
       this.$refs.OdmQuoteModalRefs.openModules("edit", record);
+    },
+    showLog(record) {
+      this.$refs.LogListModalRefs.openModules("3", record.id);
     },
     //详情页
     odmQuoteDetail(record) {

@@ -38,7 +38,7 @@
           @click="rdProjectsDetail(record, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
-        <!-- <a href="javascript:;" @click="showLog(record)">日志</a> -->
+        <a href="javascript:;" @click="showLog(record)">日志</a>
       </span>
 
       <span slot="categoryLevel" slot-scope="text, record">
@@ -59,6 +59,7 @@
     </a-table>
 
     <BomQuoteModal ref="BomQuoteModalRefs" @ok="getPageList"></BomQuoteModal>
+    <LogListModal ref="LogListModalRefs"></LogListModal>
   </a-card>
 </template>
       
@@ -67,6 +68,7 @@ import { getPageList } from "@/services/businessCode/quotationManagement/bomQuot
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import BomQuoteModal from "./modules/BomQuoteModal.vue";
+import LogListModal from "./modules/LogListModal.vue";
 
 const columns = [
   {
@@ -92,7 +94,7 @@ const columns = [
   }
 ];
 export default {
-  components: { BomQuoteModal },
+  components: { BomQuoteModal,LogListModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -126,6 +128,9 @@ export default {
     //编辑
     essentialData_edit(record) {
       this.$refs.BomQuoteModalRefs.openModules("edit", record);
+    },
+    showLog(record) {
+      this.$refs.LogListModalRefs.openModules("0", record.id);
     },
     //详情页
     rdProjectsDetail(record) {
