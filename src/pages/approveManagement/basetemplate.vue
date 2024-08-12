@@ -33,17 +33,17 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a
+        <!-- <a
           href="javascript:;"
           v-if="record.status==0"
           @click="productData_edit(record)"
           style="margin-right: 5px;"
-        >审核</a>
+        >审核</a> -->
         <a
           href="javascript:;"
           @click="lookProduct(record)"
           style="margin-right: 5px;color:#666"
-        >查看项目</a>
+        >下载</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
@@ -69,18 +69,23 @@
       @ok="handleOkAudite"
       @cancel="visibleAudite=false"
     >
-      状态：
-      <a-radio-group v-model="templateFileType">
-        <a-radio :value="0">通过</a-radio>
-        <a-radio :value="1">不通过</a-radio>
-        <a-radio :value="2">不通过</a-radio>
-        <a-radio :value="3">不通过</a-radio>
-        <a-radio :value="4">不通过</a-radio>
-        <a-radio :value="5">不通过</a-radio>
+      类型：
+      <a-radio-group v-model="templateFileType" style="width: 600px;">
+        <a-radio :value="0">内部物料模板</a-radio>
+        <a-radio :value="1">BOM报价单模板</a-radio>
+        <a-radio :value="2">ODM报价单模板</a-radio>
+        <a-radio :value="3">研发费报价模板</a-radio>
+        <a-radio :value="4">管理项目立项模板</a-radio>
+        <a-radio :value="5">项目变更申请模板</a-radio>
       </a-radio-group>
       <br />
-      <br />说明：
-      <input type="file" @change="handleFileChange" />
+
+      <input type="file" @click="handleFileChange">
+      <br />
+      <!-- <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+        <a-button type="primary" icon="to-top">导入</a-button>
+      </a-upload> -->
+      <!-- <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span> -->
     </a-modal>
   </a-card>
 </template>
@@ -89,7 +94,8 @@
 import {
   getPageList,
   templateFileAdd,
-  checkAudite
+  importExcel,
+  downloadTemplate,
 } from "@/services/approveManagement/basetemplate";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
@@ -104,23 +110,23 @@ const columns = [
   },
   {
     title: "编号",
-    dataIndex: "auditeNo",
+    dataIndex: "templateFileName",
     scopedSlots: {
-      customRender: "auditeNo"
+      customRender: "templateFileName"
     }
   },
   {
-    title: "得分",
-    dataIndex: "finalScore",
+    title: "提交人",
+    dataIndex: "submitUserName",
     scopedSlots: {
-      customRender: "finalScore"
+      customRender: "submitUserName"
     }
   },
   {
     title: "状态",
-    dataIndex: "status",
+    dataIndex: "templateFileType",
     scopedSlots: {
-      customRender: "status"
+      customRender: "templateFileType"
     }
   },
   {
@@ -176,6 +182,39 @@ export default {
       this.modalTitle = "新增";
       this.visibleAudite = true;
     },
+    // //下载模板
+    // downloadTemplate() {
+    //   downloadTemplate('ces ');
+    // },
+    //导入
+    importExcel(resData) {
+      let formData = new FormData();
+      formData.append("ImportFile", resData.file);
+      console.log(formData)
+      // importExcel(formData).then(response => {
+      //   if (response.code == 1) {
+      //     const params = {
+      //       bomQuoteId: this.$route.query.id,
+      //       bomQuoteRelations: response.data
+      //     };
+      //     params.bomQuoteRelations[0].id = "";
+      //     params.bomQuoteRelations.map(item => {
+      //       item.bomQuoteId = this.$route.query.id;
+      //     });
+      //     addBomDetail(params).then(res => {
+      //       if (res.code == 1) {
+      //         this.$message.success("导入成功");
+      //         // this.$message.success("添加成功");
+      //         this.getDetail();
+      //       } else {
+      //         this.$message.error(res.msg);
+      //       }
+      //     });
+      //   } else {
+      //     this.$message.info(response.msg);
+      //   }
+      // });
+    },
     handleFileChange(event) {
       const file = event.target.files[0];
       this.templateFileName = file.name;
@@ -183,12 +222,16 @@ export default {
         console.log("No file selected");
         return;
       }
-
       const reader = new FileReader();
       reader.onload = e => {
         const bytes = new Uint8Array(e.target.result);
-        // 处理bytes，例如发送到后端或进行其他操作
-        console.log(bytes);
+        // // 处理bytes，例如发送到后端或进行其他操作
+        // var arrTwo = [];
+        // for (let key in bytes) {
+        //   // 检查属性是否是对象自身的属性
+        //   arrTwo.push(bytes[key]);
+        // }
+        // console.log(arrTwo);
         this.templateFileData = bytes;
       };
       reader.readAsArrayBuffer(file);
@@ -257,12 +300,13 @@ export default {
     },
     //查看项目
     lookProduct(record, type) {
-      this.$router.push({
-        path: "/quotationManagement/rdProjectsDetailLook",
-        query: {
-          id: record.developProjectId
-        }
-      });
+      downloadTemplate(record.templateFileBlobName);
+      // this.$router.push({
+      //   path: "/quotationManagement/rdProjectsDetailLook",
+      //   query: {
+      //     id: record.developProjectId
+      //   }
+      // });
     },
     // 编辑
     pinbanOrder_edit(record, type) {

@@ -14,10 +14,28 @@ export async function checkAudite(params) {
     return request("/api/app/quote-audite/audite-quote-develop-project", METHOD.POST, params)
 }
 
-checkAudite
+
+//导入
+export function importExcel(params, data) {
+    return request(`/api/app/bom-quote/import-dSBom-details`, METHOD.POST, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+
+export function downloadTemplate(params) {
+    return request("/api/app/tempatet-file/down-load-template-file?TemplateFileBlobName="+params, METHOD.POST)
+    // let url = `${process.env.VUE_APP_API_BASE_URL}/api/app/tempatet-file/down-load-template-file`;
+    // download(url, '模版.xlsx');
+}
+
 
 export default {
     getPageList,
     templateFileAdd,
-    checkAudite
+    checkAudite,
+    importExcel,
+    downloadTemplate,
 }
