@@ -242,9 +242,7 @@ export default {
     },
     //查看项目
     lookProduct(record, type) {
-      downloadTemplate(record.templateFileBlobName).then(res => {
-        console.log(res)
-      });
+      downloadTemplate(record)
 
       // this.$router.push({
       //   path: "/quotationManagement/rdProjectsDetailLook",

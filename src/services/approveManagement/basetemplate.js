@@ -7,7 +7,7 @@ export async function getPageList(params) {
 }
 
 export async function templateFileAdd(params) {
-    return request("/api/app/tempatet-file/template-file", METHOD.POST,  params, {
+    return request("/api/app/tempatet-file/template-file", METHOD.POST, params, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -30,10 +30,13 @@ export async function checkAudite(params) {
 
 
 export function downloadTemplate(params) {
-    return request("/api/app/tempatet-file/down-load-template-file?TemplateFileBlobName="+params, METHOD.POST)
-    // let url = `${process.env.VUE_APP_API_BASE_URL}/api/app/tempatet-file/down-load-template-file`;
-    // download(url, '模版.xlsx');
+    request("/api/app/tempatet-file/down-load-template-file?TemplateFileBlobName=" + params.templateFileBlobName, METHOD.POST).then(res => {
+        let url = res.data
+        console.log(url)
+        download(url, params.templateFileName);
+    })
 }
+
 
 
 export default {
