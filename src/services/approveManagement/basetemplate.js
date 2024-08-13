@@ -13,6 +13,15 @@ export async function templateFileAdd(params) {
         },
     })
 }
+export async function templateFileEdit(params,TemplateFileId) {
+    return request(`/api/app/tempatet-file/template-file-info/${TemplateFileId}`, METHOD.PUT, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+
 
 export async function checkAudite(params) {
     return request("/api/app/quote-audite/audite-quote-develop-project", METHOD.POST, params)
@@ -42,6 +51,7 @@ export function downloadTemplate(params) {
 export default {
     getPageList,
     templateFileAdd,
+    templateFileEdit,
     checkAudite,
     downloadTemplate,
 }

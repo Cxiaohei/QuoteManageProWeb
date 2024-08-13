@@ -20,7 +20,7 @@
       </a-col>
       <a-col :span="12">
         <a-timeline class="homeflow">
-          <a-timeline-item color="green" v-for="(item,index) in homeflowList" :key="index">
+          <a-timeline-item color="green" v-for="(item,index) in homeflowList2" :key="index">
             <p class="title">{{item.title}}</p>
             <p
               v-for="(listItem,listIndex) in item.list"
@@ -45,67 +45,85 @@ export default {
     return {
       homeflowList: [
         {
-          title: "物料",
+          title: "报价",
           list: [
             {
-              name: "内部物料",
-              path: "/category1/materialManagement"
+              name: "研发费报价",
+              path: "/quotationManagement/rdProjects"
             },
             {
-              name: "外部物料",
-              path: "/category1/outMaterialManagement"
+              name: "OEM报价",
+              path: "/quotationManagement/bomQuote"
             }
           ]
         },
         {
-          title: "物料",
+          title: "项目评分",
           list: [
             {
-              name: "内部物料",
-              path: "/category1/materialManagement"
-            },
-            {
-              name: "外部物料",
-              path: "/category1/outMaterialManagement"
+              name: "项目评分",
+              path: "/quotationManagement/allProjects"
             }
           ]
         },
         {
-          title: "物料",
+          title: "BOM报价",
           list: [
             {
-              name: "内部物料",
-              path: "/category1/materialManagement"
-            },
-            {
-              name: "外部物料",
-              path: "/category1/outMaterialManagement"
+              name: "BOM报价",
+              path: "/quotationManagement/allProjects"
             }
           ]
         },
         {
-          title: "物料",
+          title: "制造费用报价",
           list: [
             {
-              name: "内部物料",
-              path: "/category1/materialManagement"
-            },
-            {
-              name: "外部物料",
-              path: "/category1/outMaterialManagement"
+              name: "制造费用报价",
+              path: "/quotationManagement/allProjects"
             }
           ]
         },
         {
-          title: "物料",
+          title: "报价审批",
           list: [
             {
-              name: "内部物料",
-              path: "/category1/materialManagement"
+              name: "报价审批",
+              path: "/approveManagement/allApprove"
+            }
+          ]
+        }
+      ],
+      
+      homeflowList2: [
+        {
+          title: "立项",
+          list: [
+            {
+              name: "项目立项",
+              path: "/performance/performanceManagement"
+            }
+          ]
+        },
+        {
+          title: "管理",
+          list: [
+            {
+              name: "项目绩效管理",
+              path: "/performance/performanceManagement"
             },
             {
-              name: "外部物料",
-              path: "/category1/outMaterialManagement"
+              name: "项目变更管理",
+              path: "/performance/performanceManagement"
+            }
+          ]
+        },
+        {
+          title: "项目结案",
+          list: [
+            {
+              name: "项目结案",
+              path: "/performance/performanceManagement"
             }
           ]
         }

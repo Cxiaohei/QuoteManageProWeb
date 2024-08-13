@@ -2,11 +2,11 @@
   <a-card>
     <div class="queryFromBox">
       <a-form :model="queryFrom" layout="inline">
-        <a-form-item>
+        <!-- <a-form-item>
           <a-space>
             <a-button type="primary" @click="add_pagelist">新增</a-button>
           </a-space>
-        </a-form-item>
+        </a-form-item>-->
         <a-form-item>
           <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
         </a-form-item>
@@ -33,10 +33,32 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="productData_edit(record)" style="margin-right: 5px;">编辑</a>
-        <a href="javascript:;" @click="lookProduct(record)" style="margin-right: 5px;color:#666">下载</a>
+        <a
+          href="javascript:;"
+          v-if="record.status==0"
+          @click="productData_edit(record)"
+          style="margin-right: 5px;"
+        >审核</a>
+        <!-- <a
+          href="javascript:;"
+          @click="lookProduct(record)"
+          style="margin-right: 5px;color:#666"
+        >查看项目</a> -->
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
+      </span>
+
+      <span slot="auditeType" slot-scope="text, record">
+        {{
+        record.auditeType == 0 ?"Oem报价审批":
+        record.auditeType == 1 ?"制作费用报价审批":
+        record.auditeType == 2 ?"研发费用报价审批":"Odm报价审批"
+        }}
+      </span>
+      <span slot="auditeUserNames" slot-scope="text, record">
+        {{
+        record.auditeUserNames.join(",")
+        }}
       </span>
 
       <span slot="status" slot-scope="text, record">
@@ -53,25 +75,16 @@
       </span>
     </a-table>
 
-    <a-modal
-      :title="modalTitle"
-      :visible="visibleAudite"
-      width="800px"
-      @ok="handleOkAudite"
-      @cancel="visibleAudite=false"
-    >
+    <a-modal title="审批" :visible="visibleAudite" @ok="handleOkAudite" @cancel="visibleAudite=false">
       状态：
-      <a-radio-group v-model="templateFileType">
-        <a-radio :value="0">内部物料模板</a-radio>
-        <a-radio :value="1">BOM报价单模板</a-radio>
-        <a-radio :value="2">ODM报价单模板</a-radio>
-        <a-radio :value="3">研发费报价模板</a-radio>
-        <a-radio :value="4">管理项目立项模板</a-radio>
-        <a-radio :value="5">项目变更申请模板</a-radio>
+      <a-radio-group v-model="statusAudite">
+        <!-- <a-radio :value="0">待审核</a-radio> -->
+        <a-radio :value="1">通过</a-radio>
+        <a-radio :value="10">不通过</a-radio>
       </a-radio-group>
       <br />
       <br />说明：
-      <input type="file" @change="handleFileChange" />
+      <a-input v-model="auditeRemarks" style="width: 80%;"></a-input>
     </a-modal>
   </a-card>
 </template>
@@ -79,10 +92,8 @@
 <script>
 import {
   getPageList,
-  templateFileAdd,
-  templateFileEdit,
-  downloadTemplate
-} from "@/services/approveManagement/basetemplate";
+  checkAudite
+} from "@/services/approveManagement/allApprove";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 
@@ -95,19 +106,33 @@ const columns = [
     }
   },
   {
-    title: "名称",
-    dataIndex: "templateFileName",
+    title: "编号",
+    dataIndex: "auditeNo",
     scopedSlots: {
-      customRender: "templateFileName"
+      customRender: "auditeNo"
     }
   },
   {
-    title: "提交人",
-    dataIndex: "submitUserName",
+    title: "得分",
+    dataIndex: "finalScore",
     scopedSlots: {
-      customRender: "submitUserName"
+      customRender: "finalScore"
     }
-  }
+  },
+  {
+    title: "类型",
+    dataIndex: "auditeType",
+    scopedSlots: {
+      customRender: "auditeType"
+    }
+  },
+  {
+    title: "审批人",
+    dataIndex: "auditeUserNames",
+    scopedSlots: {
+      customRender: "auditeUserNames"
+    }
+  },
   // {
   //   title: "状态",
   //   dataIndex: "status",
@@ -115,13 +140,13 @@ const columns = [
   //     customRender: "status"
   //   }
   // },
-  // {
-  //   title: "备注",
-  //   dataIndex: "remarks",
-  //   scopedSlots: {
-  //     customRender: "remarks"
-  //   }
-  // }
+  {
+    title: "备注",
+    dataIndex: "remarks",
+    scopedSlots: {
+      customRender: "remarks"
+    }
+  }
 ];
 
 export default {
@@ -130,9 +155,6 @@ export default {
       selectedRowKeys: [],
       queryFrom: {
         processStepName: ""
-      },
-      headers: {
-        authorization: "authorization-text"
       },
       loading: true,
       dataSource: [],
@@ -144,14 +166,9 @@ export default {
         showTotal: total => `总计 ${total} 条`
       },
       visibleAudite: false,
-      scoreApproveId: "",
+      auditeId: "",
       statusAudite: 1,
-      auditeRemarks: "",
-      modalTitle: "新增",
-      templateFileId: "",
-      templateFileType: "",
-      templateFileName: "",
-      templateFileData: null // 用于存储文件的ArrayBuffer
+      auditeRemarks: ""
     };
   },
   components: {},
@@ -165,61 +182,32 @@ export default {
   },
   methods: {
     checkPermission,
-    add_pagelist() {
-      this.modalTitle = "新增";
-      this.templateFileData = null;
-      this.visibleAudite = true;
-    },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      this.templateFileName = file.name;
-      if (!file) {
-        console.log("No file selected");
-        return;
-      }
-      this.templateFileData = file;
-    },
-    //确认
+    //审核确认
     handleOkAudite() {
-      let formData = new FormData();
-      formData.append("templateFileData", this.templateFileData);
-      formData.append("templateFileType", this.templateFileType);
-      if (this.modalTitle == "新增") {
-        templateFileAdd(formData)
-          .then(res => {
-            if (res.code == 1) {
-              this.$message.success("上传模板成功");
-              this.getPageList();
-              this.visibleAudite = false;
-            } else {
-              this.$message.error(res.message);
-            }
-          })
-          .catch(err => {
-            this.$message.error(err.message);
-          });
-      } else {
-        templateFileEdit(formData,this.templateFileId)
-          .then(res => {
-            if (res.code == 1) {
-              this.$message.success("更新模板成功");
-              this.getPageList();
-              this.visibleAudite = false;
-            } else {
-              this.$message.error(res.message);
-            }
-          })
-          .catch(err => {
-            this.$message.error(err.message);
-          });
-      }
+      let params = {
+        auditeId: this.auditeId,
+        status: this.statusAudite,
+        remarks: this.auditeRemarks
+      };
+      checkAudite(params)
+        .then(res => {
+          if (res.code == 1) {
+            this.$message.success("审核成功");
+            this.getPageList();
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+        .catch(err => {
+          this.$message.error(err.message);
+        });
+      this.visibleAudite = false;
     },
     //编辑
     productData_edit(record) {
-      this.modalTitle = "编辑";
-      this.templateFileData = null;
-      this.templateFileType = record.templateFileType;
-      this.templateFileId = record.id;
+      this.auditeId = record.id;
+      this.statusAudite = 1;
+      this.auditeRemarks = "";
       this.visibleAudite = true;
     },
     //获取列表数据
@@ -241,7 +229,7 @@ export default {
             this.loading = false;
           } else {
             this.loading = false;
-            this.$message.error(res.message);
+            this.$message.error(res.msg);
           }
         })
         .catch(err => {
@@ -255,14 +243,12 @@ export default {
     },
     //查看项目
     lookProduct(record, type) {
-      downloadTemplate(record);
-
-      // this.$router.push({
-      //   path: "/quotationManagement/rdProjectsDetailLook",
-      //   query: {
-      //     id: record.developProjectId
-      //   }
-      // });
+      this.$router.push({
+        path: "/quotationManagement/rdProjectsDetailLook",
+        query: {
+          id: record.developProjectId
+        }
+      });
     },
     // 编辑
     pinbanOrder_edit(record, type) {
