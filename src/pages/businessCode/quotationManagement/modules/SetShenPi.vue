@@ -20,7 +20,7 @@
         </a-form-model-item>
 
         <a-form-model-item label="研发项目" style="display: none;">
-          <a-input v-model="queryFrom.quoteld" style="width: 450px" placeholder="研发项目" disabled></a-input>
+          <a-input v-model="queryFrom.quoteId" style="width: 450px" placeholder="研发项目" disabled></a-input>
         </a-form-model-item>
 
         <a-form-model-item label="项目最终评分" v-if="queryFrom.auditeType==2">
@@ -67,7 +67,7 @@ export default {
       type: Number,
       default: 0
     },
-    quoteld: {
+    quoteId: {
       type: String,
       default: "0"
     },
@@ -97,7 +97,7 @@ export default {
     openModules(type, info) {
       this.queryFrom = {
         auditeType: this.auditeType,
-        quoteld: this.quoteld,
+        quoteId: this.quoteId,
         finalScore: this.finalScore
       };
       this.uservisible = true;

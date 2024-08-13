@@ -120,7 +120,7 @@
 
     <ProcessModal ref="ProcessModalRefs" @ok="getDetail"></ProcessModal>
     <OtherModal ref="OtherModalRefs" @ok="getDetail"></OtherModal>
-    <SetShenPi ref="SetShenPiRef" :auditeType="3" :quoteld="$route.query.id"></SetShenPi>
+    <SetShenPi ref="SetShenPiRef" :auditeType="3" :quoteId="$route.query.id"></SetShenPi>
 
   </div>
 </template>

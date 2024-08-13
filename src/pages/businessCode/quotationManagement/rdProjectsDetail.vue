@@ -181,7 +181,7 @@
       
 
     </a-modal>
-    <SetShenPi ref="SetShenPiRef" :auditeType="2" :quoteld="$route.query.id" :finalScore="finalScore"></SetShenPi>
+    <SetShenPi ref="SetShenPiRef" :auditeType="2" :quoteId="$route.query.id" :finalScore="finalScore"></SetShenPi>
 
   </a-card>
 </template>

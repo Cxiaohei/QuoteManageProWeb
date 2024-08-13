@@ -47,7 +47,7 @@
             <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
 
             <a-button type="primary" @click="setShenpi">发起审批</a-button>
-            <SetShenPi ref="SetShenPiRef" :auditeType="0" :quoteld="$route.query.id"></SetShenPi>
+            <SetShenPi ref="SetShenPiRef" :auditeType="0" :quoteId="$route.query.id"></SetShenPi>
           </a-space>
         </a-form-item>
       </a-form-model>
