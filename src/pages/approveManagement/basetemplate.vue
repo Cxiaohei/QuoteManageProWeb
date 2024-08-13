@@ -33,12 +33,12 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <!-- <a
+        <a
           href="javascript:;"
           v-if="record.status==0"
           @click="productData_edit(record)"
           style="margin-right: 5px;"
-        >审核</a>-->
+        >审核</a>
         <a href="javascript:;" @click="lookProduct(record)" style="margin-right: 5px;color:#666">下载</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
@@ -65,8 +65,8 @@
       @ok="handleOkAudite"
       @cancel="visibleAudite=false"
     >
-      类型：
-      <a-radio-group v-model="templateFileType" style="width: 600px;">
+      状态：
+      <a-radio-group v-model="templateFileType">
         <a-radio :value="0">内部物料模板</a-radio>
         <a-radio :value="1">BOM报价单模板</a-radio>
         <a-radio :value="2">ODM报价单模板</a-radio>
@@ -75,9 +75,8 @@
         <a-radio :value="5">项目变更申请模板</a-radio>
       </a-radio-group>
       <br />
-
-      <input type="file" @click="handleFileChange" />
-      <br />
+      <br />说明：
+      <input type="file" @change="handleFileChange" />
     </a-modal>
   </a-card>
 </template>
@@ -86,7 +85,7 @@
 import {
   getPageList,
   templateFileAdd,
-  downloadTemplate,
+  downloadTemplate
 } from "@/services/approveManagement/basetemplate";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
@@ -100,7 +99,7 @@ const columns = [
     }
   },
   {
-    title: "编号",
+    title: "名称",
     dataIndex: "templateFileName",
     scopedSlots: {
       customRender: "templateFileName"
@@ -112,21 +111,21 @@ const columns = [
     scopedSlots: {
       customRender: "submitUserName"
     }
-  },
-  {
-    title: "状态",
-    dataIndex: "templateFileType",
-    scopedSlots: {
-      customRender: "templateFileType"
-    }
-  },
-  {
-    title: "备注",
-    dataIndex: "remarks",
-    scopedSlots: {
-      customRender: "remarks"
-    }
   }
+  // {
+  //   title: "状态",
+  //   dataIndex: "status",
+  //   scopedSlots: {
+  //     customRender: "status"
+  //   }
+  // },
+  // {
+  //   title: "备注",
+  //   dataIndex: "remarks",
+  //   scopedSlots: {
+  //     customRender: "remarks"
+  //   }
+  // }
 ];
 
 export default {
@@ -173,10 +172,6 @@ export default {
       this.modalTitle = "新增";
       this.visibleAudite = true;
     },
-    // //下载模板
-    // downloadTemplate() {
-    //   downloadTemplate('ces ');
-    // },
     handleFileChange(event) {
       const file = event.target.files[0];
       this.templateFileName = file.name;
@@ -184,24 +179,18 @@ export default {
         console.log("No file selected");
         return;
       }
-      this.templateFileData=file;
-
+      this.templateFileData = file;
     },
     //审核确认
     handleOkAudite() {
-      // let params = {
-      //   templateFileName: this.templateFileName,
-      //   templateFileType: this.templateFileType,
-      //   templateFileData: this.templateFileData
-      // };
       let formData = new FormData();
-      formData.append("templateFileData",this.templateFileData);
-      formData.append("templateFileType",this.templateFileType);
+      formData.append("templateFileData", this.templateFileData);
+      formData.append("templateFileType", this.templateFileType);
       if (this.modalTitle == "新增") {
         templateFileAdd(formData)
           .then(res => {
             if (res.code == 1) {
-              this.$message.success("审核成功");
+              this.$message.success("上传模板成功");
               this.getPageList();
               this.visibleAudite = false;
             } else {
@@ -253,7 +242,10 @@ export default {
     },
     //查看项目
     lookProduct(record, type) {
-      downloadTemplate(record.templateFileBlobName);
+      downloadTemplate(record.templateFileBlobName).then(res => {
+        console.log(res)
+      });
+
       // this.$router.push({
       //   path: "/quotationManagement/rdProjectsDetailLook",
       //   query: {

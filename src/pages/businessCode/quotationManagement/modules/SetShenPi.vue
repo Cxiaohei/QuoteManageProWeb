@@ -57,8 +57,7 @@
 import {
   setQuoteAudite,
   editManufactureFee,
-  getPriceList
-} from "@/services/businessCode/quotationManagement/odmQuote";
+} from "@/services/businessCode/quotationManagement/shenpi";
 import cloneDeep from "lodash.clonedeep";
 
 export default {
@@ -101,16 +100,6 @@ export default {
         quoteld: this.quoteld,
         finalScore: this.finalScore
       };
-      //获取价格策略不分页
-      getPriceList().then(res => {
-        this.PriceList = res.data;
-      });
-      // if (type == "add") {
-      //   this.title = "新增";
-      // } else {
-      //   this.title = "编辑";
-      //   this.queryFrom = cloneDeep(info);
-      // }
       this.uservisible = true;
     },
     // 确定
@@ -118,11 +107,9 @@ export default {
       this.$refs.userRefs.validate(valid => {
         if (valid) {
           this.confirmLoading = true;
-          if (this.title == "新增") {
+          if (this.title == "发起审批") {
             this.setQuoteAudite();
-          } else {
-            this.editManufactureFee();
-          }
+          } 
         }
       });
     },
@@ -138,14 +125,14 @@ export default {
     },
     //新增基础数据
     setQuoteAudite() {
-      let params = {
+      const params = {
         ...this.queryFrom
       };
-      let auditeUserNames = [];
+      const auditeUserNames = [];
       this.auditeUserNamesList.map(item => {
         auditeUserNames.push(item.value);
       });
-      params.auditeUserNames = auditeUserNames;
+      params['auditeUserNames'] = auditeUserNames;
       setQuoteAudite(params)
         .then(res => {
           if (res.code == 1) {
@@ -162,32 +149,6 @@ export default {
           this.confirmLoading = false;
         });
     },
-    //编辑基础数据
-    editManufactureFee() {
-      let params = {
-        ...this.queryFrom
-      };
-      let auditeUserNames = [];
-      this.auditeUserNamesList.map(item => {
-        auditeUserNames.push(item.value);
-      });
-      params.auditeUserNames = auditeUserNames;
-      editManufactureFee(params)
-        .then(res => {
-          if (res.code == 1) {
-            this.$message.success(res.msg);
-            this.$emit("ok");
-            this.uservisible = false;
-          } else {
-            this.$message.error(res.msg);
-          }
-          this.confirmLoading = false;
-        })
-        .catch(err => {
-          this.loading = false;
-          this.confirmLoading = false;
-        });
-    }
   }
 };
 </script>
