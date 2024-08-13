@@ -7,7 +7,11 @@ export async function getPageList(params) {
 }
 
 export async function templateFileAdd(params) {
-    return request("/api/app/tempatet-file/template-file", METHOD.POST, params)
+    return request("/api/app/tempatet-file/template-file", METHOD.POST,  params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
 }
 
 export async function checkAudite(params) {
@@ -16,13 +20,13 @@ export async function checkAudite(params) {
 
 
 //导入
-export function importExcel(params, data) {
-    return request(`/api/app/bom-quote/import-dSBom-details`, METHOD.POST, params, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    })
-}
+// export function importExcel(params, data) {
+//     return request(`/api/app/bom-quote/import-dSBom-details`, METHOD.POST, params, {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//         },
+//     })
+// }
 
 
 export function downloadTemplate(params) {
@@ -36,6 +40,5 @@ export default {
     getPageList,
     templateFileAdd,
     checkAudite,
-    importExcel,
     downloadTemplate,
 }

@@ -38,12 +38,8 @@
           v-if="record.status==0"
           @click="productData_edit(record)"
           style="margin-right: 5px;"
-        >审核</a> -->
-        <a
-          href="javascript:;"
-          @click="lookProduct(record)"
-          style="margin-right: 5px;color:#666"
-        >下载</a>
+        >审核</a>-->
+        <a href="javascript:;" @click="lookProduct(record)" style="margin-right: 5px;color:#666">下载</a>
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
@@ -80,12 +76,8 @@
       </a-radio-group>
       <br />
 
-      <input type="file" @click="handleFileChange">
+      <input type="file" @click="handleFileChange" />
       <br />
-      <!-- <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
-        <a-button type="primary" icon="to-top">导入</a-button>
-      </a-upload> -->
-      <!-- <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span> -->
     </a-modal>
   </a-card>
 </template>
@@ -94,7 +86,6 @@
 import {
   getPageList,
   templateFileAdd,
-  importExcel,
   downloadTemplate,
 } from "@/services/approveManagement/basetemplate";
 import { checkPermission } from "@/utils/abp";
@@ -186,35 +177,6 @@ export default {
     // downloadTemplate() {
     //   downloadTemplate('ces ');
     // },
-    //导入
-    importExcel(resData) {
-      let formData = new FormData();
-      formData.append("ImportFile", resData.file);
-      console.log(formData)
-      // importExcel(formData).then(response => {
-      //   if (response.code == 1) {
-      //     const params = {
-      //       bomQuoteId: this.$route.query.id,
-      //       bomQuoteRelations: response.data
-      //     };
-      //     params.bomQuoteRelations[0].id = "";
-      //     params.bomQuoteRelations.map(item => {
-      //       item.bomQuoteId = this.$route.query.id;
-      //     });
-      //     addBomDetail(params).then(res => {
-      //       if (res.code == 1) {
-      //         this.$message.success("导入成功");
-      //         // this.$message.success("添加成功");
-      //         this.getDetail();
-      //       } else {
-      //         this.$message.error(res.msg);
-      //       }
-      //     });
-      //   } else {
-      //     this.$message.info(response.msg);
-      //   }
-      // });
-    },
     handleFileChange(event) {
       const file = event.target.files[0];
       this.templateFileName = file.name;
@@ -222,30 +184,21 @@ export default {
         console.log("No file selected");
         return;
       }
-      const reader = new FileReader();
-      reader.onload = e => {
-        const bytes = new Uint8Array(e.target.result);
-        // // 处理bytes，例如发送到后端或进行其他操作
-        // var arrTwo = [];
-        // for (let key in bytes) {
-        //   // 检查属性是否是对象自身的属性
-        //   arrTwo.push(bytes[key]);
-        // }
-        // console.log(arrTwo);
-        this.templateFileData = bytes;
-      };
-      reader.readAsArrayBuffer(file);
+      this.templateFileData=file;
+
     },
     //审核确认
     handleOkAudite() {
-      let params = {
-        templateFileName: this.templateFileName,
-        templateFileType: this.templateFileType,
-        templateFileData: this.templateFileData
-      };
-      console.log(params);
+      // let params = {
+      //   templateFileName: this.templateFileName,
+      //   templateFileType: this.templateFileType,
+      //   templateFileData: this.templateFileData
+      // };
+      let formData = new FormData();
+      formData.append("templateFileData",this.templateFileData);
+      formData.append("templateFileType",this.templateFileType);
       if (this.modalTitle == "新增") {
-        templateFileAdd(params)
+        templateFileAdd(formData)
           .then(res => {
             if (res.code == 1) {
               this.$message.success("审核成功");
