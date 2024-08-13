@@ -53,13 +53,10 @@
             >
               <a-button type="primary" icon="to-top">导入</a-button>
             </a-upload>
-            <span
-              @click="downloadTemplate"
-              style="color: #1890ff; cursor: pointer"
-              >下载导入模板</span
-            >
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
+
             <a-button type="primary" @click="setShenpi">发起审批</a-button>
-            <ShenPiModal ref="ShenPiModalRef"></ShenPiModal>
+            <SetShenPi ref="SetShenPiRef" :auditeType="0" :quoteId="$route.query.id"></SetShenPi>
           </a-space>
         </a-form-item>
       </a-form-model>
@@ -312,7 +309,7 @@ import {
   // editBomDataList
 } from "@/services/businessCode/quotationManagement/bomQuote";
 import cloneDeep from "lodash.clonedeep";
-import ShenPiModal from "./modules/ShenPiModal";
+import SetShenPi from "./modules/SetShenPi";
 
 const columns = [
   {
@@ -385,9 +382,7 @@ const columns = [
 export default {
   name: "customerModal",
   props: {},
-  components: {
-    ShenPiModal,
-  },
+  components: { SetShenPi },
   data() {
     return {
       title: "标题",
@@ -520,7 +515,9 @@ export default {
         this.ProductList = res.data;
       });
     },
-
+    setShenpi() {
+      this.$refs.SetShenPiRef.openModules();
+    },
     onSelect(value, record, type) {
       console.log("onSelect", value);
       console.log(record);

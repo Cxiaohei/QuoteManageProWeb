@@ -16,7 +16,7 @@
                 style="margin-right: 15px; text-decoration: underline"
               >{{ finalScore }}</a>
               <a
-                @click="setAudite()"
+                @click="setAudite"
                 v-if="
                   !detailData.auditeNo &&
                   detailData.auditeStatus != 0 &&
@@ -25,7 +25,7 @@
                 "
               >提交审批</a>
               <a
-                @click="setAudite()"
+                @click="setAudite"
                 v-if="
                   detailData.auditeNo &&
                   detailData.auditeStatus == 10 &&
@@ -177,7 +177,12 @@
     >
       备注：
       <a-input v-model="remarksAudite"></a-input>
+
+      
+
     </a-modal>
+    <SetShenPi ref="SetShenPiRef" :auditeType="2" :quoteId="$route.query.id" :finalScore="finalScore"></SetShenPi>
+
   </a-card>
 </template>
       
@@ -192,6 +197,7 @@ import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import RdProjectsDetailModal from "./modules/RdProjectsDetailModal.vue";
 import CalculateProjectsModal from "./modules/CalculateProjectsModal.vue";
+import SetShenPi from "./modules/SetShenPi";
 
 const columns = [
   {
@@ -289,7 +295,7 @@ const columns = [
   }
 ];
 export default {
-  components: { RdProjectsDetailModal, CalculateProjectsModal },
+  components: { RdProjectsDetailModal, CalculateProjectsModal , SetShenPi },
   data() {
     return {
       selectedRowKeys: [],
@@ -461,7 +467,8 @@ export default {
         });
     },
     setAudite() {
-      this.visibleAudite = true;
+      // this.visibleAudite = true;
+      this.$refs.SetShenPiRef.openModules();
     },
     handleOkAudite() {
       let params = {

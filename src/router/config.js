@@ -233,7 +233,7 @@ const options = {
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/approveManagement/scoreApprove'),
+              component: () => import('@/pages/approveManagement/allApprove'),
             },
             {
               path: 'scoreApprove',

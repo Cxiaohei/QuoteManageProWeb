@@ -7,17 +7,51 @@ export async function getPageList(params) {
 }
 
 export async function templateFileAdd(params) {
-    return request("/api/app/tempatet-file/template-file", METHOD.POST, params)
+    return request("/api/app/tempatet-file/template-file", METHOD.POST, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
 }
+export async function templateFileEdit(params,TemplateFileId) {
+    return request(`/api/app/tempatet-file/template-file-info/${TemplateFileId}`, METHOD.PUT, params, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+
 
 export async function checkAudite(params) {
     return request("/api/app/quote-audite/audite-quote-develop-project", METHOD.POST, params)
 }
 
-checkAudite
+
+//导入
+// export function importExcel(params, data) {
+//     return request(`/api/app/bom-quote/import-dSBom-details`, METHOD.POST, params, {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//         },
+//     })
+// }
+
+
+export function downloadTemplate(params) {
+    request("/api/app/tempatet-file/down-load-template-file?TemplateFileBlobName=" + params.templateFileBlobName, METHOD.POST).then(res => {
+        let url = res.data
+        console.log(url)
+        download(url, params.templateFileName);
+    })
+}
+
+
 
 export default {
     getPageList,
     templateFileAdd,
-    checkAudite
+    templateFileEdit,
+    checkAudite,
+    downloadTemplate,
 }
