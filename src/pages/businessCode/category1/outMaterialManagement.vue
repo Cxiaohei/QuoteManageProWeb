@@ -128,7 +128,8 @@ const columns = [
     dataIndex: "recentUseBomNum",
     scopedSlots: {
       customRender: "recentUseBomNum"
-    }
+    },
+    sorter: (a, b) => a.recentUseBomNum - b.recentUseBomNum,
   },
   {
     title: "备注",

@@ -13,14 +13,16 @@
               @click="grant_type = 'code'"
               style="font-weight: bolder; cursor: pointer; margin-right: 20px"
               :style="{ color: grant_type == 'code' ? '#73d8ff' : '#424242' }"
-            >密码登录</h2>
+            >
+              密码登录
+            </h2>
             <!-- <h2
               @click="grant_type = 'sms'"
               style="font-weight: bolder; cursor: pointer"
               :style="{ color: grant_type == 'sms' ? '#73d8ff' : '#424242' }"
             >短信登录</h2>-->
           </a-space>
-          <a-form @submit="onSubmit" :form="form">
+          <a-form-model @submit="onSubmit" :model="form">
             <a-alert
               type="error"
               :closable="true"
@@ -29,48 +31,34 @@
               showIcon
               style="margin-bottom: 24px"
             />
-            <!-- <a-form-item>
+            <!-- <a-form-model-item>
               <a-input size="large" addon-before="租户" disabled placeholder="未选择" v-model="tenant">
                 <a-button slot="suffix" type="primary" @click="visible = true">切换</a-button>
               </a-input>
-            </a-form-item>-->
+            </a-form-model-item>-->
 
-            <a-form-item v-if="grant_type == 'code'">
+            <a-form-model-item v-if="grant_type == 'code'">
               <a-input
                 autocomplete="autocomplete"
                 size="large"
                 placeholder="请输入账户名"
-                v-decorator="[
-                  'name',
-                  {
-                    rules: [
-                      { required: true, message: '请输入账户名', whitespace: true },
-                    ],
-                  },
-                ]"
+                v-model="form.name"
               >
                 <a-icon slot="prefix" type="user" />
               </a-input>
-            </a-form-item>
-            <a-form-item v-if="grant_type == 'code'">
+            </a-form-model-item>
+            <a-form-model-item v-if="grant_type == 'code'">
               <a-input
                 size="large"
                 placeholder="请输入密码*"
                 autocomplete="autocomplete"
                 type="password"
-                v-decorator="[
-                  'password',
-                  {
-                    rules: [
-                      { required: true, message: '请输入密码', whitespace: true },
-                    ],
-                  },
-                ]"
+                v-model="form.password"
               >
                 <a-icon slot="prefix" type="lock" />
               </a-input>
-            </a-form-item>
-            <!-- <a-form-item v-if="grant_type == 'code'">
+            </a-form-model-item>
+            <!-- <a-form-model-item v-if="grant_type == 'code'">
               <div class="codeCls">
                 <a-input
                   size="large"
@@ -90,67 +78,63 @@
                 ></a-input>
                 <img :src="imgCode" alt @click="getImgCode" />
               </div>
-            </a-form-item> -->
+            </a-form-model-item> -->
 
-            <a-form-item v-if="grant_type == 'sms'">
+            <a-form-model-item v-if="grant_type == 'sms'">
               <a-input
                 autocomplete="autocomplete"
                 size="large"
                 placeholder="手机号"
-                v-decorator="[
-                'phone',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      pattern: validatPhone,
-                      trigger: 'blur',
-                    },
-                  ],
-                },
-              ]"
               >
                 <a-icon slot="prefix" type="phone" />
               </a-input>
-            </a-form-item>
-            <a-form-item v-if="grant_type == 'sms'">
+            </a-form-model-item>
+            <a-form-model-item v-if="grant_type == 'sms'">
               <div class="codeCls">
                 <a-input
                   size="large"
                   placeholder="短信验证码"
                   v-decorator="[
-                  'messageCode',
-                  {
-                    rules: [
-                      {
-                        required: true,
-                        message: '请输入验证码',
-                        whitespace: true,
-                      },
-                    ],
-                  },
-                ]"
+                    'messageCode',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入验证码',
+                          whitespace: true,
+                        },
+                      ],
+                    },
+                  ]"
                 ></a-input>
                 <a-button
                   type="primary"
-                  style="width: 128px;height:38px"
+                  style="width: 128px; height: 38px"
                   @click="startCountdown"
                   :disabled="count == 60 ? false : true"
-                >{{ count == 60 ? '获取验证码' : count + 's后重新获取' }}</a-button>
+                  >{{
+                    count == 60 ? "获取验证码" : count + "s后重新获取"
+                  }}</a-button
+                >
               </div>
-            </a-form-item>
+            </a-form-model-item>
 
-            <a-form-item>
+            <a-form-model-item>
+              <a-checkbox v-model="setPassword"> 记住密码 </a-checkbox>
+            </a-form-model-item>
+
+            <a-form-model-item>
               <a-button
                 :loading="logging"
-                style="width: 100%; margin-top: 24px;"
+                style="width: 100%; margin-top: 24px"
                 size="large"
                 htmlType="submit"
                 type="primary"
                 class="login_btn"
-              >登录</a-button>
-            </a-form-item>
-          </a-form>
+                >登录</a-button
+              >
+            </a-form-model-item>
+          </a-form-model>
           <a-modal
             title="切换租户"
             :visible="visible"
@@ -175,6 +159,7 @@ import { mapMutations } from "vuex";
 import { tenantSwitch } from "@/services/multiTenancy/tenant";
 import WeChatLoginModal from "./modules/WeChatLoginModal";
 import { mapState } from "vuex";
+import Cookie from "js-cookie";
 export default {
   name: "Login",
   components: { CommonLayout, WeChatLoginModal },
@@ -196,7 +181,7 @@ export default {
       validatPhone,
       logging: false,
       error: "",
-      form: this.$form.createForm(this),
+      form: {},
       visible: false,
       confirmLoading: false,
       tenant: "",
@@ -204,42 +189,47 @@ export default {
       grant_type: "code", //登录类型 验证码 短信验证码
       imgCode: "", //验证码图片地址
       count: 60, //倒计数
-      getcount: true //能否执行获取短信验证码
+      getcount: true, //能否执行获取短信验证码
+      setPassword: false,
     };
   },
   computed: {
     ...mapState("setting", ["footerLinks", "copyright"]),
     systemName() {
       return this.$store.state.setting.systemName;
-    }
+    },
   },
   mounted() {
     //获取验证码
     // this.getImgCode();
+    if (Cookie.get("loginName") && Cookie.get("loginPassword")) {
+      this.form.name = Cookie.get("loginName");
+      this.form.password = Cookie.get("loginPassword");
+      this.setPassword = true;
+    }
+    this.$forceUpdate();
   },
   methods: {
     ...mapMutations("account", ["setUser", "setPermissions", "setRoles"]),
     onSubmit(e) {
-
       e.preventDefault();
-      this.form.validateFields(err => {
-        if (!err) {
-          this.logging = true;
-          const name = this.form.getFieldValue("name");
-          const password = this.form.getFieldValue("password");
-          const tenant = this.tenant;
-          login(name, password, tenant)
-            .then(this.afterLogin)
-            .finally(() => {
-              this.logging = false;
-            });
-        }
-      });
+
+      this.logging = true;
+      const name = this.form.name;
+      const password = this.form.password;
+      const tenant = this.tenant;
+
+      login(name, password, tenant)
+        .then(this.afterLogin)
+        .finally(() => {
+          this.logging = false;
+        });
     },
     afterLogin(res) {
       this.logging = false;
       const loginRes = res;
-      console.log(loginRes)
+      console.log(loginRes);
+
       if (loginRes) {
         // const { user, permissions, roles } = loginRes.data;
         // this.setUser(user);
@@ -247,7 +237,7 @@ export default {
         // this.setRoles(roles);
         setAuthorization({
           token: loginRes.access_token,
-          expireAt: new Date(new Date().getTime() + loginRes.expires_in * 1000)
+          expireAt: new Date(new Date().getTime() + loginRes.expires_in * 1000),
         });
         // 获取路由配置
         // getRoutesConfig().then((result) => {
@@ -259,9 +249,16 @@ export default {
         //   this.$router.push("/demo");
         //   this.$message.success(loginRes.message, 3);
         // });
-        this.$store.dispatch("account/refreshPermissions", res => {
+        this.$store.dispatch("account/refreshPermissions", (res) => {
           if (res == "success") {
             this.$message.success("登录成功", 3);
+            if (this.setPassword) {
+              Cookie.set("loginName", this.form.name);
+              Cookie.set("loginPassword", this.form.password);
+            } else {
+              Cookie.set("loginName", "");
+              Cookie.set("loginPassword", "");
+            }
             this.$router.push("/dashboard/home");
           }
         });
@@ -274,10 +271,10 @@ export default {
       if (!obj) {
         return permissions;
       }
-      permissions = Object.keys(obj).map(x => {
+      permissions = Object.keys(obj).map((x) => {
         return {
           id: x,
-          operation: []
+          operation: [],
         };
       });
       return permissions;
@@ -305,10 +302,10 @@ export default {
     tenantSwitchModal() {
       this.confirmLoading = true;
       let params = {
-        name: this.tenantName
+        name: this.tenantName,
       };
       tenantSwitch(params)
-        .then(res => {
+        .then((res) => {
           this.visible = false;
           this.tenant = this.tenantName;
         })
@@ -327,7 +324,7 @@ export default {
         Math.floor(Math.random() * (10000 - 1000) + 1000);
       console.log(new Date().getTime());
       baseUrl += `/api/administration-service/common/validatecode/${this.timestamp}`;
-      getImgCode(this.timestamp).then(res => {
+      getImgCode(this.timestamp).then((res) => {
         this.imgCode = baseUrl;
       });
     },
@@ -337,8 +334,8 @@ export default {
       sendCode({
         phone: phone,
         smsFrom: "Manage",
-        sendType: "Login"
-      }).then(res => {
+        sendType: "Login",
+      }).then((res) => {
         if (res.success) {
           this.$message.success(res.message);
         } else {
@@ -369,8 +366,8 @@ export default {
           this.$message.error("请输入正确的手机号");
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

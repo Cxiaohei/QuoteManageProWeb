@@ -311,7 +311,7 @@ const options = {
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+              component: () => import('@/pages/businessCode/category1/zzflpriceStrategy'),
             },
             {
               path: 'jgjpriceStrategy',
@@ -319,7 +319,7 @@ const options = {
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+              component: () => import('@/pages/businessCode/category1/jgjpriceStrategy'),
             },
             {
               path: 'jgfpriceStrategy',
@@ -327,7 +327,7 @@ const options = {
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/businessCode/category1/priceStrategy'),
+              component: () => import('@/pages/businessCode/category1/jgfpriceStrategy'),
             },
           ]
         },

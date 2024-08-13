@@ -38,6 +38,7 @@
       :pagination="pagination"
       :loading="loading"
       :selectedRows.sync="selectedRows"
+      childrenColumnName="childrens"
       bordered
     >
       <span slot="action" slot-scope="text, record">
@@ -46,9 +47,14 @@
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
-      <span slot="acceptType" slot-scope="text, record">
+      <span slot="categoryLevel" slot-scope="text, record">
         {{
-        record.acceptType == 0 ?"固定资产":"调拨资产"
+        record.categoryLevel == 0 ?"初级":record.categoryLevel == 1 ?"中级":record.categoryLevel == 2 ?"高级":"资深"
+        }}
+      </span>
+      <span slot="categoryType" slot-scope="text, record">
+        {{
+        record.categoryType == 0 ?"岗位":"-"
         }}
       </span>
       <span slot="creationTime" slot-scope="text, record">
@@ -57,102 +63,86 @@
         }}
       </span>
     </a-table>
-    <MaterialManagementModal ref="MaterialManagementModalRefs" @ok="getPageList"></MaterialManagementModal>
+
+    <PriceStrategyModal ref="PriceStrategyModalRefs" @ok="getPageList"></PriceStrategyModal>
   </a-card>
 </template>
     
 <script>
-import {
-  getPageList,
+import { getPageList,
   importExcel,
-  downloadTemplate
-} from "@/services/businessCode/category1/materialManagement";
+  downloadTemplate } from "@/services/businessCode/category1/priceStrategy";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import MaterialManagementModal from "./modules/MaterialManagementModal";
+import PriceStrategyModal from "./modules/PriceStrategyModal.vue";
 
 const columns = [
   {
-    width: 100,
+    width: 70,
     title: "操作",
     scopedSlots: {
       customRender: "action"
     }
   },
   {
-    title: "编号",
-    dataIndex: "bomNo",
-    scopedSlots: {
-      customRender: "bomNo"
-    }
+    title: "报价策略名称",
+    dataIndex: "priceStrategyName"
   },
   {
-    title: "名称",
-    dataIndex: "bomName",
-    scopedSlots: {
-      customRender: "bomName"
-    }
+    title: "工艺路线",
+    dataIndex: "processRote"
   },
   {
-    title: "9NC",
-    dataIndex: "nineNC",
-    scopedSlots: {
-      customRender: "nineNC"
-    }
+    title: "测试岗工价(元/时)",
+    dataIndex: "testUnitPrice"
   },
   {
-    title: "品牌",
-    dataIndex: "brand",
-    scopedSlots: {
-      customRender: "brand"
-    }
+    title: "组装岗工价(元/时)",
+    dataIndex: "assemblyUnitPrice"
   },
   {
-    title: "规格",
-    dataIndex: "specification",
-    scopedSlots: {
-      customRender: "specification"
-    }
+    title: "物料种类",
+    dataIndex: "bomSpecies"
   },
   {
-    title: "型号",
-    dataIndex: "bomModel",
-    scopedSlots: {
-      customRender: "bomModel"
-    }
+    title: "贴片单价1(元/点)",
+    dataIndex: "firstPatchUnitPrice"
   },
   {
-    title: "物料库存数",
-    dataIndex: "inventoriesBomNum",
-    scopedSlots: {
-      customRender: "inventoriesBomNum"
-    }
+    title: "贴片单价1临界点",
+    dataIndex: "firstPatchCritical"
   },
   {
-    title: "物料已使用数",
-    dataIndex: "usedBomNum",
-    scopedSlots: {
-      customRender: "usedBomNum"
-    }
+    title: "贴片单价2(元/点)",
+    dataIndex: "secondPatchUnitPrice"
   },
   {
-    title: "最近一次使用",
-    dataIndex: "recentUseBomNum",
-    scopedSlots: {
-      customRender: "recentUseBomNum"
-    },
-    sorter: (a, b) => a.recentUseBomNum - b.recentUseBomNum,
+    title: "贴片单价2临界点",
+    dataIndex: "secondPatchCritical"
+  },
+  {
+    title: "贴片单价3(元/点)",
+    dataIndex: "threePatchUnitPrice"
+  },
+  {
+    title: "贴片单价3临界点",
+    dataIndex: "threePatchCritical"
+  },
+  {
+    title: "插件单价(元/点)",
+    dataIndex: "dipUnitPrice"
+  },
+  {
+    title: "手焊单价(元/点)",
+    dataIndex: "manualWeldingUnitPrice"
   },
   {
     title: "备注",
-    dataIndex: "remarks",
-    scopedSlots: {
-      customRender: "remarks"
-    }
+    dataIndex: "remarks"
   }
 ];
-
 export default {
+  components: { PriceStrategyModal },
   data() {
     return {
       selectedRowKeys: [],
@@ -170,12 +160,10 @@ export default {
       }
     };
   },
-  components: { MaterialManagementModal },
   mounted() {},
   created() {
     this.getPageList();
   },
-  activated() {},
   computed: {
     ...mapGetters("account", ["organizationId"])
   },
@@ -183,7 +171,11 @@ export default {
     checkPermission,
     //新增
     add_pagelist() {
-      this.$refs.MaterialManagementModalRefs.openModules("add");
+      this.$refs.PriceStrategyModalRefs.openModules("add");
+    },
+    //编辑
+    essentialData_edit(record) {
+      this.$refs.PriceStrategyModalRefs.openModules("edit", record);
     },
     //下载模板
     downloadTemplate() {
@@ -202,10 +194,6 @@ export default {
         }
       });
     },
-    //编辑
-    essentialData_edit(record) {
-      this.$refs.MaterialManagementModalRefs.openModules("edit", record);
-    },
     //获取列表数据
     getPageList() {
       const params = {
@@ -222,6 +210,7 @@ export default {
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
             this.dataSource = res.data.items;
+            // this.dataSource = this.buildTree(res.data.items);
             this.loading = false;
           } else {
             this.loading = false;
@@ -233,19 +222,42 @@ export default {
           console.log(err);
         });
     },
+    //处理原始数据为树
+    buildTree(items) {
+      // 创建一个 Map 来存储节点，以便快速查找
+      const nodeMap = new Map(
+        items.map(item => [item.id, { ...item, children: [] }])
+      );
+
+      // 遍历所有节点，构建树形结构
+      items.forEach(item => {
+        const parentId = item.parentId;
+        if (parentId && nodeMap.has(parentId)) {
+          // 如果节点有 parentId，则将其添加到其父节点的 children 数组中
+          nodeMap.get(parentId).children.push(nodeMap.get(item.id));
+        } else {
+          // 否则，将节点视为根节点并添加到结果数组中（这里我们假设没有根节点数组，只是示例）
+          // 你可以根据需要修改此部分来收集根节点
+        }
+      });
+
+      // 从 Map 中获取根节点（假设 parentId 为 null 或 'root' 的节点是根节点）
+      const roots = [];
+      nodeMap.forEach((node, id) => {
+        if (
+          !node.parentId ||
+          node.parentId === "root" ||
+          node.parentId === null
+        ) {
+          roots.push(node);
+        }
+      });
+
+      return roots; // 返回根节点数组
+    },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys;
-    },
-    // 编辑
-    pinbanOrder_edit(record, type) {
-      this.$router.push({
-        path: "actionFixedAssets",
-        query: {
-          id: record.id,
-          type
-        }
-      });
     },
     //页数切换
     handleTableChange(pagination) {
