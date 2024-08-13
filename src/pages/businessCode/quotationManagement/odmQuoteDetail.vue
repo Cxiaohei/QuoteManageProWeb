@@ -41,6 +41,7 @@
           </a-select>
         </a-form-model-item>
       </a-form-model>
+      <a-button type="primary" @click="setShenpi">发起审批</a-button>
 
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="研发项目">
@@ -119,6 +120,8 @@
 
     <ProcessModal ref="ProcessModalRefs" @ok="getDetail"></ProcessModal>
     <OtherModal ref="OtherModalRefs" @ok="getDetail"></OtherModal>
+    <SetShenPi ref="SetShenPiRef" :auditeType="3" :quoteld="$route.query.id"></SetShenPi>
+
   </div>
 </template>
 
@@ -135,6 +138,7 @@ import OdmRdProjectsModal from "./modules/OdmRdProjectsModal.vue";
 import BomQuoteModal from "./modules/BomQuoteModal.vue";
 import ProcessModal from "./modules/ProcessModal.vue";
 import OtherModal from "./modules/OtherModal.vue";
+import SetShenPi from "./modules/SetShenPi";
 
 import cloneDeep from "lodash.clonedeep";
 
@@ -227,7 +231,13 @@ const columns4 = [
 
 export default {
   name: "customerModal",
-  components: { OdmRdProjectsModal, BomQuoteModal, ProcessModal, OtherModal },
+  components: {
+    OdmRdProjectsModal,
+    BomQuoteModal,
+    ProcessModal,
+    OtherModal,
+    SetShenPi
+  },
   props: {},
   data() {
     return {
@@ -285,6 +295,9 @@ export default {
     this.getDetail();
   },
   methods: {
+    setShenpi() {
+      this.$refs.SetShenPiRef.openModules();
+    },
     getDetail() {
       //先重置数据
       this.queryFrom = {
