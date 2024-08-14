@@ -57,7 +57,7 @@
         }}
       </span>
     </a-table>
-    <ProductManagementModal ref="ProductManagementModalRefs" @ok="getPageList"></ProductManagementModal>
+    <PerformanceManagementModal ref="PerformanceManagementModalRefs" @ok="getPageList"></PerformanceManagementModal>
   </a-card>
 </template>
     
@@ -66,10 +66,10 @@ import {
   getPageList,
   importExcel,
   downloadTemplate
-} from "@/services/businessCode/category1/productManagement";
+} from "@/services/performance/performanceManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import ProductManagementModal from "./modules/ProductManagementModal";
+import PerformanceManagementModal from "./modules/PerformanceManagementModal";
 
 const columns = [
   {
@@ -80,59 +80,45 @@ const columns = [
     }
   },
   {
-    title: "编号",
-    dataIndex: "productNo",
+    title: "部门",
+    dataIndex: "department",
     scopedSlots: {
-      customRender: "productNo"
+      customRender: "department"
     }
   },
   {
-    title: "名称",
-    dataIndex: "productName",
+    title: "项目编号",
+    dataIndex: "projectNo",
     scopedSlots: {
-      customRender: "productName"
+      customRender: "projectNo"
     }
   },
   {
-    title: "产品线",
-    dataIndex: "productLine",
+    title: "项目名称",
+    dataIndex: "projectName",
     scopedSlots: {
-      customRender: "productLine"
+      customRender: "projectName"
     }
   },
   {
-    title: "产品描述",
-    dataIndex: "description",
+    title: "项目目的",
+    dataIndex: "projectName",
     scopedSlots: {
-      customRender: "description"
+      customRender: "projectName"
     }
   },
   {
-    title: "标准价格",
-    dataIndex: "standardPrice",
+    title: "项目预算",
+    dataIndex: "projectBudget",
     scopedSlots: {
-      customRender: "standardPrice"
+      customRender: "projectBudget"
     }
   },
   {
-    title: "成本价",
-    dataIndex: "costPrice",
+    title: "创建时间",
+    dataIndex: "creationTime",
     scopedSlots: {
-      customRender: "costPrice"
-    }
-  },
-  {
-    title: "当前报价",
-    dataIndex: "currentPrice",
-    scopedSlots: {
-      customRender: "currentPrice"
-    }
-  },
-  {
-    title: "最后一次报价时间",
-    dataIndex: "lastQuoteTime",
-    scopedSlots: {
-      customRender: "lastQuoteTime"
+      customRender: "creationTime"
     }
   },
   {
@@ -162,7 +148,7 @@ export default {
       }
     };
   },
-  components: { ProductManagementModal },
+  components: { PerformanceManagementModal },
   mounted() {},
   created() {
     this.getPageList();
@@ -175,11 +161,11 @@ export default {
     checkPermission,
     //新增
     add_pagelist() {
-      this.$refs.ProductManagementModalRefs.openModules("add");
+      this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
     //编辑
     productData_edit(record) {
-      this.$refs.ProductManagementModalRefs.openModules("edit", record);
+      this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
     },
     //下载模板
     downloadTemplate() {

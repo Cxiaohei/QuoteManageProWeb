@@ -1,30 +1,62 @@
 <template>
   <div>
     <a-modal
-      :width="1180"
+      :width="580"
       :title="title"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
     >
-      <a-form-model
-        :model="queryFrom"
-        layout="inline"
-        :label-col="{ span: 8 }"
-        :rules="rules"
-        ref="userRefs"
-      >
-        <a-form-model-item
-          style="width: 31%"
-          v-for="(item, index) in queryFromDataList"
-          :key="index"
-          :label="item.label"
-        >
+      <a-form-model :model="queryFrom" :label-col="{ span: 4 }" :rules="rules" ref="userRefs">
+        <a-form-model-item label="部门">
+          <a-input v-model="queryFrom.department" style="width: 350px" placeholder="department"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="立项人">
           <a-input
-            v-model="queryFrom[item.key]"
-            style="width: 150px"
-            :placeholder="item.label"
+            v-model="queryFrom.createUserName"
+            style="width: 350px"
+            placeholder="createUserName"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目编号">
+          <a-input v-model="queryFrom.projectNo" style="width: 350px" placeholder="projectNo"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目名称">
+          <a-input v-model="queryFrom.projectName" style="width: 350px" placeholder="projectName"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目类型">
+          <a-input v-model="queryFrom.projectType" style="width: 350px" placeholder="projectType"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目目的">
+          <a-input
+            v-model="queryFrom.projectPurpose"
+            style="width: 350px"
+            placeholder="projectPurpose"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目经理">
+          <a-input
+            v-model="queryFrom.projectManager"
+            style="width: 350px"
+            placeholder="projectManager"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目时间">
+          <a-input v-model="queryFrom.timeArr" style="width: 350px" placeholder="projectManager"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目预算">
+          <a-input
+            v-model="queryFrom.projectBudget"
+            style="width: 350px"
+            placeholder="projectBudget"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="关联目标">
+          <a-input
+            v-model="queryFrom.projectObjectives"
+            style="width: 350px"
+            placeholder="projectObjectives"
           ></a-input>
         </a-form-model-item>
       </a-form-model>
@@ -35,8 +67,8 @@
 <script>
 import {
   addProductDataList,
-  editProductDataList,
-} from "@/services/businessCode/category1/productManagement";
+  editProductDataList
+} from "@/services/performance/performanceManagement";
 import cloneDeep from "lodash.clonedeep";
 
 export default {
@@ -49,79 +81,78 @@ export default {
       queryFrom: {},
       confirmLoading: false,
       queryFromDataList: [
-        
-      {
+        {
           label: "产品编号",
-          key: "productNo",
+          key: "productNo"
         },
         {
           label: "产品名称",
-          key: "productName",
+          key: "productName"
         },
         {
           label: "产品类别",
-          key: "productType",
+          key: "productType"
         },
         {
           label: "9NC",
-          key: "nineNC",
+          key: "nineNC"
         },
         {
           label: "产品线",
-          key: "productLine",
+          key: "productLine"
         },
         {
           label: "产品硬件平台",
-          key: "hardwarePlatform",
+          key: "hardwarePlatform"
         },
         {
           label: "产品软件平台",
-          key: "softwarePlatform",
+          key: "softwarePlatform"
         },
         {
           label: "产品描述",
-          key: "description",
+          key: "description"
         },
         {
           label: "图片",
-          key: "productImgUrls",
+          key: "productImgUrls"
         },
         {
           label: "操作人姓名",
-          key: "operatUserName",
+          key: "operatUserName"
         },
         {
           label: "最后一次报价时间",
-          key: "lastQuoteTime",
+          key: "lastQuoteTime"
         },
         {
           label: "标准价格",
-          key: "standardPrice",
+          key: "standardPrice"
         },
         {
           label: "成本价",
-          key: "costPrice",
+          key: "costPrice"
         },
         {
           label: "当前报价",
-          key: "currentPrice",
+          key: "currentPrice"
         },
         {
           label: "备注",
-          key: "remarks",
-        },
+          key: "remarks"
+        }
       ],
       rules: {
         categoryName: [
-          { required: true, message: "请输入类别名称", trigger: "change" },
+          { required: true, message: "请输入类别名称", trigger: "change" }
         ],
         categoryLevel: [
-          { required: true, message: "请选择等级", trigger: "change" },
+          { required: true, message: "请选择等级", trigger: "change" }
         ],
         categoryType: [
-          { required: true, message: "请选择岗位", trigger: "change" },
-        ],
-      },
+          { required: true, message: "请选择岗位", trigger: "change" }
+        ]
+      }
     };
   },
   methods: {
@@ -137,7 +168,7 @@ export default {
     },
     // 确定
     handleOk() {
-      this.$refs.userRefs.validate((valid) => {
+      this.$refs.userRefs.validate(valid => {
         if (valid) {
           this.confirmLoading = true;
           if (this.title == "新增") {
@@ -156,10 +187,10 @@ export default {
     addProductDataList() {
       this.logDataSource = [];
       let params = {
-        ...this.queryFrom,
+        ...this.queryFrom
       };
       addProductDataList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.$emit("ok");
@@ -169,7 +200,7 @@ export default {
           }
           this.confirmLoading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.confirmLoading = false;
         });
@@ -178,10 +209,10 @@ export default {
     editProductDataList() {
       this.logDataSource = [];
       let params = {
-        ...this.queryFrom,
+        ...this.queryFrom
       };
       editProductDataList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.$emit("ok");
@@ -191,12 +222,12 @@ export default {
           }
           this.confirmLoading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.confirmLoading = false;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
