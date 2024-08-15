@@ -43,7 +43,7 @@
           href="javascript:;"
           @click="lookProduct(record)"
           style="margin-right: 5px;color:#666"
-        >查看项目</a>-->
+        >查看项目</a> -->
         <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
         <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
@@ -215,7 +215,7 @@ export default {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        AuditeType: 2,
+        AuditeType:0,
         ...this.queryFrom
       };
       getPageList(params)

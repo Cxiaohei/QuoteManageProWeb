@@ -236,6 +236,22 @@ const options = {
               component: () => import('@/pages/approveManagement/allApprove'),
             },
             {
+              path: 'oemApprove',
+              name: 'Oem报价审批审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/oemApprove'),
+            },
+            {
+              path: 'zzApprove',
+              name: '制作费用报价审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/zzApprove'),
+            },
+            {
               path: 'scoreApprove',
               name: '研发费用审批',
               meta: {
@@ -244,20 +260,12 @@ const options = {
               component: () => import('@/pages/approveManagement/scoreApprove'),
             },
             {
-              path: 'productQuoteApprove',
-              name: '产品报价审批审批',
+              path: 'odmApprove',
+              name: 'Odm报价审批',
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/approveManagement/scoreApprove'),
-            },
-            {
-              path: 'xmmanageApprove',
-              name: '管理项目变更审批',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/approveManagement/scoreApprove'),
+              component: () => import('@/pages/approveManagement/odmApprove'),
             },
           ]
         },
