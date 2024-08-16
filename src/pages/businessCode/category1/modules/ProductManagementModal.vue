@@ -15,6 +15,18 @@
         :rules="rules"
         ref="userRefs"
       >
+      <a-form-model-item style="width: 31%" label="是否标准产品">
+          <!-- 产品线下拉 -->
+          <a-select
+            v-model="queryFrom.isStandard"
+            style="width: 150px"
+            placeholder="是否标准产品"
+            allowClear
+          >
+            <a-select-option :value="true">是</a-select-option>
+            <a-select-option :value="false">否</a-select-option>
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item style="width: 31%" label="产品线">
           <!-- 产品线下拉 -->
           <a-select
