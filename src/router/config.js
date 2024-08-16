@@ -210,6 +210,14 @@ const options = {
               component: () => import('@/pages/businessCode/performance/performanceManagementDetail'),
             },
             {
+              path: 'perMonitoring',
+              name: '项目预算监控',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/perMonitoring'),
+            },
+            {
               path: 'projectbg',
               name: '项目变更申请',
               meta: {

@@ -6,6 +6,10 @@ export async function getPageList(params) {
     return request("/api/app/k-kProject/bom-detail-list", METHOD.GET, transformAbpListQuery(params))
 }
 
+export async function getMonitoringPageList(params) {
+    return request("/api/app/k-kProject/project-buget-info-list", METHOD.GET, transformAbpListQuery(params))
+}
+
 export async function getPageListDetail(params) {
     return request(`/api/app/k-kProject/k-kProject-detail/${params}`, METHOD.GET)
 }
@@ -52,7 +56,7 @@ export async function addKkFy(params) {
 }
 
 export async function editKkFy(params) {
-    return request("/api/app/k-kProject/project-buget-detail-info", METHOD.POST, params)
+    return request("/api/app/k-kProject/project-buget-detail-info", METHOD.PUT, params)
 }
 
 

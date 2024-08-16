@@ -26,6 +26,14 @@
           />
           <!-- 输入框 -->
           <a-input
+            v-else-if="item.label == '创建时间'"
+            v-model="queryFrom[item.key]"
+            style="width: 250px"
+            :placeholder="item.label"
+            disabled
+          ></a-input>
+
+          <a-input
             v-else-if="item.type == 'string'"
             v-model="queryFrom[item.key]"
             style="width: 250px"
@@ -120,14 +128,19 @@
             v-for="(item,index) in kkProjectBudgetDetailsList"
             :key="index"
           >
-            <!-- 目标{{ index+1 }}: -->
+            月份：{{ (item.budgetMonth).substring(0,7) }}:
             <a-input
               v-model="item.monthCost"
               style="width: 250px;margin-right:5px"
               placeholder="目标列表"
               disabled
             ></a-input>
-            <a-button type="primary" @click="editFyList(item)" style="margin-right: 5px;">编辑目标</a-button>
+            <a-button
+              type="primary"
+              @click="editFyList(item)"
+              style="margin-right: 5px;"
+              v-if="pageType!='detail'"
+            >编辑目标</a-button>
             <!-- <a-popconfirm title="确定删除吗?" ok-text="确定" cancel-text="取消" @confirm="removeList(item)">
               <a-button type="danger">删除目标</a-button>
             </a-popconfirm>-->
@@ -233,13 +246,13 @@ export default {
           type: "string"
         },
         {
-          label: "创建时间",
-          key: "creationTime",
+          label: "备注",
+          key: "remark",
           type: "string"
         },
         {
-          label: "备注",
-          key: "remark",
+          label: "创建时间",
+          key: "creationTime",
           type: "string"
         }
         // {
@@ -249,7 +262,7 @@ export default {
         // }
       ],
       projectObjectivesList: [], //项目目标
-      kkProjectBudgetDetailsList:[],//费用
+      kkProjectBudgetDetailsList: [], //费用
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
@@ -270,9 +283,12 @@ export default {
       getPageListDetail(this.$route.query.id).then(res => {
         console.log("详情");
         this.queryFrom = res.data;
+        this.queryFrom.creationTime = this.queryFrom.creationTime
+          .replace("T", "-")
+          .substring(0, 19);
         this.projectObjectivesList = res.data.projectObjectives;
         this.kkProjectBudgetDetailsList = res.data.kkProjectBudgetDetails;
-        
+
         console.log(res.data);
       });
     },
@@ -310,27 +326,35 @@ export default {
     editFyList(record) {
       this.bugetFrom = {
         kkProjectId: this.$route.query.id,
-        budgetMonth:record.budgetMonth,
-        monthCost:record.monthCost,
-        getMaterials:record.getMaterials,
+        budgetMonth: record.budgetMonth.substring(0,7),
+        monthCost: record.monthCost,
+        getMaterials: record.getMaterials,
         projectBudgetDetailId: record.id
       };
       this.bugetFromTitle = "编辑月度费用预算";
       this.bugetFromVisible = true;
     },
     handleOkbugetFrom() {
-      const params = {...this.bugetFrom};
+      const params = { ...this.bugetFrom };
       if (this.bugetFromTitle == "编辑月度费用预算") {
         editKkFy(params).then(res => {
-          this.$message.success("编辑成功");
+          if (res.code != -1) {
+            this.$message.success("编辑成功");
+            this.getDetail();
+          } else {
+            this.$message.error("编辑失败");
+          }
           this.bugetFromVisible = false;
-          this.getDetail();
         });
       } else {
         addKkFy([params]).then(res => {
-          this.$message.success("添加成功");
+          if (res.code != -1) {
+            this.$message.success("添加成功");
+            this.getDetail();
+          } else {
+            this.$message.error("添加失败");
+          }
           this.bugetFromVisible = false;
-          this.getDetail();
         });
       }
     },
