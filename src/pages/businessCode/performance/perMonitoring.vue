@@ -190,9 +190,9 @@ export default {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
     setRowClassName(record, index) {
-      if (record.differenceRate < 15) {
+      if (record.differenceRate <= 15) {
         return "bg-red";
-      } else if (record.differenceRate > 15 && record.differenceRate < 50) {
+      } else if (record.differenceRate > 15 && record.differenceRate <= 50) {
         return "bg-yellow";
       }
     },
