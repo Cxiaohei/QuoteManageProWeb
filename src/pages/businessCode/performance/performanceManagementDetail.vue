@@ -112,7 +112,7 @@
       <div style="padding: 30px 0px;">
         <h3>
           月度费用使用预算：
-          <a-button type="primary" @click="addKkfYList">新增</a-button>
+          <a-button type="primary" @click="addKkfYList" v-if="pageType!='detail'">新增</a-button>
         </h3>
         <ul style="padding: 0;">
           <li
