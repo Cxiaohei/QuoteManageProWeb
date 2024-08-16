@@ -127,17 +127,31 @@ const columns = [
     }
   },
   {
-    title: "创建时间",
-    dataIndex: "creationTime",
+    title: "差异率",
+    dataIndex: "differenceRate",
     scopedSlots: {
-      customRender: "creationTime"
+      customRender: "differenceRate"
     }
   },
   {
-    title: "备注",
-    dataIndex: "remarks",
+    title: "余额",
+    dataIndex: "balanceMoney",
     scopedSlots: {
-      customRender: "remarks"
+      customRender: "balanceMoney"
+    }
+  },
+  {
+    title: "余额比例",
+    dataIndex: "balanceRate",
+    scopedSlots: {
+      customRender: "balanceRate"
+    }
+  },
+  {
+    title: "月均可使用金额",
+    dataIndex: "monthAvailableMone",
+    scopedSlots: {
+      customRender: "monthAvailableMone"
     }
   }
 ];
@@ -176,9 +190,9 @@ export default {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
     setRowClassName(record, index) {
-      if (index == 2) {
+      if (record.differenceRate < 15) {
         return "bg-red";
-      } else if (index == 3) {
+      } else if (record.differenceRate > 15 && record.differenceRate < 50) {
         return "bg-yellow";
       }
     },

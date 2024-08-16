@@ -38,7 +38,7 @@
             v-model="queryFrom[item.key]"
             style="width: 250px"
             :placeholder="item.label"
-            :disabled="pageType=='detail'"
+            :disabled="pageType=='detail'||item.disabled=='disabled'"
           ></a-input>
           <!-- 产品下拉 -->
 
@@ -254,7 +254,43 @@ export default {
           label: "创建时间",
           key: "creationTime",
           type: "string"
-        }
+        },
+        {
+          label: "费用使用比例",
+          key: "costSchedule",
+          disabled: "disabled",
+          type: "string"
+        },
+        {
+          label: "时间进度",
+          key: "timeSchedule",
+          disabled: "disabled",
+          type: "string"
+        },
+        {
+          label: "差异率",
+          key: "differenceRate",
+          disabled: "disabled",
+          type: "string"
+        },
+        {
+          label: "余额",
+          key: "balanceMoney",
+          disabled: "disabled",
+          type: "string"
+        },
+        {
+          label: "余额比例",
+          key: "balanceRate",
+          disabled: "disabled",
+          type: "string"
+        },
+        // {
+        //   label: "月均可使用金额",
+        //   key: "monthAvailableMone",
+        //   disabled: "disabled",
+        //   type: "string"
+        // }
         // {
         //   label: "软件开发",
         //   key: "haveSoftware",
@@ -284,7 +320,7 @@ export default {
         console.log("详情");
         this.queryFrom = res.data;
         this.queryFrom.creationTime = this.queryFrom.creationTime
-          .replace("T", "-")
+          .replace("T", "/")
           .substring(0, 19);
         this.projectObjectivesList = res.data.projectObjectives;
         this.kkProjectBudgetDetailsList = res.data.kkProjectBudgetDetails;
@@ -326,7 +362,7 @@ export default {
     editFyList(record) {
       this.bugetFrom = {
         kkProjectId: this.$route.query.id,
-        budgetMonth: record.budgetMonth.substring(0,7),
+        budgetMonth: record.budgetMonth.substring(0, 7),
         monthCost: record.monthCost,
         getMaterials: record.getMaterials,
         projectBudgetDetailId: record.id
