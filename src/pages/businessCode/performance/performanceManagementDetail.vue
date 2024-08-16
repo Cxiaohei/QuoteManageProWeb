@@ -379,20 +379,20 @@ export default {
       if (this.bugetFromTitle == "编辑月度费用预算") {
         editKkFy(params).then(res => {
           if (res.code != -1) {
-            this.$message.success("编辑成功");
+            this.$message.success(res.msg);
             this.getDetail();
           } else {
-            this.$message.error("编辑失败");
+            this.$message.error(res.msg);
           }
           this.bugetFromVisible = false;
         });
       } else {
         addKkFy([params]).then(res => {
           if (res.code != -1) {
-            this.$message.success("添加成功");
+            this.$message.success(res.msg);
             this.getDetail();
           } else {
-            this.$message.error("添加失败");
+            this.$message.error(res.msg);
           }
           this.bugetFromVisible = false;
         });
@@ -419,13 +419,13 @@ export default {
       if (this.MbTitle == "编辑项目目标") {
         params.projectObjectiveId = this.projectObjectiveId;
         editKkMb(params).then(res => {
-          this.$message.success("编辑成功");
+          this.$message.success(res.msg);
           this.MbVisible = false;
           this.getDetail();
         });
       } else {
         addKkMb([params]).then(res => {
-          this.$message.success("添加成功");
+          this.$message.success(res.msg);
           this.MbVisible = false;
           this.getDetail();
         });
