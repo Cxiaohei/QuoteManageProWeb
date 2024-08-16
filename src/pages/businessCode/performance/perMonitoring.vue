@@ -32,7 +32,6 @@
             selectedRowKeys: selectedRowKeys,
             onChange: onSelectChange,
           }"
-      :rowClassName="setRowClassName"
       :columns="columns"
       :dataSource="dataSource"
       @change="handleTableChange"
@@ -54,6 +53,13 @@
         "改善型"
         }}
       </span>
+
+      <div></div>
+      <div slot="differenceRate" slot-scope="text, record">
+        <div style="text-align: center;"
+          :class="{'bg-red':record.differenceRate <= 15,'bg-yellow':record.differenceRate > 15 && record.differenceRate <= 50}"
+        >{{ record.differenceRate==0?0:record.differenceRate.toFixed(2) }}</div>
+      </div>
 
       <span slot="costSchedule" slot-scope="text, record">
         <a-progress :percent="record.costSchedule.toFixed(1)" />
@@ -188,13 +194,6 @@ export default {
     //新增
     add_pagelist() {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
-    },
-    setRowClassName(record, index) {
-      if (record.differenceRate <= 15) {
-        return "bg-red";
-      } else if (record.differenceRate > 15 && record.differenceRate <= 50) {
-        return "bg-yellow";
-      }
     },
     //编辑
     // productData_edit(record) {

@@ -124,23 +124,27 @@
         </h3>
         <ul style="padding: 0;">
           <li
-            style="list-style: none;float: left;margin:0 20px 10px 0;"
+            style="list-style: none;float: left;margin:0 20px 10px 0;text-align:center"
             v-for="(item,index) in kkProjectBudgetDetailsList"
             :key="index"
           >
-            月份：{{ (item.budgetMonth).substring(0,7) }}:
-            <a-input
-              v-model="item.monthCost"
-              style="width: 250px;margin-right:5px"
-              placeholder="目标列表"
-              disabled
-            ></a-input>
+            <div class="kkProjectBudgetDetailsList">
+              <p style>{{ (item.budgetMonth).substring(0,7) }}</p>
+              <p>
+                <span style>费用</span>
+                <span style>领料</span>
+              </p>
+              <p>
+                <span style>{{item.monthCost}}</span>
+                <span style>{{item.getMaterials}}</span>
+              </p>
+            </div>
             <a-button
               type="primary"
               @click="editFyList(item)"
               style="margin-right: 5px;"
               v-if="pageType!='detail'"
-            >编辑目标</a-button>
+            >编辑</a-button>
             <!-- <a-popconfirm title="确定删除吗?" ok-text="确定" cancel-text="取消" @confirm="removeList(item)">
               <a-button type="danger">删除目标</a-button>
             </a-popconfirm>-->
@@ -284,7 +288,7 @@ export default {
           key: "balanceRate",
           disabled: "disabled",
           type: "string"
-        },
+        }
         // {
         //   label: "月均可使用金额",
         //   key: "monthAvailableMone",
@@ -445,4 +449,25 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.kkProjectBudgetDetailsList {
+  width: 200px;
+  margin: 20px 0;
+  text-align: center;
+  border: 1px solid #ddd;
+  p {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+  }
+  span {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    width: 50%;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-bottom: none;
+  }
+}
+</style>
