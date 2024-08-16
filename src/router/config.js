@@ -201,6 +201,15 @@ const options = {
               component: () => import('@/pages/businessCode/performance/performanceManagement'),
             },
             {
+              path: 'performanceManagementDetail',
+              name: '夸克项目详情',
+              meta: {
+                invisible: true,
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/performanceManagementDetail'),
+            },
+            {
               path: 'projectbg',
               name: '项目变更申请',
               meta: {

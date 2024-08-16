@@ -1,14 +1,21 @@
 <template>
   <div>
     <a-modal
-      :width="580"
+      :width="1080"
       :title="title"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
       @ok="handleOk"
       @cancel="handleCancel"
+      class="performanceManagement"
     >
-      <a-form-model :model="queryFrom" :label-col="{ span: 4 }" :rules="rules" ref="userRefs">
+      <a-form-model
+        :model="queryFrom"
+        layout="inline"
+        :label-col="{ span: 6 }"
+        :rules="rules"
+        ref="userRefs"
+      >
         <a-form-model-item label="部门">
           <a-input v-model="queryFrom.department" style="width: 350px" placeholder="department"></a-input>
         </a-form-model-item>
@@ -53,11 +60,50 @@
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="关联目标">
+          <div style="overflow:hidden;width: 350px">
+            <ul style="padding: 0;">
+              <li
+                style="list-style: none;"
+                v-for="(item,index) in projectObjectivesList"
+                :key="index"
+              >
+                <a-input
+                  v-model="item.value"
+                  style="width: 250px;margin-right:5px"
+                  placeholder="审批人列表"
+                ></a-input>
+                <a-button type="primary" style="margin-right: 5px;" @click="addList">+</a-button>
+                <a-button type="primary" @click="removeList(index)" v-if="index>0">-</a-button>
+              </li>
+            </ul>
+          </div>
+        </a-form-model-item>
+        <a-form-model-item label="预算包含内容">
           <a-input
-            v-model="queryFrom.projectObjectives"
+            v-model="queryFrom.projectBudgetDetail"
             style="width: 350px"
-            placeholder="projectObjectives"
+            placeholder="projectBudgetDetail"
           ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="监控手段">
+          <a-input
+            v-model="queryFrom.monitoringMeans"
+            style="width: 350px"
+            placeholder="monitoringMeans"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="制造费包含金额">
+          <a-input
+            v-model="queryFrom.manufacturingContainCost"
+            style="width: 350px"
+            placeholder="manufacturingContainCost"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="固定费用">
+          <a-input v-model="queryFrom.fixedCharge" style="width: 350px" placeholder="fixedCharge"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="费用备注">
+          <a-input v-model="queryFrom.remark" style="width: 350px" placeholder="remark"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -142,6 +188,7 @@ export default {
           key: "remarks"
         }
       ],
+      projectObjectivesList: [{ value: "" }],
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
@@ -166,6 +213,12 @@ export default {
       }
       this.uservisible = true;
     },
+    addList() {
+      this.projectObjectivesList.push({ value: "" });
+    },
+    removeList(index) {
+      this.projectObjectivesList.splice(index, 1);
+    },
     // 确定
     handleOk() {
       this.$refs.userRefs.validate(valid => {
@@ -189,6 +242,13 @@ export default {
       let params = {
         ...this.queryFrom
       };
+      const projectObjectives = [];
+      this.projectObjectivesList.map(item => {
+        projectObjectives.push({
+          objective: item.value
+        });
+      });
+      params["projectObjectives"] = projectObjectives;
       addProductDataList(params)
         .then(res => {
           if (res.code == 1) {
@@ -209,8 +269,16 @@ export default {
     editProductDataList() {
       this.logDataSource = [];
       let params = {
-        ...this.queryFrom
+        ...this.queryFrom,
+        kkProjectId: this.queryFrom.id
       };
+      const projectObjectives = [];
+      this.projectObjectivesList.map(item => {
+        projectObjectives.push({
+          objective: item.value
+        });
+      });
+      params["projectObjectives"] = projectObjectives;
       editProductDataList(params)
         .then(res => {
           if (res.code == 1) {
@@ -231,4 +299,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.performanceManagement .ant-form-item {
+  margin-bottom: 3px !important;
+  width: 48%;
+}
+</style>

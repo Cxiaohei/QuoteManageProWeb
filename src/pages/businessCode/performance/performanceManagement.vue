@@ -16,14 +16,14 @@
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
-        <a-form-item>
+        <!-- <a-form-item>
           <a-space>
             <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
               <a-button type="primary" icon="to-top">导入</a-button>
             </a-upload>
             <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
           </a-space>
-        </a-form-item>
+        </a-form-item> -->
       </a-form>
     </div>
     <a-table
@@ -42,8 +42,8 @@
     >
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" @click="productData_edit(record)" style="margin-right: 5px;">编辑</a>
-        <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a>-->
+        <a href="javascript:;" @click="productOrder_edit(record, 'detail')">详情</a>
+        <!-- <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
       <span slot="acceptType" slot-scope="text, record">
@@ -100,13 +100,13 @@ const columns = [
       customRender: "projectName"
     }
   },
-  {
-    title: "项目目的",
-    dataIndex: "projectName",
-    scopedSlots: {
-      customRender: "projectName"
-    }
-  },
+  // {
+  //   title: "项目目的",
+  //   dataIndex: "projectName",
+  //   scopedSlots: {
+  //     customRender: "projectName"
+  //   }
+  // },
   {
     title: "项目预算",
     dataIndex: "projectBudget",
@@ -164,8 +164,18 @@ export default {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
     //编辑
+    // productData_edit(record) {
+    //   this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
+    // },
     productData_edit(record) {
-      this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
+      // this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
+      this.$router.push({
+        path: "performanceManagementDetail",
+        query: {
+          id: record.id,
+          type:'edit'
+        }
+      });
     },
     //下载模板
     downloadTemplate() {
@@ -216,9 +226,9 @@ export default {
       this.selectedRowKeys = selectedRowKeys;
     },
     // 编辑
-    pinbanOrder_edit(record, type) {
+    productOrder_edit(record, type) {
       this.$router.push({
-        path: "actionFixedAssets",
+        path: "performanceManagementDetail",
         query: {
           id: record.id,
           type

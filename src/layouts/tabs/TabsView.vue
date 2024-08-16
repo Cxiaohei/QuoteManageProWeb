@@ -80,7 +80,7 @@ export default {
   mounted () {
     this.correctPageMinHeight(-this.tabsOffset)
     Bus.$on('closeCurrentPage', (data) => {
-      this.remove(this.$route.fullPath);
+      this.remove(this.$route.fullPath, data);
     });
   },
   beforeDestroy() {
