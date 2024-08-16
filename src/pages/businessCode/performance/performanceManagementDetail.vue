@@ -378,7 +378,7 @@ export default {
       const params = { ...this.bugetFrom };
       if (this.bugetFromTitle == "编辑月度费用预算") {
         editKkFy(params).then(res => {
-          if (res.code != -1) {
+          if (res.code == 1) {
             this.$message.success(res.msg);
             this.getDetail();
           } else {
@@ -388,7 +388,7 @@ export default {
         });
       } else {
         addKkFy([params]).then(res => {
-          if (res.code != -1) {
+          if (res.code == 1) {
             this.$message.success(res.msg);
             this.getDetail();
           } else {
