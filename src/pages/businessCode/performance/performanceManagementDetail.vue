@@ -33,8 +33,29 @@
             :disabled="pageType=='detail'"
           ></a-input>
           <!-- 产品下拉 -->
+
           <a-select
-            v-else-if="item.label == '产品'"
+            v-else-if="item.label == '项目类型'"
+            v-model="queryFrom.projectType"
+            :disabled="pageType=='detail'"
+            style="width: 250px"
+          >
+            <a-select-option :value="0">常规型</a-select-option>
+            <a-select-option :value="1">战略型</a-select-option>
+            <a-select-option :value="2">改善型</a-select-option>
+          </a-select>
+          <a-select
+            v-else-if="item.label == '项目来源'"
+            v-model="queryFrom.projectSource"
+            :disabled="pageType=='detail'"
+            style="width: 250px"
+          >
+            <a-select-option :value="0">日常工作包</a-select-option>
+            <a-select-option :value="1">战略策略</a-select-option>
+            <a-select-option :value="2">改善策略</a-select-option>
+          </a-select>
+          <!-- <a-select
+            v-else-if="item.label == '项目类型'"
             v-model="queryFrom[item.key]"
             style="width: 250px"
             :placeholder="item.label"
@@ -46,7 +67,7 @@
               v-for="(item,index) in ProductList"
               :key="index"
             >{{item.productNo}}</a-select-option>
-          </a-select>
+          </a-select>-->
         </a-form-model-item>
       </a-form-model>
 
@@ -56,16 +77,16 @@
           <a-button type="primary" @click="addKkMbList" v-if="pageType!='detail'">新增目标</a-button>
         </h3>
 
-        <ul style="padding: 0 0 0 42px;">
+        <ul style="padding: 0 0 0 42px;width:100%">
           <li
-            style="list-style: none;float: left;margin:0 20px 10px 0;width:30%"
+            style="list-style: none;margin:0 20px 10px 0;width:80%"
             v-for="(item,index) in projectObjectivesList"
             :key="index"
           >
             目标{{ index+1 }}:
             <a-input
               v-model="item.objective"
-              style="width: 240px;margin-right:5px"
+              style="width: 80%;margin-right:5px"
               placeholder="目标列表"
               disabled
             ></a-input>
@@ -88,34 +109,57 @@
         </ul>
       </div>
 
-      <!-- <div style="padding: 30px 0px;">
-        <h3>月度费用使用预算：
-          <a-button type="primary" @click="addKkMbList">新增</a-button>
+      <div style="padding: 30px 0px;">
+        <h3>
+          月度费用使用预算：
+          <a-button type="primary" @click="addKkfYList">新增</a-button>
         </h3>
         <ul style="padding: 0;">
           <li
             style="list-style: none;float: left;margin:0 20px 10px 0;"
-            v-for="(item,index) in projectObjectivesList"
+            v-for="(item,index) in kkProjectBudgetDetailsList"
             :key="index"
           >
-            目标{{ index+1 }}:
+            <!-- 目标{{ index+1 }}: -->
             <a-input
-              v-model="item.objective"
+              v-model="item.monthCost"
               style="width: 250px;margin-right:5px"
               placeholder="目标列表"
               disabled
             ></a-input>
-            <a-button type="primary" @click="editList(item)" style="margin-right: 5px;">编辑目标</a-button>
-            <a-popconfirm title="确定删除吗?" ok-text="确定" cancel-text="取消" @confirm="removeList(item)">
+            <a-button type="primary" @click="editFyList(item)" style="margin-right: 5px;">编辑目标</a-button>
+            <!-- <a-popconfirm title="确定删除吗?" ok-text="确定" cancel-text="取消" @confirm="removeList(item)">
               <a-button type="danger">删除目标</a-button>
-            </a-popconfirm>
+            </a-popconfirm>-->
           </li>
         </ul>
-      </div>-->
+      </div>
     </a-card>
 
     <a-modal :title="MbTitle" :visible="MbVisible" @ok="handleOkMb" @cancel="MbVisible=false">
       <a-input placeholder="目标" v-model="objective" />
+    </a-modal>
+
+    <a-modal
+      :title="bugetFromTitle"
+      :visible="bugetFromVisible"
+      @ok="handleOkbugetFrom"
+      @cancel="bugetFromVisible=false"
+      width="350px"
+    >
+      <!-- {{ bugetFrom }} -->
+      <div style="margin-bottom: 15px;">
+        预算使用月份:
+        <a-month-picker v-model="bugetFrom.budgetMonth" format="YYYY-MM" valueFormat="YYYY-MM" />
+      </div>
+      <div style="margin-bottom: 15px;">
+        预算:
+        <a-input placeholder="预算" style="width: 240px;" v-model="bugetFrom.monthCost" />
+      </div>
+      <div>
+        领料:
+        <a-input placeholder="领料" style="width: 240px;" v-model="bugetFrom.getMaterials" />
+      </div>
     </a-modal>
   </div>
 </template>
@@ -126,7 +170,9 @@ import {
   addKkMb,
   editKkMb,
   removeKkMb,
-  editProductDataList
+  editProductDataList,
+  addKkFy,
+  editKkFy
 } from "@/services/performance/performanceManagement";
 
 import cloneDeep from "lodash.clonedeep";
@@ -141,16 +187,35 @@ export default {
       queryFrom: {},
       ProductList: [],
       MbVisible: false,
+      bugetFromVisible: false,
       MbTitle: "项目目标",
+      bugetFromTitle: "新增月度费用预算",
       objective: "",
       pageType: "detail", //页面类型区分编辑和详情
       projectObjectiveId: "",
       confirmLoading: false,
+      bugetFrom: {
+        kkProjectId: "",
+        budgetMonth: "",
+        monthCost: "",
+        getMaterials: "",
+        projectBudgetDetailId: ""
+      },
       queryFromDataList: [
         {
           label: "部门",
           key: "department",
           type: "string"
+        },
+        {
+          label: "项目类型",
+          key: "projectType"
+          // type: "string"
+        },
+        {
+          label: "项目来源",
+          key: "projectSource"
+          // type: "string"
         },
         {
           label: "项目编号",
@@ -174,7 +239,7 @@ export default {
         },
         {
           label: "备注",
-          key: "remarks",
+          key: "remark",
           type: "string"
         }
         // {
@@ -184,6 +249,7 @@ export default {
         // }
       ],
       projectObjectivesList: [], //项目目标
+      kkProjectBudgetDetailsList:[],//费用
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
@@ -205,6 +271,8 @@ export default {
         console.log("详情");
         this.queryFrom = res.data;
         this.projectObjectivesList = res.data.projectObjectives;
+        this.kkProjectBudgetDetailsList = res.data.kkProjectBudgetDetails;
+        
         console.log(res.data);
       });
     },
@@ -226,6 +294,45 @@ export default {
         }
         this.getDetail();
       });
+    },
+    //费用添加 编辑
+    addKkfYList() {
+      this.bugetFrom = {
+        kkProjectId: this.$route.query.id,
+        budgetMonth: "",
+        monthCost: "",
+        getMaterials: "",
+        projectBudgetDetailId: ""
+      };
+      this.bugetFromTitle = "新增月度费用预算";
+      this.bugetFromVisible = true;
+    },
+    editFyList(record) {
+      this.bugetFrom = {
+        kkProjectId: this.$route.query.id,
+        budgetMonth:record.budgetMonth,
+        monthCost:record.monthCost,
+        getMaterials:record.getMaterials,
+        projectBudgetDetailId: record.id
+      };
+      this.bugetFromTitle = "编辑月度费用预算";
+      this.bugetFromVisible = true;
+    },
+    handleOkbugetFrom() {
+      const params = {...this.bugetFrom};
+      if (this.bugetFromTitle == "编辑月度费用预算") {
+        editKkFy(params).then(res => {
+          this.$message.success("编辑成功");
+          this.bugetFromVisible = false;
+          this.getDetail();
+        });
+      } else {
+        addKkFy([params]).then(res => {
+          this.$message.success("添加成功");
+          this.bugetFromVisible = false;
+          this.getDetail();
+        });
+      }
     },
     //目标
     addKkMbList() {
@@ -253,7 +360,7 @@ export default {
           this.getDetail();
         });
       } else {
-        addKkMb(params).then(res => {
+        addKkMb([params]).then(res => {
           this.$message.success("添加成功");
           this.MbVisible = false;
           this.getDetail();

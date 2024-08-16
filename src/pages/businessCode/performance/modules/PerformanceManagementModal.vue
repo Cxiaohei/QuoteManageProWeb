@@ -17,46 +17,63 @@
         ref="userRefs"
       >
         <a-form-model-item label="部门">
-          <a-input v-model="queryFrom.department" style="width: 350px" placeholder="department"></a-input>
+          <a-input v-model="queryFrom.department" style="width: 350px" placeholder="部门"></a-input>
         </a-form-model-item>
         <a-form-model-item label="立项人">
           <a-input
             v-model="queryFrom.createUserName"
             style="width: 350px"
-            placeholder="createUserName"
+            placeholder="立项人"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目编号">
-          <a-input v-model="queryFrom.projectNo" style="width: 350px" placeholder="projectNo"></a-input>
+          <a-input v-model="queryFrom.projectNo" style="width: 350px" placeholder="项目编号"></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目名称">
-          <a-input v-model="queryFrom.projectName" style="width: 350px" placeholder="projectName"></a-input>
+          <a-input v-model="queryFrom.projectName" style="width: 350px" placeholder="项目名称"></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目类型">
-          <a-input v-model="queryFrom.projectType" style="width: 350px" placeholder="projectType"></a-input>
+          <a-select v-model="queryFrom.projectType" placeholder="项目类型" style="width: 350px">
+            <a-select-option value="0">常规型</a-select-option>
+            <a-select-option value="1">战略型</a-select-option>
+            <a-select-option value="2">改善型</a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="项目来源">
+          <a-select v-model="queryFrom.projectSource" placeholder="项目来源" style="width: 350px">
+            <a-select-option value="0">日常工作包</a-select-option>
+            <a-select-option value="1">战略策略</a-select-option>
+            <a-select-option value="2">改善策略</a-select-option>
+          </a-select>
         </a-form-model-item>
         <a-form-model-item label="项目目的">
           <a-input
             v-model="queryFrom.projectPurpose"
             style="width: 350px"
-            placeholder="projectPurpose"
+            placeholder="项目目的"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目经理">
           <a-input
             v-model="queryFrom.projectManager"
             style="width: 350px"
-            placeholder="projectManager"
+            placeholder="项目经理"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目时间">
-          <a-input v-model="queryFrom.timeArr" style="width: 350px" placeholder="projectManager"></a-input>
+          <a-range-picker
+          v-model.trim="timeArr1"
+          :allowClear="false"
+          format="YYYY-MM-DD"
+          valueFormat="YYYY-MM-DD"
+        />
+          <!-- <a-input v-model="queryFrom.timeArr" style="width: 350px" placeholder="projectManager"></a-input> -->
         </a-form-model-item>
         <a-form-model-item label="项目预算">
           <a-input
             v-model="queryFrom.projectBudget"
             style="width: 350px"
-            placeholder="projectBudget"
+            placeholder="项目预算"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="关联目标">
@@ -82,28 +99,28 @@
           <a-input
             v-model="queryFrom.projectBudgetDetail"
             style="width: 350px"
-            placeholder="projectBudgetDetail"
+            placeholder="预算包含内容"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="监控手段">
           <a-input
             v-model="queryFrom.monitoringMeans"
             style="width: 350px"
-            placeholder="monitoringMeans"
+            placeholder="监控手段"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="制造费包含金额">
           <a-input
             v-model="queryFrom.manufacturingContainCost"
             style="width: 350px"
-            placeholder="manufacturingContainCost"
+            placeholder="制造费包含金额"
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="固定费用">
-          <a-input v-model="queryFrom.fixedCharge" style="width: 350px" placeholder="fixedCharge"></a-input>
+          <a-input v-model="queryFrom.fixedCharge" style="width: 350px" placeholder="固定费用"></a-input>
         </a-form-model-item>
         <a-form-model-item label="费用备注">
-          <a-input v-model="queryFrom.remark" style="width: 350px" placeholder="remark"></a-input>
+          <a-input v-model="queryFrom.remark" style="width: 350px" placeholder="费用备注"></a-input>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -125,6 +142,7 @@ export default {
       title: "标题",
       uservisible: false,
       queryFrom: {},
+      timeArr1:[],
       confirmLoading: false,
       queryFromDataList: [
         {
@@ -242,6 +260,11 @@ export default {
       let params = {
         ...this.queryFrom
       };
+      
+      if (this.timeArr1 && this.timeArr1.length > 0) {
+        params.startTime = this.timeArr1[0];
+        params.endTime = this.timeArr1[1];
+      }
       const projectObjectives = [];
       this.projectObjectivesList.map(item => {
         projectObjectives.push({

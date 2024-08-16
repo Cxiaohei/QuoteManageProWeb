@@ -46,6 +46,17 @@ export async function removeKkMb(Id) {
     return request(`/api/app/k-kProject/project-objective-detail/${Id}`, METHOD.DELETE)
 }
 
+//费用
+export async function addKkFy(params) {
+    return request("/api/app/k-kProject/project-buget-detail", METHOD.POST, params)
+}
+
+export async function editKkFy(params) {
+    return request("/api/app/k-kProject/project-buget-detail-info", METHOD.POST, params)
+}
+
+
+
 
 
 
