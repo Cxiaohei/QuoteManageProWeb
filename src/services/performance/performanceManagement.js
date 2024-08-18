@@ -24,6 +24,13 @@ export async function editProductDataList(params) {
     return request("/api/app/k-kProject/k-kProject-info", METHOD.PUT, params)
 }
 
+//项目变更
+export async function changeProductDataList(params) {
+    params.productId = params.id;
+    return request("/api/app/k-kProject/submit-project-change-request", METHOD.POST, params)
+}
+
+
 //导入
 export async function importExcel(params, data) {
     return request(`/api/app/product/import-products`, METHOD.POST, params, {
@@ -59,7 +66,10 @@ export async function editKkFy(params) {
     return request("/api/app/k-kProject/project-buget-detail-info", METHOD.PUT, params)
 }
 
-
+//提交项目确认
+export async function setKKProjectId(KKProjectId) {
+    return request(`/api/app/k-kProject/submit-project-info/${KKProjectId}`, METHOD.POST)
+}
 
 
 

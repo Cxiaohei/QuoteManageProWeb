@@ -87,7 +87,7 @@
                 <a-input
                   v-model="item.value"
                   style="width: 250px;margin-right:5px"
-                  placeholder="审批人列表"
+                  placeholder="目标列表"
                 ></a-input>
                 <a-button type="primary" style="margin-right: 5px;" @click="addList">+</a-button>
                 <a-button type="primary" @click="removeList(index)" v-if="index>0">-</a-button>

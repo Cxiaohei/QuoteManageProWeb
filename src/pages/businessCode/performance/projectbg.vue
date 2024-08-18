@@ -49,13 +49,12 @@
       <span slot="action" slot-scope="text, record">
         <a
           href="javascript:;"
-          @click="productData_edit(record)"
+          @click="showEdit(record)"
           style="margin-right: 5px"
-          v-if="record.status == 0"
-          >编辑</a
+          >查看变更信息</a
         >
 
-        <a
+       <!--  <a
           href="javascript:;"
           @click="productData_change(record)"
           style="margin-right: 5px"
@@ -66,12 +65,12 @@
         <a href="javascript:;" @click="productOrder_edit(record, 'detail')"
           >详情</a
         >
-        <!-- <a href="javascript:;" @click="showLog(record)">日志</a>-->
+        <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
       <span slot="status" slot-scope="text, record">
         {{ record.status }}
-        {{
+        <!-- {{
           record.status == 0
             ? "待提交"
             : record.status == 1
@@ -79,7 +78,7 @@
             : record.status == 2
             ? "变更审批中"
             : "项目中止"
-        }}
+        }} -->
       </span>
       <span slot="creationTime" slot-scope="text, record">
         {{
@@ -104,9 +103,7 @@
 <script>
 import {
   getPageList,
-  importExcel,
-  downloadTemplate,
-} from "@/services/performance/performanceManagement";
+} from "@/services/performance/projectbg";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PerformanceManagementModal from "./modules/PerformanceManagementModal";
@@ -114,45 +111,31 @@ import PerformanceChangeModal from "./modules/PerformanceChangeModal";
 
 const columns = [
   {
-    width: 100,
+    width: 140,
     title: "操作",
     scopedSlots: {
       customRender: "action",
     },
   },
   {
-    title: "部门",
-    dataIndex: "department",
+    title: "编号",
+    dataIndex: "auditeNo",
     scopedSlots: {
-      customRender: "department",
+      customRender: "auditeNo",
     },
   },
   {
-    title: "项目编号",
-    dataIndex: "projectNo",
+    title: "创建人",
+    dataIndex: "createUserName",
     scopedSlots: {
-      customRender: "projectNo",
+      customRender: "createUserName",
     },
   },
   {
-    title: "项目名称",
-    dataIndex: "projectName",
-    scopedSlots: {
-      customRender: "projectName",
-    },
-  },
-  {
-    title: "项目状态",
+    title: "状态",
     dataIndex: "status",
     scopedSlots: {
       customRender: "status",
-    },
-  },
-  {
-    title: "项目预算",
-    dataIndex: "projectBudget",
-    scopedSlots: {
-      customRender: "projectBudget",
     },
   },
   {
@@ -208,15 +191,16 @@ export default {
     productData_change(record) {
       this.$refs.PerformanceChangeModalRefs.openModules("edit", record);
     },
-    productData_edit(record) {
+    showEdit(record) {
+      alert("查看变更信息。 开发中")
       // this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
-      this.$router.push({
-        path: "performanceManagementDetail",
-        query: {
-          id: record.id,
-          type: "edit",
-        },
-      });
+      // this.$router.push({
+      //   path: "performanceManagementDetail",
+      //   query: {
+      //     id: record.id,
+      //     type: "edit",
+      //   },
+      // });
     },
     //下载模板
     downloadTemplate() {

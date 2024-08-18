@@ -223,7 +223,7 @@ const options = {
               meta: {
                 // authority: 'AbpIdentity.OrganizationUnits',
               },
-              component: () => import('@/pages/businessCode/performance/performanceManagement'),
+              component: () => import('@/pages/businessCode/performance/projectbg'),
             },
             {
               path: 'projectkb',
