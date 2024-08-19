@@ -38,12 +38,16 @@ export async function checkAudite(params) {
 // }
 
 
+// export function downloadTemplate(params) {
+//     request("/api/app/tempatet-file/down-load-template-file?TemplateFileBlobName=" + params.templateFileBlobName, METHOD.POST).then(res => {
+//         let url = res.data
+//         console.log(url)
+//         download(url, params.templateFileName);
+//     })
+// }
 export function downloadTemplate(params) {
-    request("/api/app/tempatet-file/down-load-template-file?TemplateFileBlobName=" + params.templateFileBlobName, METHOD.POST).then(res => {
-        let url = res.data
-        console.log(url)
-        download(url, params.templateFileName);
-    })
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/DownTempExcel/DownLoadTemplateFileAsync?TemplateFileBlobName=` + params.templateFileBlobName+'&downFileName='+params.templateFileName;
+    download(url,  params.templateFileName);
 }
 
 
