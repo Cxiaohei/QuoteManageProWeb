@@ -215,6 +215,10 @@ export default {
           objective: item.value,
         });
       });
+      if (this.timeArr1 && this.timeArr1.length > 0) {
+        params.startTime = this.timeArr1[0];
+        params.endTime = this.timeArr1[1];
+      }
       params["projectObjectives"] = projectObjectives;
       changeProductDataList(params)
         .then((res) => {

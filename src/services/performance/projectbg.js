@@ -9,3 +9,10 @@ export async function getPageList(params) {
 
 
 
+
+export async function getPagechange(params) {
+    return request(`/api/app/k-kProject/project-change-info/${params}`, METHOD.GET)
+}
+
+
+

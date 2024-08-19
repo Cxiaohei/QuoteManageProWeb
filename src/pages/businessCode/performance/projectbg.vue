@@ -93,21 +93,18 @@
       @ok="getPageList"
     ></PerformanceManagementModal>
 
-    <PerformanceChangeModal
-      ref="PerformanceChangeModalRefs"
-      @ok="getPageList"
-    ></PerformanceChangeModal>
+
   </a-card>
 </template>
     
 <script>
 import {
   getPageList,
+  getPagechange,
 } from "@/services/performance/projectbg";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PerformanceManagementModal from "./modules/PerformanceManagementModal";
-import PerformanceChangeModal from "./modules/PerformanceChangeModal";
 
 const columns = [
   {
@@ -172,7 +169,7 @@ export default {
       },
     };
   },
-  components: { PerformanceManagementModal, PerformanceChangeModal },
+  components: { PerformanceManagementModal },
   mounted() {},
   created() {
     this.getPageList();
@@ -187,12 +184,10 @@ export default {
     add_pagelist() {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
-    //编辑
-    productData_change(record) {
-      this.$refs.PerformanceChangeModalRefs.openModules("edit", record);
-    },
     showEdit(record) {
-      alert("查看变更信息。 开发中")
+      getPagechange(record.id).then((res) =>{
+        console.log(res)
+      })
       // this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
       // this.$router.push({
       //   path: "performanceManagementDetail",
