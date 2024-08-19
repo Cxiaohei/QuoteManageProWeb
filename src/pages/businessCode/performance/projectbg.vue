@@ -185,7 +185,7 @@ export default {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
     showEdit(record) {
-      getPagechange(record.id).then((res) =>{
+      getPagechange(record.quoteId).then((res) =>{
         console.log(res)
       })
       // this.$refs.PerformanceManagementModalRefs.openModules("edit", record);

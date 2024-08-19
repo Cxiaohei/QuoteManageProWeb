@@ -71,6 +71,108 @@ const options = {
           ]
         }, 
         {
+          path: 'performance',
+          name: '管理绩效',
+          meta: {
+            icon: 'ant-cloud'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'performanceManagement',
+              name: '项目管理',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/performanceManagement'),
+            },
+            {
+              path: 'performanceManagementDetail',
+              name: '夸克项目详情',
+              meta: {
+                invisible: true,
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/performanceManagementDetail'),
+            },
+            {
+              path: 'perMonitoring',
+              name: '项目预算监控',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/perMonitoring'),
+            },
+            {
+              path: 'projectbg',
+              name: '项目变更申请',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/projectbg'),
+            },
+            {
+              path: 'projectkb',
+              name: '项目看板',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/performance/projectKB'),
+            },
+          ]
+        },
+        {
+          path: 'approveManagement',
+          name: '审批管理',
+          meta: {
+            icon: 'laptop'
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'allApprove',
+              name: '审批单管理',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/allApprove'),
+            },
+            {
+              path: 'oemApprove',
+              name: 'Oem报价审批审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/oemApprove'),
+            },
+            {
+              path: 'zzApprove',
+              name: '制作费用报价审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/zzApprove'),
+            },
+            {
+              path: 'scoreApprove',
+              name: '研发费用审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/scoreApprove'),
+            },
+            {
+              path: 'odmApprove',
+              name: 'Odm报价审批',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/approveManagement/odmApprove'),
+            },
+          ]
+        },
+
+        {
           path: 'product',
           name: '产品管理',
           meta: {
@@ -183,110 +285,6 @@ const options = {
             },
           ]
         },
-
-        {
-          path: 'performance',
-          name: '管理绩效(夸克)',
-          meta: {
-            icon: 'ant-cloud'
-          },
-          component: PageView,
-          children: [
-            {
-              path: 'performanceManagement',
-              name: '夸克项目',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/performance/performanceManagement'),
-            },
-            {
-              path: 'performanceManagementDetail',
-              name: '夸克项目详情',
-              meta: {
-                invisible: true,
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/performance/performanceManagementDetail'),
-            },
-            {
-              path: 'perMonitoring',
-              name: '项目预算监控',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/performance/perMonitoring'),
-            },
-            {
-              path: 'projectbg',
-              name: '项目变更申请',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/performance/projectbg'),
-            },
-            {
-              path: 'projectkb',
-              name: '项目看板',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/performance/performanceManagement'),
-            },
-          ]
-        },
-
-        {
-          path: 'approveManagement',
-          name: '审批管理',
-          meta: {
-            icon: 'laptop'
-          },
-          component: PageView,
-          children: [
-            {
-              path: 'allApprove',
-              name: '审批单管理',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/approveManagement/allApprove'),
-            },
-            {
-              path: 'oemApprove',
-              name: 'Oem报价审批审批',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/approveManagement/oemApprove'),
-            },
-            {
-              path: 'zzApprove',
-              name: '制作费用报价审批',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/approveManagement/zzApprove'),
-            },
-            {
-              path: 'scoreApprove',
-              name: '研发费用审批',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/approveManagement/scoreApprove'),
-            },
-            {
-              path: 'odmApprove',
-              name: 'Odm报价审批',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/approveManagement/odmApprove'),
-            },
-          ]
-        },
-
         {
           path: 'templateManagement',
           name: '模板管理',
@@ -322,6 +320,23 @@ const options = {
               },
               component: () => import('@/pages/businessCode/category1/craftLine'),
             },
+            {
+              path: 'essentialData',
+              name: '工时费用',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/essentialData'),
+            },
+            {
+              path: 'essentialTwoData',
+              name: '物料部件',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/businessCode/category1/essentialTwoData'),
+            },
+           
             {
               path: 'pcbStrategy',
               name: 'PCB报价策略',
@@ -366,6 +381,22 @@ const options = {
           component: PageView,
           children: [
             {
+              path: 'productType',
+              name: '产品类型',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/basicsSeting/productType'),
+            },
+            {
+              path: 'productXian',
+              name: '产品线',
+              meta: {
+                // authority: 'AbpIdentity.OrganizationUnits',
+              },
+              component: () => import('@/pages/basicsSeting/productXian'),
+            },
+            {
               path: 'role',
               name: '角色管理',
               meta: {
@@ -389,91 +420,8 @@ const options = {
               },
               component: () => import('@/pages/systemManagement/organization/organizationUnits'),
             },
-            // {
-            //   path: 'claimTypes',
-            //   name: '声明类型',
-            //   meta: {
-            //     authority: 'AbpIdentity.ClaimTypes',
-            //   },
-            //   component: () => import('@/pages/systemManagement/claimType/claimTypes'),
-            // },
-            // {
-            //   path: 'securityLogs',
-            //   name: '安全日志',
-            //   meta: {
-            //     authority: 'AbpIdentity.ClaimTypes',
-            //   },
-            //   component: () => import('@/pages/systemManagement/claimType/securityLogs'),
-            // },
-            // {
-            //   path: 'dataDictionary',
-            //   name: '数据字典',
-            //   meta: {
-            //     authority: 'EasyAbp.Abp.DataDictionary.DataDictionary',
-            //   },
-            //   component: () => import('@/pages/systemManagement/dataDictionary/DataDictionary')
-            // },
-            // {
-            //   path: 'auditLog',
-            //   name: '审计日志',
-            //   meta: {
-            //     authority: 'AbpAuditLogging.Default',
-            //   },
-            //   component: () => import('@/pages/systemManagement/auditlogging/List'),
-            // },
-            // {
-            //   path: 'tenant',
-            //   name: '租户管理',
-            //   meta: {
-            //     authority: 'Saas.Tenants',
-            //   },
-            //   component: () => import('@/pages/systemManagement/multiTenancy/TenantList'),
-            // },
           ]
         },
-
-        {
-          path: 'basicsSeting',
-          name: '基础数据',
-          meta: {
-            icon: 'profile'
-          },
-          component: PageView,
-          children: [
-            {
-              path: 'essentialData',
-              name: '基础数据',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/essentialData'),
-            }, {
-              path: 'essentialTwoData',
-              name: '物料部件',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/businessCode/category1/essentialTwoData'),
-            },
-            {
-              path: 'productType',
-              name: '产品类型',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/basicsSeting/productType'),
-            },
-            {
-              path: 'productXian',
-              name: '产品线',
-              meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
-              },
-              component: () => import('@/pages/basicsSeting/productXian'),
-            },
-          ]
-        },
-
       ]
     }
   ]
