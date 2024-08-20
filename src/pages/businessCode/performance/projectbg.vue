@@ -8,17 +8,11 @@
           </a-space>
         </a-form-item>
         <a-form-item>
-          <a-input
-            v-model.trim="queryFrom.Filter"
-            style="width: 180px"
-            placeholder="关键字"
-          ></a-input>
+          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
         </a-form-item>
         <a-form-item>
           <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist"
-              >查询</a-button
-            >
+            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
@@ -29,7 +23,7 @@
             </a-upload>
             <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
           </a-space>
-        </a-form-item> -->
+        </a-form-item>-->
       </a-form>
     </div>
     <a-table
@@ -47,14 +41,9 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a
-          href="javascript:;"
-          @click="showEdit(record)"
-          style="margin-right: 5px"
-          >查看变更信息</a
-        >
+        <a href="javascript:;" @click="showEdit(record)" style="margin-right: 5px">查看变更信息</a>
 
-       <!--  <a
+        <!--  <a
           href="javascript:;"
           @click="productData_change(record)"
           style="margin-right: 5px"
@@ -78,77 +67,87 @@
             : record.status == 2
             ? "变更审批中"
             : "项目中止"
-        }} -->
+        }}-->
       </span>
       <span slot="creationTime" slot-scope="text, record">
         {{
-          record.creationTime
-            ? record.creationTime.substring(0, 19).replace("T", "/")
-            : "/"
+        record.creationTime
+        ? record.creationTime.substring(0, 19).replace("T", "/")
+        : "/"
         }}
       </span>
     </a-table>
-    <PerformanceManagementModal
-      ref="PerformanceManagementModalRefs"
-      @ok="getPageList"
-    ></PerformanceManagementModal>
 
+    <a-modal title="变更申请" :visible="changeVisible" @ok="handleOk" @cancel="changeVisible=false">
+      <div style="display: flex; justify-content: space-between" v-if="changeListData.length>0">
+        <ul>
+          <li style="font-size: 16px;font-weight: 600;">原始信息</li>
+          <li v-for="(item, index) in changeList" :key="index">
+            <span>{{ item.name }}: </span>
+            <span>{{ changeListData[0][item.key] }}</span>
+          </li>
+        </ul>
 
+        <ul>
+          <li style="font-size: 16px;font-weight: 600;">最新信息</li>
+          <li v-for="(item, index) in changeList" :key="index">
+            <span>{{ item.name }}: </span>
+            <span>{{ changeListData[1][item.key] }}</span>
+          </li>
+        </ul>
+      </div>
+    </a-modal>
   </a-card>
 </template>
     
 <script>
-import {
-  getPageList,
-  getPagechange,
-} from "@/services/performance/projectbg";
+import { getPageList, getPagechange } from "@/services/performance/projectbg";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import PerformanceManagementModal from "./modules/PerformanceManagementModal";
 
 const columns = [
   {
     width: 140,
     title: "操作",
     scopedSlots: {
-      customRender: "action",
-    },
+      customRender: "action"
+    }
   },
   {
     title: "编号",
     dataIndex: "auditeNo",
     scopedSlots: {
-      customRender: "auditeNo",
-    },
+      customRender: "auditeNo"
+    }
   },
   {
     title: "创建人",
     dataIndex: "createUserName",
     scopedSlots: {
-      customRender: "createUserName",
-    },
+      customRender: "createUserName"
+    }
   },
   {
     title: "状态",
     dataIndex: "status",
     scopedSlots: {
-      customRender: "status",
-    },
+      customRender: "status"
+    }
   },
   {
     title: "创建时间",
     dataIndex: "creationTime",
     scopedSlots: {
-      customRender: "creationTime",
-    },
+      customRender: "creationTime"
+    }
   },
   {
     title: "备注",
     dataIndex: "remarks",
     scopedSlots: {
-      customRender: "remarks",
-    },
-  },
+      customRender: "remarks"
+    }
+  }
 ];
 
 export default {
@@ -156,7 +155,7 @@ export default {
     return {
       selectedRowKeys: [],
       queryFrom: {
-        processStepName: "",
+        processStepName: ""
       },
       loading: true,
       dataSource: [],
@@ -165,18 +164,58 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        showTotal: (total) => `总计 ${total} 条`,
+        showTotal: total => `总计 ${total} 条`
       },
+      changeVisible: false,
+      changeListData: [],
+      changeList: [
+        {
+          name: "项目编号",
+          key: "projectNo"
+        },
+        {
+          name: "项目名称",
+          key: "projectName"
+        },
+        {
+          name: "部门",
+          key: "department"
+        },
+        {
+          name: "项目经理",
+          key: "projectManager"
+        },
+        {
+          name: "项目预算",
+          key: "projectBudget"
+        },
+        {
+          name: "费用备注",
+          key: "projectRemark"
+        },
+        {
+          name: "变更申请备注",
+          key: "remark"
+        }
+        // {
+        //   name: "是否终止项目",
+        //   key: "isTerminate"
+        // },
+        // {
+        //   name: "审批人列表",
+        //   key: "isTerminate"
+        // }
+      ]
     };
   },
-  components: { PerformanceManagementModal },
+  components: {},
   mounted() {},
   created() {
     this.getPageList();
   },
   activated() {},
   computed: {
-    ...mapGetters("account", ["organizationId"]),
+    ...mapGetters("account", ["organizationId"])
   },
   methods: {
     checkPermission,
@@ -185,18 +224,13 @@ export default {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
     },
     showEdit(record) {
-      getPagechange(record.quoteId).then((res) =>{
-        console.log(res)
-      })
-      // this.$refs.PerformanceManagementModalRefs.openModules("edit", record);
-      // this.$router.push({
-      //   path: "performanceManagementDetail",
-      //   query: {
-      //     id: record.id,
-      //     type: "edit",
-      //   },
-      // });
+      getPagechange(record.quoteId).then(res => {
+        console.log(res);
+        this.changeListData = res.data;
+        this.changeVisible = true;
+      });
     },
+    handleOk() {},
     //下载模板
     downloadTemplate() {
       downloadTemplate();
@@ -205,7 +239,7 @@ export default {
     importExcel(resData) {
       let formData = new FormData();
       formData.append("ImportFile", resData.file);
-      importExcel(formData).then((response) => {
+      importExcel(formData).then(response => {
         if (response.code == 1) {
           this.$message.success("导入成功");
           this.getPageList();
@@ -219,13 +253,13 @@ export default {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        ...this.queryFrom,
+        ...this.queryFrom
       };
       getPageList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             const pagination = {
-              ...this.pagination,
+              ...this.pagination
             };
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
@@ -236,7 +270,7 @@ export default {
             this.$message.error(res.message);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           console.log(err);
         });
@@ -251,14 +285,14 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type,
-        },
+          type
+        }
       });
     },
     //页数切换
     handleTableChange(pagination) {
       const pager = {
-        ...this.pagination,
+        ...this.pagination
       };
       pager.current = pagination.current;
       this.pagination = pager;
@@ -286,8 +320,8 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    },
-  },
+    }
+  }
 };
 </script>
     
@@ -300,6 +334,9 @@ export default {
       margin-right: 10px;
     }
   }
+}
+li {
+  list-style: none;
 }
 </style>
     
