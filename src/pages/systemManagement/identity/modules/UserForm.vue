@@ -40,12 +40,7 @@
                 <a-radio :value="2">女</a-radio>
               </a-radio-group>
             </a-form-model-item>
-            <a-form-model-item
-              label="密码"
-              ref="password"
-              prop="password"
-              :required="!form.id"
-            >
+            <a-form-model-item label="密码" ref="password" prop="password" :required="!form.id">
               <a-input
                 v-model="form.password"
                 type="password"
@@ -85,9 +80,7 @@
                   :label="role.name"
                   :value="role.name"
                   name="roleName"
-                >
-                  {{ role.name }}
-                </a-checkbox>
+                >{{ role.name }}</a-checkbox>
               </a-checkbox-group>
             </a-form-model-item>
           </a-tab-pane>
@@ -108,7 +101,7 @@ import {
   createUpdate,
   getAssignableRoles,
   getRolesByUserId,
-  getOrganizationsByUserId,
+  getOrganizationsByUserId
 } from "@/services/identity/user";
 import OrgTree from "@/components/module/organization/OrganizationTree";
 export default {
@@ -162,16 +155,16 @@ export default {
       visible: false,
       confirmLoading: false,
       form: {
-        orgIds: [],
+        orgIds: []
         // extraProperties:{Sex:1}
         // extraProperties: '1'
       },
       rules: {
         userName: [
-          { required: true, message: "用户名必须填写", trigger: "blur" },
+          { required: true, message: "用户名必须填写", trigger: "blur" }
         ],
         password: [
-          { validator: passwordValidator, trigger: ["blur", "change"] },
+          { validator: passwordValidator, trigger: ["blur", "change"] }
         ],
         // password: [
         //   { required: true, message: "密码必须填写", trigger: "blur" },
@@ -181,11 +174,11 @@ export default {
             type: "email",
             required: true,
             message: "请填写正确的邮箱地址",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
-      assignableRoles: null,
+      assignableRoles: null
     };
   },
   created() {},
@@ -198,7 +191,7 @@ export default {
       } else {
         this.form = {};
       }
-      getAssignableRoles().then((response) => {
+      getAssignableRoles().then(response => {
         this.assignableRoles = response.items;
       });
     },
@@ -208,15 +201,15 @@ export default {
     getFormData(id) {
       this.confirmLoading = true;
       get(id)
-        .then((res) => {
+        .then(res => {
           this.form = Object.assign({ roleNames: [] }, res);
-          getRolesByUserId(id).then((response) => {
-            response.items.forEach((item) => {
+          getRolesByUserId(id).then(response => {
+            response.items.forEach(item => {
               this.form.roleNames.push(item.name);
             });
           });
-          getOrganizationsByUserId(id).then((response) => {
-            this.form.orgIds = response.items.map((item) => item.id);
+          getOrganizationsByUserId(id).then(response => {
+            this.form.orgIds = response.items.map(item => item.id);
             // this.$refs.dialogOrgTree.checkedKeys=this.form.orgIds;
           });
         })
@@ -231,15 +224,19 @@ export default {
     handleOk() {
       const form = this.$refs.ruleForm;
       this.confirmLoading = true;
-      form.validate((valid) => {
+      form.validate(valid => {
         if (valid) {
           let values = this.form;
           createUpdate(values)
-            .then((res) => {
-              this.visible = false;
-              form.resetFields();
-              this.$message.info("操作成功");
-              this.$emit("ok");
+            .then(res => {
+              if (res.code == 1) {
+                this.visible = false;
+                form.resetFields();
+                this.$message.info("操作成功");
+                this.$emit("ok");
+              }else{
+                this.$message.error(res.msg);
+              }
             })
             .finally(() => {
               this.confirmLoading = false;
@@ -248,8 +245,8 @@ export default {
           this.confirmLoading = false;
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
