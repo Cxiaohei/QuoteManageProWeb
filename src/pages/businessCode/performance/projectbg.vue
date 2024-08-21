@@ -83,7 +83,7 @@
         <ul>
           <li style="font-size: 16px;font-weight: 600;">原始信息</li>
           <li v-for="(item, index) in changeList" :key="index">
-            <span>{{ item.name }}: </span>
+            <span>{{ item.name }}:</span>
             <span>{{ changeListData[0][item.key] }}</span>
           </li>
         </ul>
@@ -91,7 +91,7 @@
         <ul>
           <li style="font-size: 16px;font-weight: 600;">最新信息</li>
           <li v-for="(item, index) in changeList" :key="index">
-            <span>{{ item.name }}: </span>
+            <span>{{ item.name }}:</span>
             <span>{{ changeListData[1][item.key] }}</span>
           </li>
         </ul>
@@ -226,8 +226,12 @@ export default {
     showEdit(record) {
       getPagechange(record.quoteId).then(res => {
         console.log(res);
-        this.changeListData = res.data;
-        this.changeVisible = true;
+        if (res.code == 1) {
+          this.changeListData = res.data;
+          this.changeVisible = true;
+        } else {
+          this.$message.info(res.msg);
+        }
       });
     },
     handleOk() {},
