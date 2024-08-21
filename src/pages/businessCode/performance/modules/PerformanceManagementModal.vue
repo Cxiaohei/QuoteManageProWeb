@@ -20,11 +20,7 @@
           <a-input v-model="queryFrom.department" style="width: 350px" placeholder="部门"></a-input>
         </a-form-model-item>
         <a-form-model-item label="立项人">
-          <a-input
-            v-model="queryFrom.createUserName"
-            style="width: 350px"
-            placeholder="立项人"
-          ></a-input>
+          <a-input v-model="queryFrom.createUserName" style="width: 350px" placeholder="立项人"></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目编号">
           <a-input v-model="queryFrom.projectNo" style="width: 350px" placeholder="项目编号"></a-input>
@@ -47,34 +43,28 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="项目目的">
-          <a-input
-            v-model="queryFrom.projectPurpose"
-            style="width: 350px"
-            placeholder="项目目的"
-          ></a-input>
+          <a-input v-model="queryFrom.projectPurpose" style="width: 350px" placeholder="项目目的"></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目经理">
-          <a-input
-            v-model="queryFrom.projectManager"
-            style="width: 350px"
-            placeholder="项目经理"
-          ></a-input>
+          <a-input v-model="queryFrom.projectManager" style="width: 350px" placeholder="项目经理"></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目时间">
           <a-range-picker
-          v-model.trim="timeArr1"
-          :allowClear="false"
-          format="YYYY-MM-DD"
-          valueFormat="YYYY-MM-DD"
-        />
+            v-model.trim="timeArr1"
+            :allowClear="false"
+            format="YYYY-MM-DD"
+            valueFormat="YYYY-MM-DD"
+          />
           <!-- <a-input v-model="queryFrom.timeArr" style="width: 350px" placeholder="projectManager"></a-input> -->
         </a-form-model-item>
         <a-form-model-item label="项目预算">
           <a-input
             v-model="queryFrom.projectBudget"
-            style="width: 350px"
+            disabled
+            style="width: 150px;margin-right: 5px;"
             placeholder="项目预算"
           ></a-input>
+          <a-button type="primary" style @click="yusuanVisible=true">预算明细项</a-button>
         </a-form-model-item>
         <a-form-model-item label="关联目标">
           <div style="overflow:hidden;width: 350px">
@@ -103,11 +93,7 @@
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="监控手段">
-          <a-input
-            v-model="queryFrom.monitoringMeans"
-            style="width: 350px"
-            placeholder="监控手段"
-          ></a-input>
+          <a-input v-model="queryFrom.monitoringMeans" style="width: 350px" placeholder="监控手段"></a-input>
         </a-form-model-item>
         <a-form-model-item label="制造费包含金额">
           <a-input
@@ -123,6 +109,89 @@
           <a-input v-model="queryFrom.remark" style="width: 350px" placeholder="费用备注"></a-input>
         </a-form-model-item>
       </a-form-model>
+
+      <a-modal
+        title="项目预算明细"
+        :visible="yusuanVisible"
+        @ok="handleOkyusuan"
+        @cancel="yusuanVisible = false"
+        width="420px"
+      >
+        <div style="margin-bottom: 15px">
+          交通费:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a-input-number
+            placeholder="交通费"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.trafficMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          住宿费:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a-input-number
+            placeholder="住宿费"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.accommodationMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          餐费:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a-input-number
+            placeholder="餐费"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.tableMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          业务招待费:
+          <a-input-number
+            placeholder="预算"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.businessHospitalityMoney "
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          邮寄托运费:
+          <a-input-number
+            placeholder="预算"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.shipMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          活动现场费:
+          <a-input-number
+            placeholder="预算"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.eventSiteMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          礼品费:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a-input-number
+            placeholder="预算"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.giftMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          其他费用:&nbsp;&nbsp;&nbsp;&nbsp;
+          <a-input-number
+            placeholder="预算"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.otherMoney"
+          />
+        </div>
+        <div style="margin-bottom: 15px">
+          其他费用说明:
+          <a-input
+            placeholder="其他费用说明"
+            style="width: 240px"
+            v-model="kkProjectBugetPart.otherMoneyReamrk"
+          />
+        </div>
+
+        
+      </a-modal>
     </a-modal>
   </div>
 </template>
@@ -142,7 +211,7 @@ export default {
       title: "标题",
       uservisible: false,
       queryFrom: {},
-      timeArr1:[],
+      timeArr1: [],
       confirmLoading: false,
       queryFromDataList: [
         {
@@ -210,14 +279,23 @@ export default {
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" }
-        ],
-        categoryLevel: [
-          { required: true, message: "请选择等级", trigger: "change" }
-        ],
-        categoryType: [
-          { required: true, message: "请选择岗位", trigger: "change" }
         ]
-      }
+      },
+      kkProjectBugetPart: {
+        kkProjectId: "",
+        trafficMoney: 0,
+        accommodationMoney: 0,
+        tableMoney: 0,
+        businessHospitalityMoney: 0,
+        shipMoney: 0,
+        eventSiteMoney: 0,
+        giftMoney: 0,
+        otherMoney: 0,
+        otherMoneyReamrk: "",
+        projectChangeType: 0,
+        projectChangeRequestId: ""
+      },
+      yusuanVisible: false //项目预算
     };
   },
   methods: {
@@ -236,6 +314,25 @@ export default {
     },
     removeList(index) {
       this.projectObjectivesList.splice(index, 1);
+    },
+    handleOkyusuan() {
+      var addArr = [
+        "trafficMoney",
+        "accommodationMoney",
+        "tableMoney",
+        "businessHospitalityMoney",
+        "shipMoney",
+        "eventSiteMoney",
+        "giftMoney",
+        "otherMoney",
+        "projectChangeType"
+      ];
+      var projectBudgetNum = 0;
+      addArr.map(item => {
+        projectBudgetNum += parseInt(this.kkProjectBugetPart[item]);
+      });
+      this.queryFrom.projectBudget = projectBudgetNum;
+      this.yusuanVisible = false;
     },
     // 确定
     handleOk() {
@@ -260,7 +357,7 @@ export default {
       let params = {
         ...this.queryFrom
       };
-      
+
       if (this.timeArr1 && this.timeArr1.length > 0) {
         params.startTime = this.timeArr1[0];
         params.endTime = this.timeArr1[1];
@@ -272,6 +369,7 @@ export default {
         });
       });
       params["projectObjectives"] = projectObjectives;
+      params["kkProjectBugetPart"] = this.kkProjectBugetPart;
       addProductDataList(params)
         .then(res => {
           if (res.code == 1) {
