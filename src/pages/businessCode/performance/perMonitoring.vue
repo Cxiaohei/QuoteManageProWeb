@@ -1,80 +1,89 @@
 <template>
   <a-card>
-    <div class="queryFromBox">
-      <a-form :model="queryFrom" layout="inline">
-        <!-- <a-form-item>
-          <a-space>
-            <a-button type="primary" @click="add_pagelist">新增</a-button>
-          </a-space>
-        </a-form-item>-->
-        <a-form-item>
-          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
-            <a-button type="primary" @click="reset_pagelists">重置</a-button>
-          </a-space>
-        </a-form-item>
-        <!-- <a-form-item>
-          <a-space>
-            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
-              <a-button type="primary" icon="to-top">导入</a-button>
-            </a-upload>
-            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
-          </a-space>
-        </a-form-item>-->
-      </a-form>
-    </div>
-    <a-table
-      rowKey="id"
-      :row-selection="{
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange,
-          }"
-      :columns="columns"
-      :dataSource="dataSource"
-      @change="handleTableChange"
-      :pagination="pagination"
+    <vxe-toolbar ref="xToolbar1" custom>
+      <template #buttons>
+        <a-form :model="queryFrom" layout="inline">
+          <a-form-item>
+            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
+              <a-button type="primary" @click="reset_pagelists">重置</a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      ref="xTable1"
+      id="toolbar_demo5"
+      height="400"
+      size="small"
       :loading="loading"
-      :selectedRows.sync="selectedRows"
-      bordered
+      :sort-config="sortConfig"
+      show-overflow="tooltip"
+      :row-config="rowConfig"
+      :custom-config="customConfig"
+      :data="dataSource"
+      @resizable-change="resizableChangeEvent"
     >
-      <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="productData_edit(record)" style="margin-right: 5px;">编辑</a>
-        <a href="javascript:;" @click="productOrder_edit(record, 'detail')">详情</a>
-        <!-- <a href="javascript:;" @click="showLog(record)">日志</a>-->
-      </span>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="action" title="操作">
+        <template #default="{ row }">
+          <a href="javascript:;" @click="productData_edit(row)" style="margin-right: 5px;">编辑</a>
+          <a href="javascript:;" @click="productOrder_edit(row, 'detail')">详情</a>
+        </template>
+      </vxe-column>
 
-      <span slot="projectType" slot-scope="text, record">
-        {{
-        record.projectType == 0 ?"常规型":
-        record.projectType == 1 ?"战略型":
-        "改善型"
-        }}
-      </span>
+      <vxe-column field="projectType" width="80" title="项目类型">
+        <template #default="{ row }">
+          <span v-if="row.projectType == 0">常规型</span>
+          <span v-if="row.projectType == 1">战略型</span>
+          <span v-if="row.projectType == 2">改善型</span>
+        </template>
+      </vxe-column>
 
-      <div></div>
-      <div slot="differenceRate" slot-scope="text, record">
-        <div style="text-align: center;"
-          :class="{'bg-red':record.differenceRate <= 15,'bg-yellow':record.differenceRate > 15 && record.differenceRate <= 50}"
-        >{{ record.differenceRate==0?0:record.differenceRate.toFixed(2) }}</div>
-      </div>
+      <vxe-column field="costSchedule" width="150" title="费用使用比例">
+        <template #default="{ row }">
+          <a-progress :percent="row.costSchedule.toFixed(1)" />
+        </template>
+      </vxe-column>
 
-      <span slot="costSchedule" slot-scope="text, record">
-        <a-progress :percent="record.costSchedule.toFixed(1)" />
-      </span>
+      <vxe-column field="timeSchedule" width="150" title="时间进度">
+        <template #default="{ row }">
+          <a-progress :percent="row.timeSchedule.toFixed(1)" />
+        </template>
+      </vxe-column>
 
-      <span slot="timeSchedule" slot-scope="text, record">
-        <a-progress :percent="record.timeSchedule.toFixed(1)" />
-      </span>
+      <vxe-column field="projectBudget" width="150" title="项目预算"></vxe-column>
+      <vxe-column field="differenceRate" width="80" title="差异率">
+        <template #default="{ row }">
+          <div
+            style="text-align: center;"
+            :class="{'bg-red':row.differenceRate <= 15,'bg-yellow':row.differenceRate > 15 && row.differenceRate <= 50}"
+          >{{ row.differenceRate==0?0:row.differenceRate.toFixed(2) }}</div>
+        </template>
+      </vxe-column>
+      <vxe-column field="balanceMoney" width="150" title="余额"></vxe-column>
+      <vxe-column field="balanceRate" width="150" title="余额比例"></vxe-column>
+      <vxe-column field="monthAvailableMone" title="月均可使用金额"></vxe-column>
 
-      <span slot="creationTime" slot-scope="text, record">
-        {{
-        record.creationTime?record.creationTime.substring(0,19).replace('T','/'):"/"
-        }}
-      </span>
-    </a-table>
+      <!-- <vxe-column field="remarks" title="备注"></vxe-column> -->
+    </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
+
     <PerformanceManagementModal ref="PerformanceManagementModalRefs" @ok="getMonitoringPageList"></PerformanceManagementModal>
   </a-card>
 </template>
@@ -89,78 +98,6 @@ import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PerformanceManagementModal from "./modules/PerformanceManagementModal";
 
-const columns = [
-  {
-    width: 100,
-    title: "操作",
-    scopedSlots: {
-      customRender: "action"
-    }
-  },
-  {
-    title: "项目名称",
-    dataIndex: "projectName",
-    scopedSlots: {
-      customRender: "projectName"
-    }
-  },
-  {
-    title: "项目类型",
-    dataIndex: "projectType",
-    scopedSlots: {
-      customRender: "projectType"
-    }
-  },
-  {
-    title: "费用使用比例",
-    dataIndex: "costSchedule",
-    scopedSlots: {
-      customRender: "costSchedule"
-    }
-  },
-  {
-    title: "时间进度",
-    dataIndex: "timeSchedule",
-    scopedSlots: {
-      customRender: "timeSchedule"
-    }
-  },
-  {
-    title: "项目预算",
-    dataIndex: "projectBudget",
-    scopedSlots: {
-      customRender: "projectBudget"
-    }
-  },
-  {
-    title: "差异率",
-    dataIndex: "differenceRate",
-    scopedSlots: {
-      customRender: "differenceRate"
-    }
-  },
-  {
-    title: "余额",
-    dataIndex: "balanceMoney",
-    scopedSlots: {
-      customRender: "balanceMoney"
-    }
-  },
-  {
-    title: "余额比例",
-    dataIndex: "balanceRate",
-    scopedSlots: {
-      customRender: "balanceRate"
-    }
-  },
-  {
-    title: "月均可使用金额",
-    dataIndex: "monthAvailableMone",
-    scopedSlots: {
-      customRender: "monthAvailableMone"
-    }
-  }
-];
 
 export default {
   data() {
@@ -172,11 +109,28 @@ export default {
       loading: true,
       dataSource: [],
       selectedRows: [],
-      columns: columns,
       pagination: {
         pageSize: 10,
         current: 1,
         showTotal: total => `总计 ${total} 条`
+      },
+      // 表格配置
+      customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true
+        }
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true
+      },
+      rowConfig: {
+        keyField: "id"
       }
     };
   },
@@ -272,7 +226,7 @@ export default {
       const pager = {
         ...this.pagination
       };
-      pager.current = pagination.current;
+      pager.current = pagination;
       this.pagination = pager;
       this.getMonitoringPageList();
     },
