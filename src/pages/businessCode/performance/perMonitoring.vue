@@ -34,7 +34,8 @@
       <vxe-column field="action" title="操作">
         <template #default="{ row }">
           <a href="javascript:;" @click="productData_edit(row)" style="margin-right: 5px;">编辑</a>
-          <a href="javascript:;" @click="productOrder_edit(row, 'detail')">详情</a>
+          <a href="javascript:;" @click="productOrder_edit(row, 'detail')" style="margin-right: 5px;">详情</a>
+          <a href="javascript:;" @click="productMoney_edit(row)" style="margin-right: 5px;">编辑费用</a>
         </template>
       </vxe-column>
 
@@ -85,6 +86,8 @@
     </div>
 
     <PerformanceManagementModal ref="PerformanceManagementModalRefs" @ok="getMonitoringPageList"></PerformanceManagementModal>
+    <PerMoneyModal ref="PerMoneyModalRefs" @ok="getMonitoringPageList"></PerMoneyModal>
+    
   </a-card>
 </template>
     
@@ -97,6 +100,7 @@ import {
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PerformanceManagementModal from "./modules/PerformanceManagementModal";
+import PerMoneyModal from "./modules/PerMoneyModal";
 
 
 export default {
@@ -134,7 +138,7 @@ export default {
       }
     };
   },
-  components: { PerformanceManagementModal },
+  components: { PerformanceManagementModal,PerMoneyModal },
   mounted() {},
   created() {
     this.getMonitoringPageList();
@@ -163,6 +167,9 @@ export default {
     //新增
     add_pagelist() {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
+    },
+    productMoney_edit(row) {
+      this.$refs.PerMoneyModalRefs.openModules(row);
     },
     //编辑
     // productData_edit(record) {
