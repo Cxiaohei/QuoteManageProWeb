@@ -51,6 +51,7 @@
         <a-form-model-item label="项目时间">
           <a-range-picker
             v-model.trim="timeArr1"
+            style="width: 350px" 
             :allowClear="false"
             format="YYYY-MM-DD"
             valueFormat="YYYY-MM-DD"
