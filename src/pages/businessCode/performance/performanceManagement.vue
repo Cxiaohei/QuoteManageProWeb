@@ -1,103 +1,97 @@
 <template>
   <a-card>
-    <div class="queryFromBox">
-      <a-form :model="queryFrom" layout="inline">
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" @click="add_pagelist">新增</a-button>
-          </a-space>
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            v-model.trim="queryFrom.Filter"
-            style="width: 180px"
-            placeholder="关键字"
-          ></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist"
-              >查询</a-button
-            >
-            <a-button type="primary" @click="reset_pagelists">重置</a-button>
-          </a-space>
-        </a-form-item>
-        <!-- <a-form-item>
-          <a-space>
-            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
-              <a-button type="primary" icon="to-top">导入</a-button>
-            </a-upload>
-            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
-          </a-space>
-        </a-form-item> -->
-      </a-form>
-    </div>
-    <a-table
-      rowKey="id"
-      :row-selection="{
-        selectedRowKeys: selectedRowKeys,
-        onChange: onSelectChange,
-      }"
-      :columns="columns"
-      :dataSource="dataSource"
-      @change="handleTableChange"
-      :pagination="pagination"
+    <vxe-toolbar ref="xToolbar1" custom>
+      <template #buttons>
+        <a-form :model="queryFrom" layout="inline">
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" @click="add_pagelist">新增</a-button>
+            </a-space>
+          </a-form-item>
+          <a-form-item>
+            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
+              <a-button type="primary" @click="reset_pagelists">重置</a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      ref="xTable1"
+      id="toolbar_demo5"
+      height="400"
+      size="small"
       :loading="loading"
-      :selectedRows.sync="selectedRows"
-      bordered
+      :sort-config="sortConfig"
+      show-overflow="tooltip"
+      :row-config="rowConfig"
+      :custom-config="customConfig"
+      :data="dataSource"
+      @resizable-change="resizableChangeEvent"
     >
-      <span slot="action" slot-scope="text, record">
-        <a
-          href="javascript:;"
-          @click="productData_edit(record)"
-          style="margin-right: 5px"
-          v-if="record.status == 0"
-          >编辑</a
-        >
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="action" title="操作">
+        <template #default="{ row }">
+          <a
+            href="javascript:;"
+            @click="productData_edit(row)"
+            style="margin-right: 5px"
+            v-if="row.status == 0"
+          >编辑</a>
 
-        <a
-          href="javascript:;"
-          @click="productData_change(record)"
-          style="margin-right: 5px"
-          v-if="record.status == 1"
-          >申请变更</a
-        >
+          <a
+            href="javascript:;"
+            @click="productData_change(row)"
+            style="margin-right: 5px"
+            v-if="row.status == 1"
+          >申请变更</a>
 
-        <a href="javascript:;" @click="productOrder_edit(record, 'detail')"
-          >详情</a
-        >
-        <!-- <a href="javascript:;" @click="showLog(record)">日志</a>-->
-      </span>
+          <a href="javascript:;" @click="productOrder_edit(row, 'detail')">详情</a>
+        </template>
+      </vxe-column>
+      <vxe-column field="department" title="部门"></vxe-column>
+      <vxe-column field="projectNo" title="项目编号"></vxe-column>
+      <vxe-column field="projectName" width="320" title="项目名称"></vxe-column>
+      <vxe-column field="status" title="项目状态" width="80">
+        <template #default="{ row }">
+          <span v-if="row.status == 0">待提交</span>
+          <span v-if="row.status == 1">已确认</span>
+          <span v-if="row.status == 2">变更审批中</span>
+          <span v-if="row.status == 3">项目中止</span>
+        </template>
+      </vxe-column>
+      <vxe-column field="projectBudget" width="150" title="项目预算"></vxe-column>
+      <vxe-column field="creationTime" title="创建时间">
+        <template #default="{ row }">
+          {{
+          row.creationTime
+          ? row.creationTime.substring(0, 19).replace("T", "/")
+          : "/"
+          }}
+        </template>
+      </vxe-column>
+      <vxe-column field="remarks" title="备注"></vxe-column>
+    </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
 
-      <span slot="status" slot-scope="text, record">
-        {{ record.status }}
-        {{
-          record.status == 0
-            ? "待提交"
-            : record.status == 1
-            ? "已确认"
-            : record.status == 2
-            ? "变更审批中"
-            : "项目中止"
-        }}
-      </span>
-      <span slot="creationTime" slot-scope="text, record">
-        {{
-          record.creationTime
-            ? record.creationTime.substring(0, 19).replace("T", "/")
-            : "/"
-        }}
-      </span>
-    </a-table>
-    <PerformanceManagementModal
-      ref="PerformanceManagementModalRefs"
-      @ok="getPageList"
-    ></PerformanceManagementModal>
+    <PerformanceManagementModal ref="PerformanceManagementModalRefs" @ok="getPageList"></PerformanceManagementModal>
 
-    <PerformanceChangeModal
-      ref="PerformanceChangeModalRefs"
-      @ok="getPageList"
-    ></PerformanceChangeModal>
+    <PerformanceChangeModal ref="PerformanceChangeModalRefs" @ok="getPageList"></PerformanceChangeModal>
   </a-card>
 </template>
     
@@ -105,101 +99,78 @@
 import {
   getPageList,
   importExcel,
-  downloadTemplate,
+  downloadTemplate
 } from "@/services/performance/performanceManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PerformanceManagementModal from "./modules/PerformanceManagementModal";
 import PerformanceChangeModal from "./modules/PerformanceChangeModal";
 
-const columns = [
-  {
-    width: 100,
-    title: "操作",
-    scopedSlots: {
-      customRender: "action",
-    },
-  },
-  {
-    title: "部门",
-    dataIndex: "department",
-    scopedSlots: {
-      customRender: "department",
-    },
-  },
-  {
-    title: "项目编号",
-    dataIndex: "projectNo",
-    scopedSlots: {
-      customRender: "projectNo",
-    },
-  },
-  {
-    title: "项目名称",
-    dataIndex: "projectName",
-    scopedSlots: {
-      customRender: "projectName",
-    },
-  },
-  {
-    title: "项目状态",
-    dataIndex: "status",
-    scopedSlots: {
-      customRender: "status",
-    },
-  },
-  {
-    title: "项目预算",
-    dataIndex: "projectBudget",
-    scopedSlots: {
-      customRender: "projectBudget",
-    },
-  },
-  {
-    title: "创建时间",
-    dataIndex: "creationTime",
-    scopedSlots: {
-      customRender: "creationTime",
-    },
-  },
-  {
-    title: "备注",
-    dataIndex: "remarks",
-    scopedSlots: {
-      customRender: "remarks",
-    },
-  },
-];
-
 export default {
   data() {
     return {
       selectedRowKeys: [],
       queryFrom: {
-        processStepName: "",
+        processStepName: ""
       },
       loading: true,
       dataSource: [],
-      selectedRows: [],
-      columns: columns,
       pagination: {
         pageSize: 10,
         current: 1,
-        showTotal: (total) => `总计 ${total} 条`,
+        showTotal: total => `总计 ${total} 条`
       },
+      // 表格配置
+      customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true
+        }
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true
+      },
+      rowConfig: {
+        keyField: "id"
+      }
     };
   },
   components: { PerformanceManagementModal, PerformanceChangeModal },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      // 手动将表格和工具栏进行关联
+      this.$refs.xTable1.connect(this.$refs.xToolbar1);
+    });
+  },
   created() {
     this.getPageList();
   },
   activated() {},
   computed: {
-    ...mapGetters("account", ["organizationId"]),
+    ...mapGetters("account", ["organizationId"])
   },
   methods: {
     checkPermission,
+    checkColumnMethod({ column }) {
+      if (column.field === "role") {
+        return false;
+      }
+      return true;
+    },
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map(column => {
+        return {
+          width: column.renderWidth
+        };
+      });
+      console.log(customData);
+    },
     //新增
     add_pagelist() {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
@@ -214,8 +185,8 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type: "edit",
-        },
+          type: "edit"
+        }
       });
     },
     //下载模板
@@ -226,7 +197,7 @@ export default {
     importExcel(resData) {
       let formData = new FormData();
       formData.append("ImportFile", resData.file);
-      importExcel(formData).then((response) => {
+      importExcel(formData).then(response => {
         if (response.code == 1) {
           this.$message.success("导入成功");
           this.getPageList();
@@ -240,13 +211,13 @@ export default {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        ...this.queryFrom,
+        ...this.queryFrom
       };
       getPageList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             const pagination = {
-              ...this.pagination,
+              ...this.pagination
             };
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
@@ -257,14 +228,10 @@ export default {
             this.$message.error(res.message);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           console.log(err);
         });
-    },
-    //切换选中
-    onSelectChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys;
     },
     // 编辑
     productOrder_edit(record, type) {
@@ -272,16 +239,16 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type,
-        },
+          type
+        }
       });
     },
     //页数切换
     handleTableChange(pagination) {
       const pager = {
-        ...this.pagination,
+        ...this.pagination
       };
-      pager.current = pagination.current;
+      pager.current = pagination;
       this.pagination = pager;
       this.getPageList();
     },
@@ -307,8 +274,8 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    },
-  },
+    }
+  }
 };
 </script>
     

@@ -17,6 +17,10 @@ Vue.component('DragModal', DragModal)
 Vue.config.devtools = true;
 const router = initRouter(store.state.setting.asyncRoutes)
 const i18n = initI18n('CN', 'US')
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
+Vue.use(VXETable)
 
 Vue.use(Antd)
 Vue.use(Viser)
