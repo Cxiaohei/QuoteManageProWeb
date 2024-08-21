@@ -48,13 +48,13 @@
 
       <vxe-column field="costSchedule" width="150" title="费用使用比例">
         <template #default="{ row }">
-          <a-progress :percent="row.costSchedule.toFixed(1)" />
+          <a-progress :percent="Number(row.costSchedule.toFixed(1))" />
         </template>
       </vxe-column>
 
       <vxe-column field="timeSchedule" width="150" title="时间进度">
         <template #default="{ row }">
-          <a-progress :percent="row.timeSchedule.toFixed(1)" />
+          <a-progress :percent="Number(row.timeSchedule.toFixed(1))" />
         </template>
       </vxe-column>
 
@@ -145,6 +145,21 @@ export default {
   },
   methods: {
     checkPermission,
+    checkColumnMethod({ column }) {
+      if (column.field === "role") {
+        return false;
+      }
+      return true;
+    },
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map(column => {
+        return {
+          width: column.renderWidth
+        };
+      });
+      console.log(customData);
+    },
     //新增
     add_pagelist() {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
