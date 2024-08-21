@@ -33,7 +33,7 @@ export async function changeProductDataList(params) {
 
 //导入
 export async function importExcel(params, data) {
-    return request(`/api/app/product/import-products`, METHOD.POST, params, {
+    return request(`/api/app/k-kProject/import-kKProject-info`, METHOD.POST, params, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },

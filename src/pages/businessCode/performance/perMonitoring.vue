@@ -4,11 +4,17 @@
       <template #buttons>
         <a-form :model="queryFrom" layout="inline">
           <a-form-item>
-            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+            <a-input
+              v-model.trim="queryFrom.Filter"
+              style="width: 180px"
+              placeholder="关键字"
+            ></a-input>
           </a-form-item>
           <a-form-item>
             <a-space>
-              <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
+              <a-button type="primary" icon="search" @click="search_pagelist"
+                >查询</a-button
+              >
               <a-button type="primary" @click="reset_pagelists">重置</a-button>
             </a-space>
           </a-form-item>
@@ -30,15 +36,35 @@
       :data="dataSource"
       @resizable-change="resizableChangeEvent"
     >
-      <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="action" title="操作">
+      <vxe-column type="seq" width="50"></vxe-column>
+      <vxe-column field="action"  width="80" title="操作">
         <template #default="{ row }">
-          <a href="javascript:;" @click="productData_edit(row)" style="margin-right: 5px;">编辑</a>
-          <a href="javascript:;" @click="productOrder_edit(row, 'detail')" style="margin-right: 5px;">详情</a>
-          <a href="javascript:;" @click="productMoney_edit(row)" style="margin-right: 5px;">编辑费用</a>
+          <a
+            href="javascript:;"
+            @click="productData_edit(row)"
+            style="margin-right: 5px"
+            >编辑</a
+          >
+          <a
+            href="javascript:;"
+            @click="productOrder_edit(row, 'detail')"
+            style="margin-right: 5px"
+            >详情</a
+          >
+          <a
+            href="javascript:;"
+            @click="productMoney_edit(row)"
+            style="margin-right: 5px"
+            >编辑费用</a
+          >
         </template>
       </vxe-column>
-
+      <vxe-column field="department" width="150" title="部门"></vxe-column>
+      <vxe-column
+        field="createUserName"
+        width="150"
+        title="立项人"
+      ></vxe-column>
       <vxe-column field="projectType" width="80" title="项目类型">
         <template #default="{ row }">
           <span v-if="row.projectType == 0">常规型</span>
@@ -46,31 +72,70 @@
           <span v-if="row.projectType == 2">改善型</span>
         </template>
       </vxe-column>
-
-      <vxe-column field="costSchedule" width="150" title="费用使用比例">
-        <template #default="{ row }">
-          <a-progress :percent="Number(row.costSchedule.toFixed(1))" />
-        </template>
-      </vxe-column>
-
+      <vxe-column field="projectNo" width="150" title="项目编号"></vxe-column>
+      <vxe-column field="projectName" width="150" title="项目名称"></vxe-column>
+      <vxe-column
+        field="projectManager"
+        width="150"
+        title="项目经理"
+      ></vxe-column>
+      <vxe-column
+        field="projectBudget"
+        width="150"
+        title="项目预算"
+      ></vxe-column>
+      <vxe-column
+        field="budgetMonthAvailableMoney"
+        width="200"
+        title="月均值"
+      ></vxe-column>
+      <vxe-column
+        field="projectBudgetDetail"
+        width="200"
+        title="预算包含内容"
+      ></vxe-column>
+      <vxe-column field="fixedCharge" width="150" title="固定费用"></vxe-column>
+      <vxe-column
+        field="manufacturingContainCost"
+        width="200"
+        title="制造费包含金额"
+      ></vxe-column>
+      <vxe-column field="startMonth" width="150" title="启动时间"></vxe-column>
+      <vxe-column
+        field="projectCycle"
+        width="150"
+        title="项目周期"
+      ></vxe-column>
       <vxe-column field="timeSchedule" width="150" title="时间进度">
         <template #default="{ row }">
-          <a-progress :percent="Number(row.timeSchedule.toFixed(1))" />
+          <a-progress :percent="Number(row.timeSchedule.toFixed(3))*100" />
         </template>
       </vxe-column>
-
-      <vxe-column field="projectBudget" width="150" title="项目预算"></vxe-column>
+      <vxe-column field="costSchedule" width="150" title="费用使用比例">
+        <template #default="{ row }">
+          <a-progress :percent="Number(row.costSchedule.toFixed(3))*100" />
+        </template>
+      </vxe-column>
       <vxe-column field="differenceRate" width="80" title="差异率">
         <template #default="{ row }">
           <div
-            style="text-align: center;"
-            :class="{'bg-red':row.differenceRate <= 15,'bg-yellow':row.differenceRate > 15 && row.differenceRate <= 50}"
-          >{{ row.differenceRate==0?0:row.differenceRate.toFixed(2) }}</div>
+            style="text-align: center"
+            :class="{
+              'bg-red': row.differenceRate <= 15,
+              'bg-yellow': row.differenceRate > 15 && row.differenceRate <= 50,
+            }"
+          >
+            {{ row.differenceRate == 0 ? 0 : row.differenceRate.toFixed(2) }}
+          </div>
         </template>
       </vxe-column>
       <vxe-column field="balanceMoney" width="150" title="余额"></vxe-column>
       <vxe-column field="balanceRate" width="150" title="余额比例"></vxe-column>
-      <vxe-column field="monthAvailableMone" title="月均可使用金额"></vxe-column>
+      <vxe-column
+        field="monthAvailableMoney"
+        width="150"
+        title="月均可使用金额"
+      ></vxe-column>
 
       <!-- <vxe-column field="remarks" title="备注"></vxe-column> -->
     </vxe-table>
@@ -85,30 +150,34 @@
       />
     </div>
 
-    <PerformanceManagementModal ref="PerformanceManagementModalRefs" @ok="getMonitoringPageList"></PerformanceManagementModal>
-    <PerMoneyModal ref="PerMoneyModalRefs" @ok="getMonitoringPageList"></PerMoneyModal>
-    
+    <PerformanceManagementModal
+      ref="PerformanceManagementModalRefs"
+      @ok="getMonitoringPageList"
+    ></PerformanceManagementModal>
+    <PerMoneyModal
+      ref="PerMoneyModalRefs"
+      @ok="getMonitoringPageList"
+    ></PerMoneyModal>
   </a-card>
 </template>
-    
+
 <script>
 import {
   getMonitoringPageList,
   importExcel,
-  downloadTemplate
+  downloadTemplate,
 } from "@/services/performance/performanceManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import PerformanceManagementModal from "./modules/PerformanceManagementModal";
 import PerMoneyModal from "./modules/PerMoneyModal";
 
-
 export default {
   data() {
     return {
       selectedRowKeys: [],
       queryFrom: {
-        processStepName: ""
+        processStepName: "",
       },
       loading: true,
       dataSource: [],
@@ -116,7 +185,7 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        showTotal: total => `总计 ${total} 条`
+        showTotal: (total) => `总计 ${total} 条`,
       },
       // 表格配置
       customConfig: {
@@ -124,28 +193,28 @@ export default {
           visible: true,
           resizable: true,
           sort: true,
-          fixed: true
-        }
+          fixed: true,
+        },
       },
       sortConfig: {
         defaultSort: [],
         multiple: true,
         trigger: "cell",
-        remote: true
+        remote: true,
       },
       rowConfig: {
-        keyField: "id"
-      }
+        keyField: "id",
+      },
     };
   },
-  components: { PerformanceManagementModal,PerMoneyModal },
+  components: { PerformanceManagementModal, PerMoneyModal },
   mounted() {},
   created() {
     this.getMonitoringPageList();
   },
   activated() {},
   computed: {
-    ...mapGetters("account", ["organizationId"])
+    ...mapGetters("account", ["organizationId"]),
   },
   methods: {
     checkPermission,
@@ -157,9 +226,9 @@ export default {
     },
     resizableChangeEvent() {
       const columns = this.$refs.xTable1.getColumns();
-      const customData = columns.map(column => {
+      const customData = columns.map((column) => {
         return {
-          width: column.renderWidth
+          width: column.renderWidth,
         };
       });
       console.log(customData);
@@ -181,8 +250,8 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type: "edit"
-        }
+          type: "edit",
+        },
       });
     },
     //下载模板
@@ -193,7 +262,7 @@ export default {
     importExcel(resData) {
       let formData = new FormData();
       formData.append("ImportFile", resData.file);
-      importExcel(formData).then(response => {
+      importExcel(formData).then((response) => {
         if (response.code == 1) {
           this.$message.success("导入成功");
           this.getMonitoringPageList();
@@ -207,13 +276,13 @@ export default {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        ...this.queryFrom
+        ...this.queryFrom,
       };
       getMonitoringPageList(params)
-        .then(res => {
+        .then((res) => {
           if (res.code == 1) {
             const pagination = {
-              ...this.pagination
+              ...this.pagination,
             };
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
@@ -224,7 +293,7 @@ export default {
             this.$message.error(res.message);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           console.log(err);
         });
@@ -239,14 +308,14 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type
-        }
+          type,
+        },
       });
     },
     //页数切换
     handleTableChange(pagination) {
       const pager = {
-        ...this.pagination
+        ...this.pagination,
       };
       pager.current = pagination;
       this.pagination = pager;
@@ -274,12 +343,12 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    }
-  }
+    },
+  },
 };
 </script>
-    
-    <style lang="less" scoped>
+
+<style lang="less" scoped>
 .queryFromBox {
   margin-bottom: 5px;
   .btnListBox {
@@ -296,4 +365,3 @@ export default {
   background-color: #eeea7e;
 }
 </style>
-    

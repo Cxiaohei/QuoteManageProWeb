@@ -9,14 +9,27 @@
             </a-space>
           </a-form-item>
           <a-form-item>
-            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+            <a-input
+              v-model.trim="queryFrom.Filter"
+              style="width: 180px"
+              placeholder="关键字"
+            ></a-input>
           </a-form-item>
           <a-form-item>
             <a-space>
-              <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
+              <a-button type="primary" icon="search" @click="search_pagelist"
+                >查询</a-button
+              >
               <a-button type="primary" @click="reset_pagelists">重置</a-button>
             </a-space>
           </a-form-item>
+          <a-form-item>
+          <a-space>
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
+              <a-button type="primary" icon="to-top">导入</a-button>
+            </a-upload>
+          </a-space>
+        </a-form-item>
         </a-form>
       </template>
     </vxe-toolbar>
@@ -43,21 +56,37 @@
             @click="productData_edit(row)"
             style="margin-right: 5px"
             v-if="row.status == 0"
-          >编辑</a>
+            >编辑</a
+          >
 
           <a
             href="javascript:;"
             @click="productData_change(row)"
             style="margin-right: 5px"
             v-if="row.status == 1"
-          >申请变更</a>
+            >申请变更</a
+          >
 
-          <a href="javascript:;" @click="productOrder_edit(row, 'detail')">详情</a>
+          <a href="javascript:;" @click="productOrder_edit(row, 'detail')"
+            >详情</a
+          >
         </template>
       </vxe-column>
-      <vxe-column field="department" title="部门"></vxe-column>
-      <vxe-column field="projectNo" title="项目编号"></vxe-column>
+      <vxe-column field="department" width="150" title="部门"></vxe-column>
+      <vxe-column field="projectNo" width="150" title="项目编号"></vxe-column>
+      <vxe-column field="projectType" width="80" title="项目类型">
+        <template #default="{ row }">
+          <span v-if="row.projectType == 0">常规型</span>
+          <span v-if="row.projectType == 1">战略型</span>
+          <span v-if="row.projectType == 2">改善型</span>
+        </template>
+      </vxe-column>
       <vxe-column field="projectName" width="320" title="项目名称"></vxe-column>
+      <vxe-column
+        field="projectManager"
+        width="150"
+        title="项目经理"
+      ></vxe-column>
       <vxe-column field="status" title="项目状态" width="80">
         <template #default="{ row }">
           <span v-if="row.status == 0">待提交</span>
@@ -66,17 +95,29 @@
           <span v-if="row.status == 3">项目中止</span>
         </template>
       </vxe-column>
-      <vxe-column field="projectBudget" width="150" title="项目预算"></vxe-column>
-      <vxe-column field="creationTime" title="创建时间">
-        <template #default="{ row }">
-          {{
-          row.creationTime
-          ? row.creationTime.substring(0, 19).replace("T", "/")
-          : "/"
-          }}
-        </template>
-      </vxe-column>
-      <vxe-column field="remarks" title="备注"></vxe-column>
+      <vxe-column
+        field="projectBudget"
+        width="150"
+        title="项目预算"
+      ></vxe-column>
+     
+      <vxe-column
+        field="budgetMonthAvailableMoney"
+        width="200"
+        title="月均值"
+      ></vxe-column>
+      <vxe-column
+        field="projectBudgetDetail"
+        width="200"
+        title="预算包含内容"
+      ></vxe-column>
+      <vxe-column field="fixedCharge" width="150" title="固定费用"></vxe-column>
+      <vxe-column
+        field="projectCycle"
+        width="150"
+        title="项目周期"
+      ></vxe-column>
+      <vxe-column field="remarks" width="150" title="备注"></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination
@@ -89,17 +130,23 @@
       />
     </div>
 
-    <PerformanceManagementModal ref="PerformanceManagementModalRefs" @ok="getPageList"></PerformanceManagementModal>
+    <PerformanceManagementModal
+      ref="PerformanceManagementModalRefs"
+      @ok="getPageList"
+    ></PerformanceManagementModal>
 
-    <PerformanceChangeModal ref="PerformanceChangeModalRefs" @ok="getPageList"></PerformanceChangeModal>
+    <PerformanceChangeModal
+      ref="PerformanceChangeModalRefs"
+      @ok="getPageList"
+    ></PerformanceChangeModal>
   </a-card>
 </template>
-    
+
 <script>
 import {
   getPageList,
   importExcel,
-  downloadTemplate
+  downloadTemplate,
 } from "@/services/performance/performanceManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
@@ -111,14 +158,14 @@ export default {
     return {
       selectedRowKeys: [],
       queryFrom: {
-        processStepName: ""
+        processStepName: "",
       },
       loading: true,
       dataSource: [],
       pagination: {
         pageSize: 10,
         current: 1,
-        showTotal: total => `总计 ${total} 条`
+        showTotal: (total) => `总计 ${total} 条`,
       },
       // 表格配置
       customConfig: {
@@ -126,18 +173,18 @@ export default {
           visible: true,
           resizable: true,
           sort: true,
-          fixed: true
-        }
+          fixed: true,
+        },
       },
       sortConfig: {
         defaultSort: [],
         multiple: true,
         trigger: "cell",
-        remote: true
+        remote: true,
       },
       rowConfig: {
-        keyField: "id"
-      }
+        keyField: "id",
+      },
     };
   },
   components: { PerformanceManagementModal, PerformanceChangeModal },
@@ -152,7 +199,7 @@ export default {
   },
   activated() {},
   computed: {
-    ...mapGetters("account", ["organizationId"])
+    ...mapGetters("account", ["organizationId"]),
   },
   methods: {
     checkPermission,
@@ -164,9 +211,9 @@ export default {
     },
     resizableChangeEvent() {
       const columns = this.$refs.xTable1.getColumns();
-      const customData = columns.map(column => {
+      const customData = columns.map((column) => {
         return {
-          width: column.renderWidth
+          width: column.renderWidth,
         };
       });
       console.log(customData);
@@ -185,8 +232,8 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type: "edit"
-        }
+          type: "edit",
+        },
       });
     },
     //下载模板
@@ -197,7 +244,7 @@ export default {
     importExcel(resData) {
       let formData = new FormData();
       formData.append("ImportFile", resData.file);
-      importExcel(formData).then(response => {
+      importExcel(formData).then((response) => {
         if (response.code == 1) {
           this.$message.success("导入成功");
           this.getPageList();
@@ -211,13 +258,13 @@ export default {
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,
-        ...this.queryFrom
+        ...this.queryFrom,
       };
       getPageList(params)
-        .then(res => {
+        .then((res) => {
           if (res.code == 1) {
             const pagination = {
-              ...this.pagination
+              ...this.pagination,
             };
             pagination.total = res.data.totalCount;
             this.pagination = pagination;
@@ -228,7 +275,7 @@ export default {
             this.$message.error(res.message);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           console.log(err);
         });
@@ -239,14 +286,14 @@ export default {
         path: "performanceManagementDetail",
         query: {
           id: record.id,
-          type
-        }
+          type,
+        },
       });
     },
     //页数切换
     handleTableChange(pagination) {
       const pager = {
-        ...this.pagination
+        ...this.pagination,
       };
       pager.current = pagination;
       this.pagination = pager;
@@ -274,12 +321,12 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    }
-  }
+    },
+  },
 };
 </script>
-    
-    <style lang="less" scoped>
+
+<style lang="less" scoped>
 .queryFromBox {
   margin-bottom: 5px;
   .btnListBox {
@@ -290,4 +337,3 @@ export default {
   }
 }
 </style>
-    

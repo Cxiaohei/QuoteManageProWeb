@@ -30,10 +30,12 @@
               <p>
                 <span style>费用</span>
                 <span style>领料</span>
+                <span style>制造</span>
               </p>
               <p>
                 <span style>{{ item.monthCost }}</span>
                 <span style>{{ item.getMaterials }}</span>
+                <span style>{{ item.manufactureFee }}</span>
               </p>
             </div>
             <a-button
@@ -53,7 +55,7 @@
         :visible="bugetFromVisible"
         @ok="handleOkbugetFrom"
         @cancel="bugetFromVisible = false"
-        width="350px"
+        width="550px"
       >
         <!-- {{ bugetFrom }} -->
         <div style="margin-bottom: 15px">
@@ -67,6 +69,10 @@
         <div>
           领料:
           <a-input placeholder="领料" style="width: 240px" v-model="bugetFrom.getMaterials" />
+        </div>
+        <div>
+          制造:
+          <a-input placeholder="制造费用" style="width: 240px" v-model="bugetFrom.manufactureFee" />
         </div>
       </a-modal>
     </a-modal>
@@ -98,6 +104,7 @@ export default {
         budgetMonth: "",
         monthCost: "",
         getMaterials: "",
+        manufactureFee: "",
         projectBudgetDetailId: ""
       }
     };
@@ -121,6 +128,7 @@ export default {
         budgetMonth: "",
         monthCost: "",
         getMaterials: "",
+        manufactureFee: "",
         projectBudgetDetailId: ""
       };
       this.bugetFromTitle = "新增月度费用预算";
@@ -132,6 +140,7 @@ export default {
         budgetMonth: record.budgetMonth.substring(0, 7),
         monthCost: record.monthCost,
         getMaterials: record.getMaterials,
+        manufactureFee: record.manufactureFee,
         projectBudgetDetailId: record.id
       };
       this.bugetFromTitle = "编辑月度费用预算";
@@ -189,7 +198,7 @@ export default {
     padding: 0;
     margin: 0;
     display: inline-block;
-    width: 50%;
+    width: 33%;
     border: 1px solid #ddd;
     border-top: none;
     border-bottom: none;
