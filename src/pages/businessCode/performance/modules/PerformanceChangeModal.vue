@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal
-      width="60%"
+      width="95%"
       title="申请变更"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
@@ -9,37 +9,49 @@
       @cancel="handleCancel"
       class="performanceManagement"
     >
-      <table class="scrapBalanceTable">
-        <tr>
-          <td v-for="(item, index) in tableKey" :key="index">{{ item.name }}</td>
-        </tr>
-        <tr>
-          <td v-for="(item, index) in tableKey" :key="index">
-            <p v-if="item.name=='项目类型' ">
-              {{
-              tableData[item.key]==0 ?"常规型" :
-              tableData[item.key]==1 ?"战略型" :"改善型"
-              }}
-            </p>
-            <p v-else-if="item.name=='项目来源' ">
-              {{
-              tableData[item.key]==0 ?"日常工作包" :
-              tableData[item.key]==1 ?"战略型" :"改善策略"
-              }}
-            </p>
-            <p v-else-if="item.name=='起止时间' ">
-              起:{{
-              tableData.startTime.substring(0,10)
-              }}
-              <br />
-              止:{{
-              tableData.endTime.substring(0,10)
-              }}
-            </p>
-            <p v-else>{{ tableData[item.key] }}</p>
-          </td>
-        </tr>
-      </table>
+    <table class="scrapBalanceTable">
+  <tr>
+    <td v-for="(item, index) in tableKey" :key="index" :class="{'narrow-column': ['部门', '立项人', '项目类型', '项目编号', '项目来源', '项目预算', '项目经理', '己使用金额'].includes(item.name), 'wide-column': ['项目目标', '项目目的'].includes(item.name)}">
+      {{ item.name }}
+    </td>
+  </tr>
+  <tr>
+    <td v-for="(item, index) in tableKey" :key="index" :class="{'narrow-column': ['部门', '立项人', '项目类型', '项目编号', '项目来源', '项目预算', '项目经理', '己使用金额'].includes(item.name), 'wide-column': ['项目目标', '项目目的'].includes(item.name)}">
+      <p v-if="item.name == '项目类型'">
+        {{
+          tableData[item.key] == 0
+            ? "常规型"
+            : tableData[item.key] == 1
+            ? "战略型"
+            : "改善型"
+        }}
+      </p>
+      <p v-else-if="item.name == '项目来源'">
+        {{
+          tableData[item.key] == 0
+            ? "日常工作包"
+            : tableData[item.key] == 1
+            ? "战略型"
+            : "改善策略"
+        }}
+      </p>
+      <p v-else-if="item.name == '项目目标'">
+        <span
+          v-for="(objective, objIndex) in tableData[item.key]"
+          :key="objIndex"
+        >
+          {{ objective.objective }}<br />
+        </span>
+      </p>
+      <p v-else-if="item.name == '起止时间'">
+        起:{{ tableData.startTime.substring(0, 10) }}
+        <br />
+        止:{{ tableData.endTime.substring(0, 10) }}
+      </p>
+      <p v-else>{{ tableData[item.key] }}</p>
+    </td>
+  </tr>
+</table>
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -48,8 +60,17 @@
         ref="userRefs"
       >
         <a-form-model-item label="部门">
-          <a-input v-model="tableData.department" style="width: 175px" placeholder="部门" disabled></a-input>
-          <a-input v-model="queryFrom.department" style="width: 175px" placeholder="部门"></a-input>
+          <a-input
+            v-model="tableData.department"
+            style="width: 250px"
+            placeholder="部门"
+            disabled
+          ></a-input>
+          <a-input
+            v-model="queryFrom.department"
+            style="width: 250px"
+            placeholder="部门"
+          ></a-input>
         </a-form-model-item>
 
         <a-form-model-item label="项目时间">
@@ -63,143 +84,292 @@
         <a-form-model-item label="立项人">
           <a-input
             v-model="tableData.createUserName"
-            style="width: 175px"
+            style="width: 250px"
             placeholder="立项人"
             disabled
           ></a-input>
-          <a-input v-model="queryFrom.createUserName" style="width: 175px" placeholder="立项人"></a-input>
+          <a-input
+            v-model="queryFrom.createUserName"
+            style="width: 250px"
+            placeholder="立项人"
+          ></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目经理">
           <a-input
             v-model="tableData.projectManager"
-            style="width: 175px"
+            style="width: 250px"
             placeholder="项目经理"
             disabled
           ></a-input>
-          <a-input v-model="queryFrom.projectManager" style="width: 175px" placeholder="项目经理"></a-input>
+          <a-input
+            v-model="queryFrom.projectManager"
+            style="width: 250px"
+            placeholder="项目经理"
+          ></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目目的">
-          <a-input
+          <a-textarea
             v-model="tableData.projectPurpose"
-            style="width: 175px"
+            style="width: 250px"
             placeholder="项目目的"
             disabled
-          ></a-input>
-          <a-input v-model="queryFrom.projectPurpose" style="width: 175px" placeholder="项目目的"></a-input>
+          ></a-textarea>
+          <a-textarea
+            v-model="queryFrom.projectPurpose"
+            style="width: 250px"
+            placeholder="项目目的"
+          ></a-textarea>
         </a-form-model-item>
-        <!-- <a-form-model-item label="项目目标">
-          <a-input
-            v-model="tableData.projectObjectives"
-            style="width: 175px"
-            placeholder="项目目标"
-            disabled
-          ></a-input>
-          <a-input v-model="queryFrom.projectObjectives" style="width: 175px" placeholder="项目目标"></a-input>
-        </a-form-model-item>-->
-        <a-form-model-item label="项目目标">
-          <div style="overflow: hidden; width: 350px">
-            <ul style="padding: 0">
-              <li
-                style="list-style: none"
-                v-for="(item, index) in projectObjectivesList"
-                :key="index"
-              >
-                <a-input
-                  v-model="item.value"
-                  style="width: 250px; margin-right: 5px"
-                  placeholder="项目目标"
-                ></a-input>
-                <a-button type="primary" style="margin-right: 5px" @click="addList">+</a-button>
-                <a-button type="primary" @click="removeList(index)" v-if="index > 0">-</a-button>
-              </li>
-            </ul>
-          </div>
-        </a-form-model-item>
-
         <a-form-model-item label="项目预算">
           <a-input
             v-model="tableData.projectBudget"
-            style="width: 175px"
+            style="width: 250px"
             placeholder="项目预算"
             disabled
           ></a-input>
-          <a-input v-model="queryFrom.projectBudget" style="width: 175px" placeholder="项目经理"></a-input>
         </a-form-model-item>
-
-        <a-form-model-item label="变更申请备注">
-          <a-input v-model="queryFrom.remark" style="width: 350px" placeholder="变更申请备注"></a-input>
-        </a-form-model-item>
-
-        <!-- <a-form-model-item label="项目编号">
-          <a-input v-model="queryFrom.projectNo" style="width: 350px" placeholder="项目编号"></a-input>
-        </a-form-model-item>
-        <a-form-model-item label="项目名称">
-          <a-input v-model="queryFrom.projectName" style="width: 350px" placeholder="项目名称"></a-input>
-        </a-form-model-item>
-        
-        <a-form-model-item label="项目来源">
-          <a-select v-model="queryFrom.projectSource" placeholder="项目来源" style="width: 350px">
-            <a-select-option value="0">日常工作包</a-select-option>
-            <a-select-option value="1">战略策略</a-select-option>
-            <a-select-option value="2">改善策略</a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item label="项目目的">
-          <a-input
-            v-model="queryFrom.projectPurpose"
-            style="width: 350px"
-            placeholder="项目目的"
-          ></a-input>
-        </a-form-model-item>
-        <a-form-model-item label="项目时间">
-          <a-range-picker
-            v-model.trim="timeArr1"
-            :allowClear="false"
-            format="YYYY-MM-DD"
-            valueFormat="YYYY-MM-DD"
-          />
-        </a-form-model-item>
-        <a-form-model-item label="项目预算">
-          <a-input v-model="queryFrom.projectBudget" style="width: 350px" placeholder="项目预算"></a-input>
-        </a-form-model-item>
-        <a-form-model-item label="费用备注">
-          <a-input v-model="queryFrom.projectRemark" style="width: 350px" placeholder="费用备注"></a-input>
-        </a-form-model-item>
-
-        <a-form-model-item label="是否终止项目">
-          <a-radio-group v-model="queryFrom.isTerminate">
-            <a-radio :value="true">是</a-radio>
-            <a-radio :value="false">否</a-radio>
-          </a-radio-group>
-        </a-form-model-item>
-        <a-form-model-item label="项目类型">
-          <a-select v-model="queryFrom.projectType" placeholder="项目类型" style="width: 350px">
-            <a-select-option value="0">常规型</a-select-option>
-            <a-select-option value="1">战略型</a-select-option>
-            <a-select-option value="2">改善型</a-select-option>
-          </a-select>
-        </a-form-model-item>
-
-        <a-form-model-item label="审批人列表">
-          <div style="overflow: hidden; width: 350px">
+        <a-form-model-item label="项目目标">
+          <div style="overflow: hidden; width: auto">
             <ul style="padding: 0">
               <li
-                style="list-style: none"
-                v-for="(item, index) in projectObjectivesList"
+                style="
+                  list-style: none;
+                  display: flex;
+                  align-items: flex-start;
+                  margin-bottom: 8px;
+                "
+                v-for="(item, index) in queryFrom.projectObjectives"
                 :key="index"
               >
-                <a-input
-                  v-model="item.value"
+                <a-textarea
+                  v-model="item.objective"
                   style="width: 250px; margin-right: 5px"
-                  placeholder="审批人列表"
-                ></a-input>
-                <a-button type="primary" style="margin-right: 5px" @click="addList">+</a-button>
-                <a-button type="primary" @click="removeList(index)" v-if="index > 0">-</a-button>
+                  placeholder="项目目标"
+                  rows="3"
+                  disabled
+                ></a-textarea>
+                <a-textarea
+                  v-model="item.objective"
+                  style="width: 250px; margin-right: 5px"
+                  placeholder="项目目标"
+                  rows="3"
+                ></a-textarea>
+                <a-button
+                  type="primary"
+                  style="margin-right: 5px"
+                  @click="addList"
+                  >+</a-button
+                >
+                <a-button
+                  type="primary"
+                  @click="removeList(index)"
+                  v-if="index > 0"
+                  >-</a-button
+                >
               </li>
             </ul>
           </div>
         </a-form-model-item>
-        -->
+        <a-form-model-item label="预算明细">
+  <div style="overflow: hidden; width: auto">
+    <ul style="padding: 0">
+      <li
+        v-for="(item, index) in queryFrom.projectBugetParts"
+        :key="index"
+        style="list-style: none; margin-bottom: 16px"
+      >
+        <!-- 交通费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">交通费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.trafficMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="交通费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.trafficMoney"
+              style="width: 250px"
+              placeholder="交通费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 住宿费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">住宿费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.accommodationMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="住宿费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.accommodationMoney"
+              style="width: 250px"
+              placeholder="住宿费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 餐费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">餐费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.tableMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="餐费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.tableMoney"
+              style="width: 250px"
+              placeholder="餐费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 业务招待费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">业务招待费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.businessHospitalityMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="业务招待费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.businessHospitalityMoney"
+              style="width: 250px"
+              placeholder="业务招待费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 邮寄托运费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">邮寄托运费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.shipMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="邮寄托运费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.shipMoney"
+              style="width: 250px"
+              placeholder="邮寄托运费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 活动现场费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">活动现场费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.eventSiteMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="活动现场费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.eventSiteMoney"
+              style="width: 250px"
+              placeholder="活动现场费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 礼品费 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">礼品费：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.giftMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="礼品费"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.giftMoney"
+              style="width: 250px"
+              placeholder="礼品费"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 其他费用 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.otherMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="其他费用"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.otherMoney"
+              style="width: 250px"
+              placeholder="其他费用"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 总预算 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">总预算：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.totalMoney"
+              style="width: 250px; margin-right: 5px"
+              placeholder="总预算"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.totalMoney"
+              style="width: 250px"
+              placeholder="总预算"
+            ></a-input>
+          </div>
+        </div>
+
+        <!-- 其他费用说明 -->
+        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用说明：</span>
+          <div style="flex: 1; display: flex; align-items: center;">
+            <a-input
+              v-model="item.otherMoneyReamrk"
+              style="width: 250px; margin-right: 5px"
+              placeholder="其他费用说明"
+              disabled
+            ></a-input>
+            <a-input
+              v-model="item.otherMoneyReamrk"
+              style="width: 250px"
+              placeholder="其他费用说明"
+            ></a-input>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</a-form-model-item>
+
+
+        <a-form-model-item label="变更申请备注">
+          <a-textarea
+            v-model="queryFrom.remark"
+            style="width: 550px"
+            placeholder="变更申请备注"
+          ></a-textarea>
+        </a-form-model-item>
       </a-form-model>
     </a-modal>
   </div>
@@ -219,52 +389,52 @@ export default {
       tableKey: [
         {
           name: "部门",
-          key: "department"
+          key: "department",
         },
         {
           name: "立项人",
-          key: "createUserName"
+          key: "createUserName",
         },
         {
           name: "项目类型",
-          key: "projectType"
+          key: "projectType",
         },
         {
           name: "项目编号",
-          key: "projectNo"
+          key: "projectNo",
         },
         {
           name: "项目来源",
-          key: "projectSource"
+          key: "projectSource",
         },
         {
           name: "项目名称",
-          key: "projectName"
+          key: "projectName",
         },
         {
           name: "项目经理",
-          key: "projectManager"
+          key: "projectManager",
         },
         {
           name: "项目目的",
-          key: "projectPurpose"
+          key: "projectPurpose",
         },
         {
           name: "项目目标",
-          key: "projectObjectives"
+          key: "projectObjectives",
         },
         {
           name: "起止时间",
-          key: ""
+          key: "",
         },
         {
           name: "项目预算",
-          key: "projectBudget"
+          key: "projectBudget",
         },
         {
-          name: "预算己使用金额",
-          key: ""
-        }
+          name: "己使用金额",
+          key: "",
+        },
       ],
       tableData: {},
       queryFrom: {},
@@ -273,16 +443,46 @@ export default {
       projectObjectivesList: [{ value: "" }],
       rules: {
         categoryName: [
-          { required: true, message: "请输入类别名称", trigger: "change" }
+          { required: true, message: "请输入类别名称", trigger: "change" },
         ],
         categoryLevel: [
-          { required: true, message: "请选择等级", trigger: "change" }
+          { required: true, message: "请选择等级", trigger: "change" },
         ],
         categoryType: [
-          { required: true, message: "请选择岗位", trigger: "change" }
-        ]
-      }
+          { required: true, message: "请选择岗位", trigger: "change" },
+        ],
+      },
     };
+  },
+  computed: {
+    // 计算 totalMoney 的值
+    totalMoney() {
+      return this.queryFrom.projectBugetParts.map(item => {
+        // 计算所有费用的总和
+        return (
+          Number(item.trafficMoney) +
+          Number(item.accommodationMoney)+
+           Number(item.tableMoney) +
+           Number(item.businessHospitalityMoney) +
+           Number(item.shipMoney) +
+           Number(item.eventSiteMoney) +
+           Number(item.giftMoney) +
+           Number(item.otherMoney)
+        );
+      });
+    }
+  },
+  watch: {
+    // 监听 projectBugetParts 中的数据变化
+    'queryFrom.projectBugetParts': {
+      handler(newParts) {
+        newParts.forEach(item => {
+          // 更新每个项的 totalMoney
+          item.totalMoney = this.totalMoney;
+        });
+      },
+      deep: true
+    }
   },
   methods: {
     openModules(type, info) {
@@ -292,6 +492,7 @@ export default {
       console.log(info);
       this.uservisible = true;
       this.projectObjectivesList = this.queryFrom.projectObjectives;
+      console.log(this.queryFrom.projectObjectives);
       if (this.projectObjectivesList.length == 0) {
         this.projectObjectivesList = [{ value: "" }];
       }
@@ -304,9 +505,10 @@ export default {
     },
     // 确定
     handleOk() {
-      this.$refs.userRefs.validate(valid => {
+      this.$refs.userRefs.validate((valid) => {
         if (valid) {
           this.confirmLoading = true;
+          
           this.changeProductDataList();
         }
       });
@@ -320,12 +522,12 @@ export default {
       this.logDataSource = [];
       let params = {
         ...this.queryFrom,
-        kkProjectId: this.queryFrom.id
+        kkProjectId: this.queryFrom.id,
       };
       const projectObjectives = [];
-      this.projectObjectivesList.map(item => {
+      this.projectObjectivesList.map((item) => {
         projectObjectives.push({
-          objective: item.value
+          objective: item.value,
         });
       });
       if (this.timeArr1 && this.timeArr1.length > 0) {
@@ -334,7 +536,7 @@ export default {
       }
       params["projectObjectives"] = projectObjectives;
       changeProductDataList(params)
-        .then(res => {
+        .then((res) => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.$emit("ok");
@@ -344,12 +546,12 @@ export default {
           }
           this.confirmLoading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           this.confirmLoading = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -368,4 +570,22 @@ export default {
     font-size: 12px;
   }
 }
+
+.scrapBalanceTable td, .scrapBalanceTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.scrapBalanceTable td {
+  text-align: left;
+}
+
+.scrapBalanceTable .narrow-column {
+  width: 90px;
+}
+
+.scrapBalanceTable .wide-column {
+  width: 300px; /* 根据需要调整宽度 */
+}
+
 </style>
