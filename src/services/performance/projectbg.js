@@ -13,6 +13,9 @@ export async function getPageList(params) {
 export async function getPagechange(params) {
     return request(`/api/app/k-kProject/project-change-info/${params}`, METHOD.GET)
 }
+export async function checkAudite(params) {
+    return request("/api/app/k-kProject/do-audite-quote", METHOD.POST, params)
+}
 
 
 

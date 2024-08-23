@@ -481,7 +481,7 @@ export default {
         },
         {
           name: "己使用金额",
-          key: ""
+          key: "usedBuget"
         }
       ],
       tableData: {},

@@ -327,11 +327,11 @@ console.log(this.projectData)
 }
 
 .pie-chart {
-  height: 400px; /* 调整饼图高度以符合三分之一页面高度 */
+  height: 380px; /* 调整饼图高度以符合三分之一页面高度 */
 }
 
 .line-bar-chart {
-  height: 400px; /* 适当增加柱状图和折线图的高度 */
+  height: 380px; /* 适当增加柱状图和折线图的高度 */
 }
 
 .chart {

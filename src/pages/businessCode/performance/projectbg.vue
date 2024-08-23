@@ -369,10 +369,9 @@
 </template>
 
 <script>
-import { getPageList, getPagechange } from "@/services/performance/projectbg";
+import { getPageList, getPagechange,checkAudite } from "@/services/performance/projectbg";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
-import { checkAudite } from "@/services/approveManagement/allApprove";
 
 const columns = [
   {
@@ -469,7 +468,7 @@ export default {
         },
         {
           name: "己使用金额",
-          key: ""
+          key: "usedBuget"
         }
       ],
       tableData: {},
