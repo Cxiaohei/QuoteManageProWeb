@@ -341,7 +341,7 @@
               <div style="flex: 1; min-width: 0;">
                 <a-form-model-item label="变更申请备注" style="margin: 0;">
                   <a-textarea
-                    v-model="changeListData[1].Remark"
+                    v-model="changeListData[1].remark"
                     style="width: 1200px;"
                     placeholder="变更申请备注"
                     disabled
