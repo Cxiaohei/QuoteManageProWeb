@@ -224,6 +224,7 @@ export default {
     },
     //编辑
     productData_change(record) {
+      
       this.$refs.PerformanceChangeModalRefs.openModules("edit", record);
     },
     productData_edit(record) {

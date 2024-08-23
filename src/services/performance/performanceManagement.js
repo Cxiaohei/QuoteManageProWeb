@@ -70,6 +70,9 @@ export async function editKkFy(params) {
 export async function setKKProjectId(KKProjectId) {
     return request(`/api/app/k-kProject/submit-project-info/${KKProjectId}`, METHOD.POST)
 }
+export async function getkBData() {
+    return request(`/api/app/k-kProject/project-buget-kBData`, METHOD.GET)
+}
 
 
 
