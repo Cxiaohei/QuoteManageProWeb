@@ -108,17 +108,17 @@
         width="50"
         title="项目周期"
       ></vxe-column>
-      <vxe-column field="timeSchedule" width="150" title="时间进度">
+      <vxe-column field="timeSchedule" width="200" title="时间进度">
         <template #default="{ row }">
-          <a-progress :percent="Number(row.timeSchedule.toFixed(3))*100" />
+          <a-progress :percent="Number(row.timeSchedule.toFixed(2))*100" />
         </template>
       </vxe-column>
-      <vxe-column field="costSchedule" width="150" title="费用使用比例">
+      <vxe-column field="costSchedule" width="200" title="费用使用比例">
         <template #default="{ row }">
-          <a-progress :percent="Number(row.costSchedule.toFixed(3))*100" />
+          <a-progress :percent="Number(row.costSchedule.toFixed(2))*100" />
         </template>
       </vxe-column>
-      <vxe-column field="differenceRate" width="80" title="差异率">
+      <vxe-column field="differenceRate" width="100" title="差异率">
         <template #default="{ row }">
           <div
             style="text-align: center"
@@ -127,12 +127,16 @@
               'bg-yellow': row.differenceRate > 15 && row.differenceRate <= 50,
             }"
           >
-            {{ row.differenceRate == 0 ? 0 : row.differenceRate.toFixed(2) }}
+            {{ row.differenceRate == 0 ? 0 : row.differenceRate.toFixed(4) }}
           </div>
         </template>
       </vxe-column>
       <vxe-column field="balanceMoney" width="80" title="余额"></vxe-column>
-      <vxe-column field="balanceRate" width="80" title="余额比例"></vxe-column>
+      <vxe-column field="balanceRate" width="80" title="余额比例">
+        <template #default="{ row }">
+          {{ (row.balanceRate*100).toFixed(2)}}%
+        </template>
+      </vxe-column>
       <vxe-column
         field="monthAvailableMoney"
         width="80"
@@ -203,6 +207,7 @@ import {
   getMonitoringPageList,
   importExcel,
   downloadTemplate,
+  editKkFy
 } from "@/services/performance/performanceManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
@@ -292,9 +297,23 @@ export default {
         },
       });
     },
-    //下载模板
-    downloadTemplate() {
-      downloadTemplate();
+    editFyList(record) {
+      const params = {
+        kkProjectId: this.kkProjectId,
+        budgetMonth: record.budgetMonth.substring(0, 7),
+        monthCost: record.monthCost,
+        getMaterials: record.getMaterials,
+        manufactureFee: record.manufactureFee,
+        projectBudgetDetailId: record.id
+      };
+      editKkFy(params).then(res => {
+          if (res.code == 1) {
+            this.$message.success(res.msg);
+            this.getMonitoringPageList();
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
     },
     //导入
     importExcel(resData) {

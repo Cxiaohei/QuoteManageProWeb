@@ -129,237 +129,294 @@
           ></a-input>
         </a-form-model-item>
         <a-form-model-item label="项目目标">
-          <div style="overflow: hidden; width: auto">
-            <ul style="padding: 0">
-              <li
-                style="
-                  list-style: none;
-                  display: flex;
-                  align-items: flex-start;
-                  margin-bottom: 8px;
-                "
-                v-for="(item, index) in queryFrom.projectObjectives"
-                :key="index"
-              >
-                <a-textarea
-                  v-model="item.objective"
-                  style="width: 250px; margin-right: 5px"
-                  placeholder="项目目标"
-                  rows="3"
-                  disabled
-                ></a-textarea>
-                <a-textarea
-                  v-model="item.objective"
-                  style="width: 250px; margin-right: 5px"
-                  placeholder="项目目标"
-                  rows="3"
-                ></a-textarea>
-                <a-button
-                  type="primary"
-                  style="margin-right: 5px"
-                  @click="addList"
-                  >+</a-button
-                >
-                <a-button
-                  type="primary"
-                  @click="removeList(index)"
-                  v-if="index > 0"
-                  >-</a-button
-                >
-              </li>
-            </ul>
-          </div>
+          <div style="overflow: hidden; width: auto; display: flex;">
+    <!-- 第一列：禁用的输入框，绑定 queryFrom.projectObjectives -->
+    <ul style="padding: 0; flex: 1;">
+        <li
+            style="
+                list-style: none;
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 8px;
+            "
+            v-for="(item, index) in queryFrom.projectObjectives"
+            :key="`disabled-${index}`"
+        >
+            <a-textarea
+                v-model="item.objective"
+                style="width: 250px; margin-right: 5px"
+                placeholder="项目目标"
+                rows="3"
+                disabled
+            ></a-textarea>
+        </li>
+    </ul>
+
+    <!-- 第二列：非禁用的输入框，绑定 projectObjectivesList -->
+    <ul style="padding: 0; flex: 1;">
+        <li
+            style="
+                list-style: none;
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 8px;
+            "
+            v-for="(item, index) in projectObjectivesList"
+            :key="`enabled-${index}`"
+        >
+            <a-textarea
+                v-model="item.objective"
+                style="width: 250px; margin-right: 5px"
+                placeholder="项目目标"
+                rows="3"
+            ></a-textarea>
+            <a-button
+                type="primary"
+                style="margin-right: 5px"
+                @click="addList"
+            >+</a-button>
+            <a-button
+                type="primary"
+                @click="removeList(index)"
+                v-if="index > 0"
+            >-</a-button>
+        </li>
+    </ul>
+</div>
+
         </a-form-model-item>
         <a-form-model-item label="预算明细">
-  <div style="overflow: hidden; width: auto">
-    <ul style="padding: 0">
-      <li
-        v-for="(item, index) in queryFrom.projectBugetParts"
-        :key="index"
-        style="list-style: none; margin-bottom: 16px"
-      >
-        <!-- 交通费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">交通费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.trafficMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="交通费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.trafficMoney"
-              style="width: 250px"
-              placeholder="交通费"
-            ></a-input>
-          </div>
-        </div>
+          <div style="overflow: hidden; width: auto; display: flex;">
+    <!-- 第一列：禁用的输入框，绑定 queryFrom.projectBugetParts -->
+    <ul style="padding: 0; flex: 1;">
+        <li
+            v-for="(item, index) in queryFrom.projectBugetParts"
+            :key="`disabled-${index}`"
+            style="list-style: none; margin-bottom: 16px"
+        >
+            <!-- 交通费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">交通费：</span>
+                <a-input
+                    v-model="item.trafficMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="交通费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 住宿费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">住宿费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.accommodationMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="住宿费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.accommodationMoney"
-              style="width: 250px"
-              placeholder="住宿费"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 住宿费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">住宿费：</span>
+                <a-input
+                    v-model="item.accommodationMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="住宿费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 餐费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">餐费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.tableMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="餐费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.tableMoney"
-              style="width: 250px"
-              placeholder="餐费"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 餐费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">餐费：</span>
+                <a-input
+                    v-model="item.tableMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="餐费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 业务招待费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">业务招待费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.businessHospitalityMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="业务招待费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.businessHospitalityMoney"
-              style="width: 250px"
-              placeholder="业务招待费"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 业务招待费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">业务招待费：</span>
+                <a-input
+                    v-model="item.businessHospitalityMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="业务招待费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 邮寄托运费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">邮寄托运费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.shipMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="邮寄托运费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.shipMoney"
-              style="width: 250px"
-              placeholder="邮寄托运费"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 邮寄托运费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">邮寄托运费：</span>
+                <a-input
+                    v-model="item.shipMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="邮寄托运费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 活动现场费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">活动现场费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.eventSiteMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="活动现场费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.eventSiteMoney"
-              style="width: 250px"
-              placeholder="活动现场费"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 活动现场费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">活动现场费：</span>
+                <a-input
+                    v-model="item.eventSiteMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="活动现场费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 礼品费 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">礼品费：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.giftMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="礼品费"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.giftMoney"
-              style="width: 250px"
-              placeholder="礼品费"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 礼品费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">礼品费：</span>
+                <a-input
+                    v-model="item.giftMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="礼品费"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 其他费用 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.otherMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="其他费用"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.otherMoney"
-              style="width: 250px"
-              placeholder="其他费用"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 其他费用 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用：</span>
+                <a-input
+                    v-model="item.otherMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="其他费用"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 总预算 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">总预算：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.totalMoney"
-              style="width: 250px; margin-right: 5px"
-              placeholder="总预算"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.totalMoney"
-              style="width: 250px"
-              placeholder="总预算"
-            ></a-input>
-          </div>
-        </div>
+            <!-- 总预算 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">总预算：</span>
+                <a-input
+                    v-model="item.totalMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="总预算"
+                    disabled
+                ></a-input>
+            </div>
 
-        <!-- 其他费用说明 -->
-        <div style="margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-          <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用说明：</span>
-          <div style="flex: 1; display: flex; align-items: center;">
-            <a-input
-              v-model="item.otherMoneyReamrk"
-              style="width: 250px; margin-right: 5px"
-              placeholder="其他费用说明"
-              disabled
-            ></a-input>
-            <a-input
-              v-model="item.otherMoneyReamrk"
-              style="width: 250px"
-              placeholder="其他费用说明"
-            ></a-input>
-          </div>
-        </div>
-      </li>
+            <!-- 其他费用说明 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用说明：</span>
+                <a-textarea
+                    v-model="item.otherMoneyReamrk"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="其他费用说明"
+                    disabled
+                ></a-textarea>
+            </div>
+        </li>
     </ul>
-  </div>
+
+    <!-- 第二列：非禁用的输入框，绑定 newprojectBugetParts -->
+    <ul style="padding: 0; flex: 1;">
+        <li
+            v-for="(item, index) in newprojectBugetParts"
+            :key="`enabled-${index}`"
+            style="list-style: none; margin-bottom: 16px"
+        >
+            <!-- 交通费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">交通费：</span>
+                <a-input
+                    v-model="item.trafficMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="交通费"
+                ></a-input>
+            </div>
+
+            <!-- 住宿费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">住宿费：</span>
+                <a-input
+                    v-model="item.accommodationMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="住宿费"
+                ></a-input>
+            </div>
+
+            <!-- 餐费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">餐费：</span>
+                <a-input
+                    v-model="item.tableMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="餐费"
+                ></a-input>
+            </div>
+
+            <!-- 业务招待费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">业务招待费：</span>
+                <a-input
+                    v-model="item.businessHospitalityMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="业务招待费"
+                ></a-input>
+            </div>
+
+            <!-- 邮寄托运费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">邮寄托运费：</span>
+                <a-input
+                    v-model="item.shipMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="邮寄托运费"
+                ></a-input>
+            </div>
+
+            <!-- 活动现场费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">活动现场费：</span>
+                <a-input
+                    v-model="item.eventSiteMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="活动现场费"
+                ></a-input>
+            </div>
+
+            <!-- 礼品费 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">礼品费：</span>
+                <a-input
+                    v-model="item.giftMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="礼品费"
+                ></a-input>
+            </div>
+
+            <!-- 其他费用 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用：</span>
+                <a-input
+                    v-model="item.otherMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="其他费用"
+                ></a-input>
+            </div>
+
+            <!-- 总预算 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">总预算：</span>
+                <a-input
+                    v-model="item.totalMoney"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="总预算"
+                ></a-input>
+            </div>
+
+            <!-- 其他费用说明 -->
+            <div style="margin-bottom: 8px; display: flex; align-items: center;">
+                <span style="flex-shrink: 0; text-align: right; width: 100px;">其他费用说明：</span>
+                <a-textarea
+                    v-model="item.otherMoneyReamrk"
+                    style="width: 150px; margin-left: 5px"
+                    placeholder="其他费用说明"
+                ></a-textarea>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
 </a-form-model-item>
 
 
@@ -441,6 +498,7 @@ export default {
       timeArr1: [],
       confirmLoading: false,
       projectObjectivesList: [{ value: "" }],
+      newprojectBugetParts:[],
       rules: {
         categoryName: [
           { required: true, message: "请输入类别名称", trigger: "change" },
@@ -457,7 +515,7 @@ export default {
   computed: {
     // 计算 totalMoney 的值
     totalMoney() {
-      return this.queryFrom.projectBugetParts.map(item => {
+      return this.newprojectBugetParts.map(item => {
         // 计算所有费用的总和
         return (
           Number(item.trafficMoney) +
@@ -473,8 +531,8 @@ export default {
     }
   },
   watch: {
-    // 监听 projectBugetParts 中的数据变化
-    'queryFrom.projectBugetParts': {
+    // 监听 newprojectBugetParts 中的数据变化
+    'newprojectBugetParts': {
       handler(newParts) {
         newParts.forEach(item => {
           // 更新每个项的 totalMoney
@@ -492,6 +550,7 @@ export default {
       console.log(info);
       this.uservisible = true;
       this.projectObjectivesList = this.queryFrom.projectObjectives;
+      this.newprojectBugetParts=this.queryFrom.projectBugetParts;
       console.log(this.queryFrom.projectObjectives);
       if (this.projectObjectivesList.length == 0) {
         this.projectObjectivesList = [{ value: "" }];
@@ -534,13 +593,15 @@ export default {
         params.startTime = this.timeArr1[0];
         params.endTime = this.timeArr1[1];
       }
-      params["projectObjectives"] = projectObjectives;
+      params["projectObjectives"] = this.queryFrom.projectObjectives;
+      params["kKProjectBugetPart"] = this.newprojectBugetParts[0];
+      console.log(params)
       changeProductDataList(params)
         .then((res) => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.$emit("ok");
-            this.uservisible = false;
+            this.uservisible = false; 
           } else {
             this.$message.error(res.msg);
           }
