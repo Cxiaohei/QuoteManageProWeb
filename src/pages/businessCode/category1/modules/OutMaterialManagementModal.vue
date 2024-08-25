@@ -17,14 +17,18 @@
       >
         <a-form-model-item
           style="width: 31%;"
-          v-for="(item,index) in queryFromDataList"
+          v-for="(item, index) in queryFromDataList"
           :key="index"
           :label="item.label"
         >
-        <a-select v-model="queryFrom[item.key]" style="width: 200px;" placeholder="物料工艺" v-if="item.key=='bomCraft'">
+          <a-select v-model="queryFrom[item.key]" style="width: 200px;" v-if="item.key === 'bomCraft'">
             <a-select-option :value="0">贴片</a-select-option>
             <a-select-option :value="5">插件</a-select-option>
             <a-select-option :value="10">手工焊</a-select-option>
+          </a-select>
+          <a-select v-model="queryFrom[item.key]" style="width: 200px;" v-else-if="item.key === 'dataSource'">
+            <a-select-option :value="0">内部物料</a-select-option>
+            <a-select-option :value="1">外部物料</a-select-option>
           </a-select>
           <a-input v-else v-model="queryFrom[item.key]" style="width: 200px" :placeholder="item.label"></a-input>
         </a-form-model-item>
@@ -50,97 +54,31 @@ export default {
       queryFrom: {},
       confirmLoading: false,
       queryFromDataList: [
-        {
-          label: "物料编号",
-          key: "bomNo"
-        },
-        {
-          label: "9NC",
-          key: "nineNC"
-        },
-        {
-          label: "物料代码",
-          key: "bomCode"
-        },
-        {
-          label: "物料名称",
-          key: "bomName"
-        },
-        {
-          label: "品牌",
-          key: "brand"
-        },
-        {
-          label: "规格",
-          key: "specification"
-        },
-        {
-          label: "型号",
-          key: "bomModel"
-        },
-        {
-          label: "物料工艺",
-          key: "bomCraft"
-        },
-        {
-          label: "物料脚数",
-          key: "bomLegNum"
-        },
-        {
-          label: "物料库存数",
-          key: "inventoriesBomNum"
-        },
-        {
-          label: "物料已使用数",
-          key: "usedBomNum"
-        },
-        {
-          label: "最近一次使用数",
-          key: "recentUseBomNum"
-        },
-        {
-          label: "历史最高价",
-          key: "maxPrice"
-        },
-        {
-          label: "历史最低价",
-          key: "minPrice"
-        },
-        {
-          label: "最近一次采购价",
-          key: "recentPrice"
-        },
-        {
-          label: "备注",
-          key: "remarks"
-        },
-        {
-          label: "备用1",
-          key: "spareColumOne"
-        },
-        {
-          label: "备用2",
-          key: "spareColumTwo"
-        },
-        {
-          label: "备用3",
-          key: "spareColumThree"
-        },
-        {
-          label: "备用4",
-          key: "spareColumFour"
-        }
+        { label: "物料编号", key: "bomNo" },
+        { label: "9NC", key: "nineNC" },
+        { label: "物料代码", key: "bomCode" },
+        { label: "物料名称", key: "bomName" },
+        { label: "品牌", key: "brand" },
+        { label: "规格", key: "specification" },
+        { label: "型号", key: "bomModel" },
+        { label: "物料工艺", key: "bomCraft" },
+        { label: "外部物料来源", key: "dataSource" },
+        { label: "物料脚数", key: "bomLegNum" },
+        { label: "物料已使用数", key: "usedBomNum" },
+        { label: "最近一次使用数量", key: "recentUseBomNum" },
+        { label: "当前市场价格", key: "currentPrice" },
+        { label: "最近一次采购价", key: "recentPrice" },
+        { label: "备注", key: "remarks" },
+        { label: "备用1", key: "spareColumOne" },
+        { label: "备用2", key: "spareColumTwo" },
+        { label: "备用3", key: "spareColumThree" },
+        { label: "备用4", key: "spareColumFour" }
       ],
       rules: {
-        categoryName: [
-          { required: true, message: "请输入类别名称", trigger: "change" }
-        ],
-        categoryLevel: [
-          { required: true, message: "请选择等级", trigger: "change" }
-        ],
-        categoryType: [
-          { required: true, message: "请选择岗位", trigger: "change" }
-        ]
+        bomNo: [{ required: true, message: "请输入物料编号", trigger: "change" }],
+        bomName: [{ required: true, message: "请输入物料名称", trigger: "change" }],
+        bomCraft: [{ required: true, message: "请选择物料工艺", trigger: "change" }],
+        dataSource: [{ required: true, message: "请选择物料来源", trigger: "change" }],
       }
     };
   },
@@ -155,7 +93,6 @@ export default {
       }
       this.uservisible = true;
     },
-    // 确定
     handleOk() {
       this.$refs.userRefs.validate(valid => {
         if (valid) {
@@ -172,33 +109,23 @@ export default {
       this.uservisible = false;
       this.$refs.userRefs.resetFields();
     },
-    //新增基础数据
     addEssentialDataList() {
-      this.logDataSource = [];
-      let params = {
-        ...this.queryFrom
-      };
+      let params = { ...this.queryFrom };
       addEssentialDataList(params)
         .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
-
             this.$emit("ok");
             this.uservisible = false;
             this.confirmLoading = false;
           }
         })
-        .catch(err => {
-          this.loading = false;
+        .catch(() => {
           this.confirmLoading = false;
         });
     },
-    //编辑基础数据
     editEssentialDataList() {
-      this.logDataSource = [];
-      let params = {
-        ...this.queryFrom
-      };
+      let params = { ...this.queryFrom };
       editEssentialDataList(params)
         .then(res => {
           if (res.code == 1) {
@@ -210,8 +137,7 @@ export default {
           }
           this.confirmLoading = false;
         })
-        .catch(err => {
-          this.loading = false;
+        .catch(() => {
           this.confirmLoading = false;
         });
     }

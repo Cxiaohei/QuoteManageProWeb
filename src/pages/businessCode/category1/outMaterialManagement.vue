@@ -1,229 +1,216 @@
 <template>
   <a-card>
-    <div class="queryFromBox">
-      <a-form :model="queryFrom" layout="inline">
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" @click="add_pagelist">新增</a-button>
-          </a-space>
-        </a-form-item>
-        <a-form-item>
-          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
-            <a-button type="primary" @click="reset_pagelists">重置</a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-    </div>
-    <a-table
-      rowKey="id"
-      :row-selection="{
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange,
-          }"
-      :columns="columns"
-      :dataSource="dataSource"
-      @change="handleTableChange"
-      :pagination="pagination"
+    <vxe-toolbar ref="xToolbar1" custom>
+      <template #buttons>
+        <a-form :model="queryFrom" layout="inline">
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" @click="add_pagelist">新增</a-button>
+            </a-space>
+          </a-form-item>
+          <a-form-item>
+            <a-input
+              v-model.trim="queryFrom.Filter"
+              style="width: 180px"
+              placeholder="关键字"
+            ></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" icon="search" @click="search_pagelist"
+                >查询</a-button
+              >
+              <a-button type="primary" @click="reset_pagelists">重置</a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      ref="xTable1"
+      id="toolbar_demo5"
+      height="600"
+      size="small"
       :loading="loading"
-      :selectedRows.sync="selectedRows"
-      bordered
+      :sort-config="sortConfig"
+      show-overflow="tooltip"
+      :row-config="rowConfig"
+      :custom-config="customConfig"
+      :data="dataSource"
+      @resizable-change="resizableChangeEvent"
     >
-      <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="essentialData_edit(record)" style="margin-right: 5px;">编辑</a>
-        <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a> -->
-      </span>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="action" title="操作">
+        <template #default="{ row }">
+          <a
+            href="javascript:;"
+            @click="edit_record(row)"
+            style="margin-right: 5px"
+            >编辑</a
+          >
+          <a href="javascript:;" @click="view_details(row)">详情</a>
+        </template>
+      </vxe-column>
+      <vxe-column field="bomNo" title="物料编号"></vxe-column>
+      <vxe-column field="bomName" title="物料名称"></vxe-column>
+      <vxe-column field="bomCode" title="物料代码"></vxe-column>
+      <vxe-column field="brand" title="品牌"></vxe-column>
+      <vxe-column field="specification" title="规格"></vxe-column>
+      <vxe-column field="bomModel" title="型号"></vxe-column>
+      <vxe-column field="bomCraft" title="物料工艺">
+        <template #default="{ row }">
+          <span v-if="row.bomCraft === 0">贴片</span>
+          <span v-if="row.bomCraft === 5">插件</span>
+          <span v-if="row.bomCraft === 10">手工焊</span>
+        </template>
+      </vxe-column>
 
-      <span slot="acceptType" slot-scope="text, record">
-        {{
-        record.acceptType == 0 ?"固定资产":"调拨资产"
-        }}
-      </span>
-      <span slot="creationTime" slot-scope="text, record">
-        {{
-        record.creationTime?record.creationTime.substring(0,19).replace('T','/'):"/"
-        }}
-      </span>
-    </a-table>
-    <OutMaterialManagementModal ref="OutMaterialManagementModalRefs" @ok="getPageList"></OutMaterialManagementModal>
+      <vxe-column field="dataSource" title="外部物料来源">
+        <template #default="{ row }">
+          <span v-if="row.dataSource === 0">嘉立创</span>
+          <span v-if="row.dataSource === 1">华秋</span>
+          <span v-if="row.dataSource === 3">猎芯网</span>
+          <span v-if="row.dataSource === 4">圣禾堂</span>
+        </template>
+      </vxe-column>
+
+      <vxe-column field="bomLegNum" title="物料脚数"></vxe-column>
+      <vxe-column field="recentUseBomNum" title="最近一次使用数量"></vxe-column>
+      <vxe-column field="currentPrice" title="当前市场价格"></vxe-column>
+      <vxe-column field="recentPrice" title="最近一次采购价"></vxe-column>
+    </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
+
+    <OutMaterialManagementModal
+      ref="OutMaterialManagementModalRefs"
+      @ok="getPageList"
+    ></OutMaterialManagementModal>
   </a-card>
 </template>
-    
+
 <script>
 import { getPageList } from "@/services/businessCode/category1/outMaterialManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import OutMaterialManagementModal from "./modules/OutMaterialManagementModal";
 
-const columns = [
-  {
-    width: 100,
-    title: "操作",
-    scopedSlots: {
-      customRender: "action"
-    }
-  },
-  {
-    title: "编号",
-    dataIndex: "bomNo",
-    scopedSlots: {
-      customRender: "bomNo"
-    }
-  },
-  {
-    title: "名称",
-    dataIndex: "bomName",
-    scopedSlots: {
-      customRender: "bomName"
-    }
-  },
-  {
-    title: "物料代码",
-    dataIndex: "bomCode",
-    scopedSlots: {
-      customRender: "bomCode"
-    }
-  },
-  {
-    title: "品牌",
-    dataIndex: "brand",
-    scopedSlots: {
-      customRender: "brand"
-    }
-  },
-  {
-    title: "规格",
-    dataIndex: "specification",
-    scopedSlots: {
-      customRender: "specification"
-    }
-  },
-  {
-    title: "型号",
-    dataIndex: "bomModel",
-    scopedSlots: {
-      customRender: "bomModel"
-    }
-  },
-  {
-    title: "物料库存数",
-    dataIndex: "inventoriesBomNum",
-    scopedSlots: {
-      customRender: "inventoriesBomNum"
-    }
-  },
-  {
-    title: "物料已使用数",
-    dataIndex: "usedBomNum",
-    scopedSlots: {
-      customRender: "usedBomNum"
-    }
-  },
-  {
-    title: "最近一次使用",
-    dataIndex: "recentUseBomNum",
-    scopedSlots: {
-      customRender: "recentUseBomNum"
-    },
-    sorter: (a, b) => a.recentUseBomNum - b.recentUseBomNum,
-  },
-  {
-    title: "备注",
-    dataIndex: "remarks",
-    scopedSlots: {
-      customRender: "remarks"
-    }
-  }
-];
-
 export default {
   data() {
     return {
       selectedRowKeys: [],
       queryFrom: {
-        processStepName: ""
+        processStepName: "",
       },
       loading: true,
       dataSource: [],
-      selectedRows: [],
-      columns: columns,
       pagination: {
         pageSize: 10,
         current: 1,
-        showTotal: total => `总计 ${total} 条`
-      }
+        showTotal: (total) => `总计 ${total} 条`,
+      },
+      // 表格配置
+      customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true,
+        },
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true,
+      },
+      rowConfig: {
+        keyField: "id",
+      },
     };
   },
   components: { OutMaterialManagementModal },
-  mounted() {},
+  mounted() {
+    this.$nextTick(() => {
+      // 手动将表格和工具栏进行关联
+      this.$refs.xTable1.connect(this.$refs.xToolbar1);
+    });
+  },
   created() {
     this.getPageList();
   },
-  activated() {},
-  computed: {
-    ...mapGetters("account", ["organizationId"])
-  },
   methods: {
     checkPermission,
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map((column) => {
+        return {
+          width: column.renderWidth,
+        };
+      });
+      console.log(customData);
+    },
     //新增
     add_pagelist() {
       this.$refs.OutMaterialManagementModalRefs.openModules("add");
     },
     //编辑
-    essentialData_edit(record) {
+    edit_record(record) {
       this.$refs.OutMaterialManagementModalRefs.openModules("edit", record);
+    },
+    //详情
+    view_details(record) {
+      this.$router.push({
+        path: "outMaterialDetail",
+        query: {
+          id: record.id,
+          type: "view",
+        },
+      });
     },
     //获取列表数据
     getPageList() {
-        const params = {
-          skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
-          MaxResultCount: this.pagination.pageSize,
-          ...this.queryFrom
-        };
-        getPageList(params)
-          .then(res => {
-            if (res.code == 1) {
-              const pagination = {
-                ...this.pagination
-              };
-              pagination.total = res.data.totalCount;
-              this.pagination = pagination;
-              this.dataSource = res.data.items;
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.$message.error(res.message);
-            }
-          })
-          .catch(err => {
+      const params = {
+        skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
+        MaxResultCount: this.pagination.pageSize,
+        ...this.queryFrom,
+      };
+      getPageList(params)
+        .then((res) => {
+          if (res.code == 1) {
+            const pagination = {
+              ...this.pagination,
+            };
+            pagination.total = res.data.totalCount;
+            this.pagination = pagination;
+            this.dataSource = res.data.items;
             this.loading = false;
-            console.log(err);
-          });
-    },
-    //切换选中
-    onSelectChange(selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys;
-    },
-    // 编辑
-    pinbanOrder_edit(record, type) {
-      this.$router.push({
-        path: "actionFixedAssets",
-        query: {
-          id: record.id,
-          type
-        }
-      });
+          } else {
+            this.loading = false;
+            this.$message.error(res.message);
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
     //页数切换
     handleTableChange(pagination) {
       const pager = {
-        ...this.pagination
+        ...this.pagination,
       };
-      pager.current = pagination.current;
+      pager.current = pagination;
       this.pagination = pager;
       this.getPageList();
     },
@@ -238,23 +225,11 @@ export default {
       this.pagination.current = 1;
       this.getPageList();
     },
-    // 刷新
-    user_success() {
-      this.getPageList();
-    },
-    //下拉筛选
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text
-          .toLowerCase()
-          .indexOf(input.toLowerCase()) >= 0
-      );
-    }
-  }
+  },
 };
 </script>
-    
-    <style lang="less" scoped>
+
+<style lang="less" scoped>
 .queryFromBox {
   margin-bottom: 5px;
   .btnListBox {
@@ -265,4 +240,3 @@ export default {
   }
 }
 </style>
-    ./outMaterialManagement.vue

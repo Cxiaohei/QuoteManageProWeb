@@ -117,6 +117,17 @@
         width="150"
         title="项目周期"
       ></vxe-column>
+      <vxe-column
+        field="startTime
+"
+        width="150"
+        title="项目开始时间"
+      ></vxe-column>
+      <vxe-column
+        field="endTime"
+        width="150"
+        title="项目终止时间"
+      ></vxe-column>
       <vxe-column field="remarks" width="150" title="备注"></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
@@ -224,7 +235,7 @@ export default {
     },
     //编辑
     productData_change(record) {
-      
+
       this.$refs.PerformanceChangeModalRefs.openModules("edit", record);
     },
     productData_edit(record) {

@@ -4,14 +4,14 @@
       <h3>
         项目基础数据：
         <a-button type="primary" @click="sendDetail" v-if="pageType != 'detail'"
-          >保存</a-button
+          >保存草稿</a-button
         >
         <a-button
           type="primary"
           @click="sendconfigDetail"
           v-if="pageType != 'detail'"
           style="margin-left: 15px"
-          >项目确认提交</a-button
+          >提交</a-button
         >
       </h3>
       <a-form-model
@@ -85,6 +85,16 @@
               :key="index"
             >{{item.productNo}}</a-select-option>
           </a-select>-->
+        </a-form-model-item>
+        <a-form-model-item label="项目时间">
+          <a-range-picker
+            v-model.trim="timeArr1"
+            style="width: 250px" 
+            :allowClear="false"
+            format="YYYY-MM-DD"
+            valueFormat="YYYY-MM-DD"
+          />
+          <!-- <a-input v-model="queryFrom.timeArr" style="width: 350px" placeholder="projectManager"></a-input> -->
         </a-form-model-item>
       </a-form-model>
 
@@ -398,7 +408,7 @@ export default {
     sendconfigDetail() {
       let that = this;
       this.$confirm({
-        title: "提交后项目信息不可更改，是否确认？",
+        title: "提交后项目信息不可再更改，需要走变更流程，是否确认？",
         onOk() {
           console.log("OK");
           setKKProjectId(that.$route.query.id).then((res) => {
