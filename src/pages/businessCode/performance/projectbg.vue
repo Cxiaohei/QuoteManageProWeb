@@ -41,7 +41,7 @@
       bordered
     >
       <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="showEdit(record)" style="margin-right: 5px">查看变更信息</a>
+        <a href="javascript:;" @click="showEdit(record)" style="margin-right: 5px">查看</a>
         <a
           href="javascript:;"
           v-if="record.status==0"
@@ -87,7 +87,7 @@
     <a-modal
       title="变更申请"
       :visible="changeVisible"
-      @ok="handleOk"
+      @ok="changeVisible = false"
       @cancel="changeVisible = false"
       width="95%"
       :bodyStyle="{ height: '90%', overflowY: 'auto' }"

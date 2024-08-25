@@ -15,6 +15,15 @@
               placeholder="关键字"
             ></a-input>
           </a-form-item>
+
+          <a-form-item label="选择时间">
+            <a-range-picker
+              style="width: 240px"
+              v-model="timeArr"
+              valueFormat="YYYY/MM/DD"
+              format="YYYY/MM/DD"
+            />
+          </a-form-item>
           <a-form-item>
             <a-space>
               <a-button type="primary" icon="search" @click="search_pagelist"
@@ -24,12 +33,17 @@
             </a-space>
           </a-form-item>
           <a-form-item>
-          <a-space>
-            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
-              <a-button type="primary" icon="to-top">导入</a-button>
-            </a-upload>
-          </a-space>
-        </a-form-item>
+            <a-space>
+              <a-upload
+                name="file"
+                :fileList="[]"
+                action
+                :customRequest="importExcel"
+              >
+                <a-button type="primary" icon="to-top">导入</a-button>
+              </a-upload>
+            </a-space>
+          </a-form-item>
         </a-form>
       </template>
     </vxe-toolbar>
@@ -100,7 +114,7 @@
         width="150"
         title="项目预算"
       ></vxe-column>
-     
+
       <vxe-column
         field="budgetMonthAvailableMoney"
         width="200"
@@ -123,11 +137,7 @@
         width="150"
         title="项目开始时间"
       ></vxe-column>
-      <vxe-column
-        field="endTime"
-        width="150"
-        title="项目终止时间"
-      ></vxe-column>
+      <vxe-column field="endTime" width="150" title="项目终止时间"></vxe-column>
       <vxe-column field="remarks" width="150" title="备注"></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
@@ -171,6 +181,7 @@ export default {
       queryFrom: {
         processStepName: "",
       },
+      timeArr:[],
       loading: true,
       dataSource: [],
       pagination: {
@@ -235,7 +246,6 @@ export default {
     },
     //编辑
     productData_change(record) {
-
       this.$refs.PerformanceChangeModalRefs.openModules("edit", record);
     },
     productData_edit(record) {
@@ -272,6 +282,10 @@ export default {
         MaxResultCount: this.pagination.pageSize,
         ...this.queryFrom,
       };
+      if (this.timeArr && this.timeArr.length > 0) {
+        params.startTime = this.timeArr[0];
+        params.endTime = this.timeArr[1];
+      }
       getPageList(params)
         .then((res) => {
           if (res.code == 1) {
@@ -316,6 +330,7 @@ export default {
       this.pagination.current = 1;
       this.queryFrom = {};
       this.getPageList();
+      this.timeArr = [];
     },
     //查询
     search_pagelist() {

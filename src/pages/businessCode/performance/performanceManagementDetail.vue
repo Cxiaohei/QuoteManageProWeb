@@ -1,19 +1,7 @@
 <template>
   <div>
     <a-card>
-      <h3>
-        项目基础数据：
-        <a-button type="primary" @click="sendDetail" v-if="pageType != 'detail'"
-          >保存草稿</a-button
-        >
-        <a-button
-          type="primary"
-          @click="sendconfigDetail"
-          v-if="pageType != 'detail'"
-          style="margin-left: 15px"
-          >提交</a-button
-        >
-      </h3>
+      <h3>项目基础数据：</h3>
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -86,11 +74,12 @@
             >{{item.productNo}}</a-select-option>
           </a-select>-->
         </a-form-model-item>
-        <a-form-model-item label="项目时间">
+        <a-form-model-item label="项目时间" style="width: 31%">
           <a-range-picker
             v-model.trim="timeArr1"
-            style="width: 250px" 
+            style="width: 250px; display: inline-block"
             :allowClear="false"
+            disabled
             format="YYYY-MM-DD"
             valueFormat="YYYY-MM-DD"
           />
@@ -152,7 +141,7 @@
             >新增</a-button
           >
         </h3>
-        <ul style="padding: 0">
+        <ul style="padding: 0; overflow: hidden">
           <li
             style="
               list-style: none;
@@ -186,6 +175,20 @@
             </a-popconfirm>-->
           </li>
         </ul>
+      </div>
+
+      <h3>页面保存</h3>
+      <div>
+        <a-button type="primary" @click="sendDetail" v-if="pageType != 'detail'"
+          >保存草稿</a-button
+        >
+        <a-button
+          type="primary"
+          @click="sendconfigDetail"
+          v-if="pageType != 'detail'"
+          style="margin-left: 15px"
+          >提交</a-button
+        >
       </div>
     </a-card>
 
@@ -257,6 +260,7 @@ export default {
       title: "标题",
       queryFrom: {},
       ProductList: [],
+      timeArr1: [],
       MbVisible: false,
       bugetFromVisible: false,
       MbTitle: "项目目标",
@@ -376,10 +380,12 @@ export default {
       this.pageType = this.$route.query.type;
       getPageListDetail(this.$route.query.id).then((res) => {
         console.log("详情");
+        console.log(res.data);
         this.queryFrom = res.data;
         this.queryFrom.creationTime = this.queryFrom.creationTime
           .replace("T", "/")
           .substring(0, 19);
+        this.timeArr1 = [this.queryFrom.startTime, this.queryFrom.endTime];
         this.projectObjectivesList = res.data.projectObjectives;
         this.kkProjectBudgetDetailsList = res.data.kkProjectBudgetDetails;
 
@@ -414,7 +420,7 @@ export default {
           setKKProjectId(that.$route.query.id).then((res) => {
             if (res.code == 1) {
               that.$message.success(res.msg);
-            }else{
+            } else {
               that.$message.error(res.msg);
             }
           });
