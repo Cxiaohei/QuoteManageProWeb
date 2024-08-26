@@ -10,6 +10,13 @@
               placeholder="关键字"
             ></a-input>
           </a-form-item>
+          <a-form-item label="年份">
+            <a-input
+              v-model.trim="queryFrom.year"
+              style="width: 180px"
+              placeholder="输入年份"
+            ></a-input>
+          </a-form-item>
           <a-form-item>
             <a-space>
               <a-button type="primary" icon="search" @click="search_pagelist"
@@ -87,6 +94,11 @@
         title="项目预算"
       ></vxe-column>
       <vxe-column
+        field="usedBuget"
+        width="80"
+        title="已使用金额"
+      ></vxe-column>
+      <vxe-column
         field="budgetMonthAvailableMoney"
         width="80"
         title="月均值"
@@ -137,6 +149,11 @@
           {{ (row.balanceRate*100).toFixed(2)}}%
         </template>
       </vxe-column>
+      <vxe-column
+        field="manufactureFee"
+        width="80"
+        title="制造费金额"
+      ></vxe-column>
       <vxe-column
         field="monthAvailableMoney"
         width="80"
@@ -220,6 +237,7 @@ export default {
       selectedRowKeys: [],
       queryFrom: {
         processStepName: "",
+        year:""
       },
       loading: true,
       dataSource: [],

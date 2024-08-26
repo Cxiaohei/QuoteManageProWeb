@@ -117,10 +117,19 @@
           ></a-input>
         </a-form-model-item>
 
-        <a-form-model-item label="项目时间">
+        <a-form-model-item label="项目时间"  >
           <a-range-picker
             v-model.trim="timeArr1"
             :allowClear="false"
+            format="YYYY-MM-DD"
+            style="width: 250px;"
+            disabled
+            valueFormat="YYYY-MM-DD"
+          />
+          <a-range-picker
+            v-model.trim="newtimeArr1"
+            :allowClear="false"
+                 style="width: 250px;"
             format="YYYY-MM-DD"
             valueFormat="YYYY-MM-DD"
           />
@@ -655,6 +664,7 @@ export default {
       tableData: {},
       queryFrom: {},
       timeArr1: [],
+      newtimeArr1: [],
       auditeUserNamesList: [{ value: "" }],
       confirmLoading: false,
       projectObjectivesList: [{ value: "" }],
@@ -711,6 +721,8 @@ export default {
       this.uservisible = true;
       this.projectObjectivesList = this.queryFrom.projectObjectives;
       this.newprojectBugetParts = this.queryFrom.projectBugetParts;
+      this.timeArr1 = [this.queryFrom.startTime, this.queryFrom.endTime];
+      this.newtimeArr1 = [this.queryFrom.startTime, this.queryFrom.endTime];
       console.log(this.queryFrom.projectObjectives);
       if (this.projectObjectivesList.length == 0) {
         this.projectObjectivesList = [{ value: "" }];
@@ -756,9 +768,9 @@ export default {
         auditeUserNames.push(item.value);
       });
 
-      if (this.timeArr1 && this.timeArr1.length > 0) {
-        params.startTime = this.timeArr1[0];
-        params.endTime = this.timeArr1[1];
+      if (this.newtimeArr1 && this.newtimeArr1.length > 0) {
+        params.startTime = this.newtimeArr1[0];
+        params.endTime = this.newtimeArr1[1];
       }
       params["projectObjectives"] = this.queryFrom.projectObjectives;
       params["auditeUserNames"] = auditeUserNames;

@@ -211,6 +211,7 @@
             placeholder="交通费"
             style="width: 240px"
             v-model="this.kkProjectBugetPart.trafficMoney"
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -219,6 +220,7 @@
             placeholder="住宿费"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.accommodationMoney"
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -235,6 +237,7 @@
             placeholder="业务招待费"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.businessHospitalityMoney "
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -243,6 +246,7 @@
             placeholder="邮寄托运费"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.shipMoney"
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -251,6 +255,7 @@
             placeholder="活动现场费"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.eventSiteMoney"
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -259,6 +264,7 @@
             placeholder="礼品费"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.giftMoney"
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -267,6 +273,7 @@
             placeholder="其他费用"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.otherMoney"
+             :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -275,6 +282,7 @@
             placeholder="其他费用说明"
             style="width: 240px"
             v-model=" this.kkProjectBugetPart.otherMoneyReamrk"
+             :disabled="pageType == 'detail'"
           />
         </div>
 

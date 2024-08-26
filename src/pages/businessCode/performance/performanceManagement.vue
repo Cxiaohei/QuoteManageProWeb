@@ -16,13 +16,12 @@
             ></a-input>
           </a-form-item>
 
-          <a-form-item label="选择时间">
-            <a-range-picker
-              style="width: 240px"
-              v-model="timeArr"
-              valueFormat="YYYY/MM/DD"
-              format="YYYY/MM/DD"
-            />
+          <a-form-item label="年份">
+            <a-input
+              v-model.trim="queryFrom.year"
+              style="width: 180px"
+              placeholder="输入年份"
+            ></a-input>
           </a-form-item>
           <a-form-item>
             <a-space>
@@ -180,8 +179,9 @@ export default {
       selectedRowKeys: [],
       queryFrom: {
         processStepName: "",
+        year: "",
       },
-      timeArr:[],
+      timeArr: [],
       loading: true,
       dataSource: [],
       pagination: {
