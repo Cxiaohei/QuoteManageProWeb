@@ -42,29 +42,15 @@
     >
       <span slot="action" slot-scope="text, record">
         <a href="javascript:;" @click="showEdit(record)" style="margin-right: 5px">查看</a>
-        <a
-          href="javascript:;"
-          v-if="record.status==0"
-          @click="productData_edit(record)"
-          style="margin-right: 5px;"
-        >审核</a>
 
-        <!--  <a
-          href="javascript:;"
-          @click="productData_change(record)"
-          style="margin-right: 5px"
-          v-if="record.status == 1"
-          >申请变更</a
-        >
-
-        <a href="javascript:;" @click="productOrder_edit(record, 'detail')"
-          >详情</a
-        >
-        <a href="javascript:;" @click="showLog(record)">日志</a>-->
       </span>
 
       <span slot="status" slot-scope="text, record">
-        {{ record.status }}
+        {{  record.status == 0
+            ? "待审核"
+            : record.status == 1
+            ? "已审核"
+          :"未知"}}
         <!-- {{
           record.status == 0
             ? "待提交"
@@ -352,6 +338,10 @@
           </div>
         </a-form-model>
       </div>
+      <div style="text-align: center;" v-if="this.auditeStatus==0">
+        <a-button type="primary" style="width: 150px;height: 40px;font-size: x-large;" @click="productData_edit(changeListData[1])">审核</a-button>
+      </div>
+
     </a-modal>
 
     <a-modal title="审批" :visible="visibleAudite" @ok="handleOkAudite" @cancel="visibleAudite=false">
@@ -489,6 +479,7 @@ export default {
       changeVisible: false,
       changeListData: [],
       auditeId: "",
+      auditeStatus:0,
       visibleAudite: false,
       statusAudite: 1,
       auditeRemarks: "",
@@ -549,12 +540,13 @@ export default {
     },
     showEdit(record) {
       getPagechange(record.quoteId).then(res => {
-        console.log(res);
         if (res.code == 1) {
           this.changeListData = res.data;
           this.tableData = res.data[0];
           this.bgInfoFrom = res.data[0];
           this.changeVisible = true;
+          this.auditeId = record.id;
+      this.auditeStatus=record.status;
         } else {
           this.$message.info(res.msg);
         }
@@ -562,8 +554,7 @@ export default {
     },
 
     //编辑
-    productData_edit(record) {
-      this.auditeId = record.id;
+    productData_edit(record) {  
       this.statusAudite = 1;
       this.auditeRemarks = "";
       this.visibleAudite = true;
@@ -610,7 +601,7 @@ export default {
         })
         .catch(err => {
           this.loading = false;
-          console.log(err);
+       
         });
     },
     //切换选中
@@ -622,7 +613,7 @@ export default {
       let params = {
         auditeId: this.auditeId,
         status: this.statusAudite,
-        remarks: this.auditeRemarks
+        auditeRemarks: this.auditeRemarks
       };
       checkAudite(params)
         .then(res => {

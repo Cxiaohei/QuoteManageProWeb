@@ -5,7 +5,10 @@ import qs from 'querystring'
 export async function getPageList(params) {
     return request("/api/app/k-kProject/bom-detail-list", METHOD.GET, transformAbpListQuery(params))
 }
-
+//删除项目信息
+export async function deleteKKProject(Id) {
+    return request(`/api/app/k-kProject/k-kProject/${Id}`, METHOD.DELETE)
+}
 export async function getMonitoringPageList(params) {
     return request("/api/app/k-kProject/project-buget-info-list", METHOD.GET, transformAbpListQuery(params))
 }

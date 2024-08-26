@@ -79,7 +79,14 @@
             v-if="row.status == 1"
             >申请变更</a
           >
-
+          <a-popconfirm
+            title="确定删除吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="deleteKKProject(row)"
+          >
+            <a href="#"  v-if="row.status == 0"   style="margin-right: 5px">删除</a>
+          </a-popconfirm>
           <a href="javascript:;" @click="productOrder_edit(row, 'detail')"
             >详情</a
           >
@@ -95,6 +102,11 @@
         </template>
       </vxe-column>
       <vxe-column field="projectName" width="320" title="项目名称"></vxe-column>
+      <vxe-column
+        field="createUserName"
+        width="150"
+        title="立项人"
+      ></vxe-column>
       <vxe-column
         field="projectManager"
         width="150"
@@ -125,14 +137,14 @@
         title="预算包含内容"
       ></vxe-column>
       <vxe-column field="fixedCharge" width="150" title="固定费用"></vxe-column>
+      <vxe-column field="manufacturingContainCost" width="150" title="制造费包含金额"></vxe-column>
       <vxe-column
         field="projectCycle"
         width="150"
         title="项目周期"
       ></vxe-column>
       <vxe-column
-        field="startTime
-"
+        field="startTime"
         width="150"
         title="项目开始时间"
       ></vxe-column>
@@ -167,6 +179,7 @@ import {
   getPageList,
   importExcel,
   downloadTemplate,
+  deleteKKProject,
 } from "@/services/performance/performanceManagement";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
@@ -256,6 +269,13 @@ export default {
           id: record.id,
           type: "edit",
         },
+      });
+    },
+    deleteKKProject(record){
+      console.log(record)
+      deleteKKProject(record.id).then(res => {
+        this.$message.success("删除成功");
+        this.getPageList();
       });
     },
     //下载模板

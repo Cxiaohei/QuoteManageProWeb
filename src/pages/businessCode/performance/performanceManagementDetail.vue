@@ -94,12 +94,15 @@
           <a-button type="primary" @click="yusuanVisible=true">预算明细项</a-button>
         </a-form-model-item>
         <a-form-model-item label="预算监控方式" style="width: 31%">
-          <a-input
+          <a-select
             v-model="queryFrom.monitoringMeans"
-            style="width: 250px;"
-            placeholder="预算监控方式"
             :disabled="pageType == 'detail'"
-          ></a-input>
+            style="width: 250px"
+          >
+            <a-select-option value="固定费用">固定费用</a-select-option>
+            <a-select-option value="月度监控">月度监控</a-select-option>
+            <a-select-option value="条件使用">条件使用</a-select-option>
+          </a-select>
         </a-form-model-item>
         <a-form-model-item label="制造费用" style="width: 31%">
           <a-input
@@ -124,6 +127,22 @@
             placeholder="项目目的"
             :disabled="pageType == 'detail'"
           ></a-textarea>
+        </a-form-model-item>
+        <a-form-model-item label="立项人" style="width: 31%">
+          <a-input
+            v-model="queryFrom.createUserName"
+            style="width: 250px;"
+            placeholder="立项人"
+            :disabled="pageType == 'detail'"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="项目经理" style="width: 31%">
+          <a-input
+            v-model="queryFrom.projectManager"
+            style="width: 250px;"
+            placeholder="项目经理"
+            :disabled="pageType == 'detail'"
+          ></a-input>
         </a-form-model-item>
       </a-form-model>
 
