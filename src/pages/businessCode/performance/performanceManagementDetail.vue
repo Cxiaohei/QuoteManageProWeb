@@ -83,39 +83,54 @@
             format="YYYY-MM-DD"
             valueFormat="YYYY-MM-DD"
           />
-        </a-form-model-item >
-          <a-form-model-item label="项目预算" style="width: 31%">
+        </a-form-model-item>
+        <a-form-model-item label="项目预算" style="width: 31%">
           <a-input
             v-model="queryFrom.projectBudget"
             disabled
             style="width: 150px;margin-right: 5px;"
             placeholder="项目预算"
           ></a-input>
-          <a-button type="primary"  @click="yusuanVisible=true">预算明细项</a-button>
+          <a-button type="primary" @click="yusuanVisible=true">预算明细项</a-button>
         </a-form-model-item>
-        <a-form-model-item label="预算监控方式"  style="width: 31%">
-          <a-input v-model="queryFrom.monitoringMeans"    style="width: 250px;"  placeholder="预算监控方式"     :disabled="pageType == 'detail'"></a-input>
+        <a-form-model-item label="预算监控方式" style="width: 31%">
+          <a-input
+            v-model="queryFrom.monitoringMeans"
+            style="width: 250px;"
+            placeholder="预算监控方式"
+            :disabled="pageType == 'detail'"
+          ></a-input>
         </a-form-model-item>
-        <a-form-model-item label="制造费用"  style="width: 31%">
-          <a-input v-model="queryFrom.manufacturingContainCost"    style="width: 250px;"  placeholder="制造费用"     :disabled="pageType == 'detail'"></a-input>
+        <a-form-model-item label="制造费用" style="width: 31%">
+          <a-input
+            v-model="queryFrom.manufacturingContainCost"
+            style="width: 250px;"
+            placeholder="制造费用"
+            :disabled="pageType == 'detail'"
+          ></a-input>
         </a-form-model-item>
-        <a-form-model-item label="固定费用"  style="width: 31%">
-          <a-input v-model="queryFrom.fixedCharge"    style="width: 250px;"  placeholder="固定费用"     :disabled="pageType == 'detail'"></a-input>
+        <a-form-model-item label="固定费用" style="width: 31%">
+          <a-input
+            v-model="queryFrom.fixedCharge"
+            style="width: 250px;"
+            placeholder="固定费用"
+            :disabled="pageType == 'detail'"
+          ></a-input>
         </a-form-model-item>
-        <a-form-model-item label="项目目的"  style="width: 31%">
-          <a-textarea v-model="queryFrom.projectPurpose"    style="width: 250px;"  placeholder="项目目的"     :disabled="pageType == 'detail'"></a-textarea>
+        <a-form-model-item label="项目目的" style="width: 31%">
+          <a-textarea
+            v-model="queryFrom.projectPurpose"
+            style="width: 250px;"
+            placeholder="项目目的"
+            :disabled="pageType == 'detail'"
+          ></a-textarea>
         </a-form-model-item>
       </a-form-model>
-    
+
       <div style="padding: 30px 0px">
         <h3>
           项目目标：
-          <a-button
-            type="primary"
-            @click="addKkMbList"
-            v-if="pageType != 'detail'"
-            >新增目标</a-button
-          >
+          <a-button type="primary" @click="addKkMbList" v-if="pageType != 'detail'">新增目标</a-button>
         </h3>
 
         <ul style="padding: 0 0 0 42px; width: 100%">
@@ -136,8 +151,7 @@
               @click="editList(item)"
               v-if="pageType != 'detail'"
               style="margin-right: 5px"
-              >编辑</a-button
-            >
+            >编辑</a-button>
             <a-popconfirm
               title="确定删除吗?"
               ok-text="确定"
@@ -197,7 +211,7 @@
             </a-popconfirm>
         </li>
         </ul>
-      </div> --> 
+      </div>-->
       <a-modal
         title="项目预算明细"
         :visible="yusuanVisible"
@@ -210,8 +224,8 @@
           <a-input-number
             placeholder="交通费"
             style="width: 240px"
-            v-model="this.kkProjectBugetPart.trafficMoney"
-             :disabled="pageType == 'detail'"
+            v-model="kkProjectBugetPartModel.trafficMoney"
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -219,8 +233,8 @@
           <a-input-number
             placeholder="住宿费"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.accommodationMoney"
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.accommodationMoney"
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -228,7 +242,8 @@
           <a-input-number
             placeholder="餐费"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.tableMoney"
+            :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.tableMoney"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -236,8 +251,8 @@
           <a-input-number
             placeholder="业务招待费"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.businessHospitalityMoney "
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.businessHospitalityMoney "
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -245,8 +260,8 @@
           <a-input-number
             placeholder="邮寄托运费"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.shipMoney"
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.shipMoney"
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -254,8 +269,8 @@
           <a-input-number
             placeholder="活动现场费"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.eventSiteMoney"
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.eventSiteMoney"
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -263,8 +278,8 @@
           <a-input-number
             placeholder="礼品费"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.giftMoney"
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.giftMoney"
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -272,8 +287,8 @@
           <a-input-number
             placeholder="其他费用"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.otherMoney"
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.otherMoney"
+            :disabled="pageType == 'detail'"
           />
         </div>
         <div style="margin-bottom: 15px">
@@ -281,34 +296,24 @@
           <a-input
             placeholder="其他费用说明"
             style="width: 240px"
-            v-model=" this.kkProjectBugetPart.otherMoneyReamrk"
-             :disabled="pageType == 'detail'"
+            v-model=" kkProjectBugetPartModel.otherMoneyReamrk"
+            :disabled="pageType == 'detail'"
           />
         </div>
-
-        
       </a-modal>
       <h3>页面保存</h3>
       <div>
-        <a-button type="primary" @click="sendDetail" v-if="pageType != 'detail'"
-          >保存草稿</a-button
-        >
+        <a-button type="primary" @click="sendDetail" v-if="pageType != 'detail'">保存草稿</a-button>
         <a-button
           type="primary"
           @click="sendconfigDetail"
           v-if="pageType != 'detail'"
           style="margin-left: 15px"
-          >提交</a-button
-        >
+        >提交</a-button>
       </div>
     </a-card>
 
-    <a-modal
-      :title="MbTitle"
-      :visible="MbVisible"
-      @ok="handleOkMb"
-      @cancel="MbVisible = false"
-    >
+    <a-modal :title="MbTitle" :visible="MbVisible" @ok="handleOkMb" @cancel="MbVisible = false">
       <a-input placeholder="目标" v-model="objective" />
     </a-modal>
 
@@ -322,28 +327,16 @@
       <!-- {{ bugetFrom }} -->
       <div style="margin-bottom: 15px">
         预算使用月份:
-        <a-month-picker
-          v-model="bugetFrom.budgetMonth"
-          format="YYYY-MM"
-          valueFormat="YYYY-MM"
-        />
+        <a-month-picker v-model="bugetFrom.budgetMonth" format="YYYY-MM" valueFormat="YYYY-MM" />
       </div>
       <div style="margin-bottom: 15px">
         预算:
-        <a-input
-          placeholder="预算"
-          style="width: 240px"
-          v-model="bugetFrom.monthCost"
-        />
+        <a-input placeholder="预算" style="width: 240px" v-model="bugetFrom.monthCost" />
       </div>
       <div style="margin-bottom: 15px">
         领料:
-        <a-input
-          placeholder="领料"
-          style="width: 240px"
-          v-model="bugetFrom.getMaterials"
-        />
-        <div >
+        <a-input placeholder="领料" style="width: 240px" v-model="bugetFrom.getMaterials" />
+        <div>
           制造:
           <a-input placeholder="制造费用" style="width: 240px" v-model="bugetFrom.manufactureFee" />
         </div>
@@ -361,7 +354,7 @@ import {
   editProductDataList,
   addKkFy,
   editKkFy,
-  setKKProjectId,
+  setKKProjectId
 } from "@/services/performance/performanceManagement";
 
 import cloneDeep from "lodash.clonedeep";
@@ -389,54 +382,54 @@ export default {
         budgetMonth: "",
         monthCost: "",
         getMaterials: "",
-        projectBudgetDetailId: "",
+        projectBudgetDetailId: ""
       },
-     
+
       yusuanVisible: false, //项目预算
       queryFromDataList: [
         {
           label: "部门",
           key: "department",
-          type: "string",
+          type: "string"
         },
         {
           label: "项目类型",
-          key: "projectType",
+          key: "projectType"
           // type: "string"
         },
         {
           label: "项目来源",
-          key: "projectSource",
+          key: "projectSource"
           // type: "string"
         },
         {
           label: "项目编号",
           key: "projectNo",
-          type: "string",
+          type: "string"
         },
         {
           label: "项目名称",
           key: "projectName",
-          type: "string",
+          type: "string"
         },
         {
           label: "备注",
           key: "remark",
-          type: "string",
+          type: "string"
         },
         {
           label: "创建时间",
           key: "creationTime",
-          type: "string",
+          type: "string"
         }
       ],
       projectObjectivesList: [], //项目目标
       kkProjectBudgetDetailsList: [], //费用
-     
+
       rules: {
         categoryName: [
-          { required: true, message: "请输入类别名称", trigger: "change" },
-        ],
+          { required: true, message: "请输入类别名称", trigger: "change" }
+        ]
       },
       kkProjectBugetPart: {
         kkProjectId: "",
@@ -452,6 +445,7 @@ export default {
         projectChangeType: 0,
         projectChangeRequestId: ""
       },
+      kkProjectBugetPartModel: {}
     };
   },
   created() {
@@ -461,10 +455,10 @@ export default {
     getDetail() {
       //先重置数据
       this.queryFrom = {
-        haveProductDefinitions: true,
+        haveProductDefinitions: true
       };
       this.pageType = this.$route.query.type;
-      getPageListDetail(this.$route.query.id).then((res) => {
+      getPageListDetail(this.$route.query.id).then(res => {
         console.log("详情");
         console.log(res.data);
         this.queryFrom = res.data;
@@ -474,8 +468,9 @@ export default {
         this.timeArr1 = [this.queryFrom.startTime, this.queryFrom.endTime];
         this.projectObjectivesList = res.data.projectObjectives;
         this.kkProjectBudgetDetailsList = res.data.kkProjectBudgetDetails;
-        this.kkProjectBugetPart=res.data.projectBugetParts[0]
-        console.log('明细',this.kkProjectBugetPart)
+        this.kkProjectBugetPart = res.data.projectBugetParts[0];
+        this.kkProjectBugetPartModel = cloneDeep(this.kkProjectBugetPart);
+        console.log("明细", this.kkProjectBugetPart);
         console.log(res.data);
       });
     },
@@ -493,7 +488,8 @@ export default {
       ];
       var projectBudgetNum = 0;
       addArr.map(item => {
-        projectBudgetNum += parseInt(this.kkProjectBugetPart[item]);
+        projectBudgetNum += parseInt(this.kkProjectBugetPartModel[item]);
+        this.kkProjectBugetPart[item] = this.kkProjectBugetPartModel[item];
       });
       this.queryFrom.projectBudget = projectBudgetNum;
       this.yusuanVisible = false;
@@ -502,10 +498,10 @@ export default {
       //编辑基础数据
       let params = {
         ...this.queryFrom,
-        kkProjectId: this.queryFrom.id,
+        kkProjectId: this.queryFrom.id
       };
       params["kkProjectBugetPart"] = this.kkProjectBugetPart;
-      editProductDataList(params).then((res) => {
+      editProductDataList(params).then(res => {
         if (res.code == 1) {
           this.$message.success(res.msg);
           // this.$bus.$emit(
@@ -524,7 +520,7 @@ export default {
         title: "提交后项目信息不可再更改，需要走变更流程，是否确认？",
         onOk() {
           console.log("OK");
-          setKKProjectId(that.$route.query.id).then((res) => {
+          setKKProjectId(that.$route.query.id).then(res => {
             if (res.code == 1) {
               that.$message.success(res.msg);
             } else {
@@ -534,10 +530,10 @@ export default {
         },
         onCancel() {
           console.log("Cancel");
-        },
+        }
       });
     },
-   
+
     //费用添加 编辑
     addKkfYList() {
       this.bugetFrom = {
@@ -545,7 +541,7 @@ export default {
         budgetMonth: "",
         monthCost: "",
         getMaterials: "",
-        projectBudgetDetailId: "",
+        projectBudgetDetailId: ""
       };
       this.bugetFromTitle = "新增月度费用预算";
       this.bugetFromVisible = true;
@@ -556,7 +552,7 @@ export default {
         budgetMonth: record.budgetMonth.substring(0, 7),
         monthCost: record.monthCost,
         getMaterials: record.getMaterials,
-        projectBudgetDetailId: record.id,
+        projectBudgetDetailId: record.id
       };
       this.bugetFromTitle = "编辑月度费用预算";
       this.bugetFromVisible = true;
@@ -564,7 +560,7 @@ export default {
     handleOkbugetFrom() {
       const params = { ...this.bugetFrom };
       if (this.bugetFromTitle == "编辑月度费用预算") {
-        editKkFy(params).then((res) => {
+        editKkFy(params).then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.getDetail();
@@ -574,7 +570,7 @@ export default {
           this.bugetFromVisible = false;
         });
       } else {
-        addKkFy([params]).then((res) => {
+        addKkFy([params]).then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.getDetail();
@@ -601,17 +597,17 @@ export default {
     handleOkMb() {
       const params = {
         kkProjectId: this.$route.query.id,
-        objective: this.objective,
+        objective: this.objective
       };
       if (this.MbTitle == "编辑项目目标") {
         params.projectObjectiveId = this.projectObjectiveId;
-        editKkMb(params).then((res) => {
+        editKkMb(params).then(res => {
           this.$message.success(res.msg);
           this.MbVisible = false;
           this.getDetail();
         });
       } else {
-        addKkMb([params]).then((res) => {
+        addKkMb([params]).then(res => {
           this.$message.success(res.msg);
           this.MbVisible = false;
           this.getDetail();
@@ -620,7 +616,7 @@ export default {
     },
     //删除目标
     removeList(record) {
-      removeKkMb(record.id).then((res) => {
+      removeKkMb(record.id).then(res => {
         this.$message.success("删除成功");
         this.getDetail();
       });
@@ -631,8 +627,8 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
