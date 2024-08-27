@@ -132,6 +132,7 @@ export default {
       showFile: [],
       loading: false,
       activeKey: "1",
+      userid:JSON.parse(localStorage.getItem("admin.user")).id,
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       form: {},
@@ -169,7 +170,7 @@ export default {
     ...mapMutations("account", ["setUser"]),
     getUserInfo(flag) {
       this.loading = true;
-      get()
+      get(this.userid)
         .then((res) => {
           if (res.code == 1) {
             this.form = {
