@@ -172,39 +172,25 @@ export default {
       this.loading = true;
       get(this.userid)
         .then((res) => {
-          if (res.code == 1) {
+            console.log('form信息',res);
             this.form = {
-              userName: res.data.userName,
-              name: res.data.name,
-              surname: res.data.surname,
-              email: res.data.email,
-              phoneNumber: res.data.phoneNumber,
-              headPhoto: res.data?.extraProperties?.HeadPhoto,
-              jobNo: res.data?.extraProperties?.JobNo,
+                id: res.id,
+              userName: res.userName,
+              name: res.name,
+              surname: res.surname,
+              email: res.email,
+              phoneNumber: res.phoneNumber,
             };
             this.form2 = {
-              id: res.data.id,
+              id: res.id,
             };
             if (flag) {
               this.setUser({
-                ...res.data,
-                headPhoto: res.data?.extraProperties?.HeadPhoto,
-                jobNo: res.data?.extraProperties?.JobNo,
+                ...res,
               });
             }
-            if (this.form.headPhoto) {
-              this.showFile = [
-                {
-                  name: this.form.headPhoto,
-                  url: this.form.headPhoto,
-                  uid: this.form.headPhoto,
-                },
-              ];
-            } else {
-              this.showFile = [];
-            }
-            console.log(this.form);
-          }
+        
+            console.log('form信息',this.form);
         })
         .finally(() => {
           this.loading = false;
@@ -232,7 +218,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           this.loading = true;
-          putUser(this.form)
+          createUpdate(this.form)
             .then((res) => {
               form.resetFields();
               this.$message.success("操作成功");

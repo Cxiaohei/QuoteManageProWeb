@@ -2,7 +2,7 @@
   <a-dropdown>
     <div class="header-avatar" style="cursor: pointer">
       <a-avatar class="avatar" size="small" shape="circle" src="https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png"/>
-      <span class="name">{{user.tenantName?user.tenantName+'/':''}}{{user.userName}}</span>
+      <span class="name">{{user.tenantName?user.tenantName+'/':''}}{{user.name}}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
       <a-menu-item  @click="handleUserInfo">

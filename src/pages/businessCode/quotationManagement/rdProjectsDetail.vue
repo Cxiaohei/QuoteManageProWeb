@@ -389,7 +389,7 @@ export default {
           hasKey: "haveAuthentication",
           moneyHasKey: "authenticationMoney",
           detailType: 6,
-          title: " 认证"
+          title: " 常规认证(CE,FCC,ROHS)"
         },
         {
           key: "otherFeeDetails",
@@ -397,6 +397,13 @@ export default {
           moneyHasKey: "otherFeeMoney",
           detailType: 7,
           title: " 其他研发相关费用"
+        },
+        {
+          key: "spicalAuthenticationDetails",
+          hasKey: "haveSpicalAuthentications",
+          moneyHasKey: "spicalAuthenticationMoney",
+          detailType: 8,
+          title: " 特种认证费用"
         }
       ],
       allTableData: [],

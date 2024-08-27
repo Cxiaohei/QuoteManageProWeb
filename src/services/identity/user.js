@@ -27,6 +27,14 @@ export function getRolesByUserId(id) {
 export function getOrganizationsByUserId(id, includeDetails = false) {
     return request(`/api/identity/users/${id}/organization-units`, METHOD.GET,includeDetails)
   }
+  //修改密码
+export async function postChangePassword(params) {
+    return request(
+      'api/account/my-profile/change-password',
+      METHOD.POST,
+      params
+    );
+  }
 export default {
     getList,
     getListWithDetails,
