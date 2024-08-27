@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal
-      :width="1280"
+      :width="1380"
       :title="title"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
@@ -25,14 +25,21 @@
             v-if="index == 0"
             style="margin-right: 5px"
             @click="addDetailDataList"
-            >添加</a
-          >
-          <a
-            href="javascript:;"
-            v-if="index != 0"
-            @click="removeDetailDataList(index)"
-            >删除</a
-          >
+          >添加</a>
+          <a href="javascript:;" v-if="index != 0" @click="removeDetailDataList(index)">删除</a>
+        </span>
+        <!-- 大类 -->
+        <span slot="detailType" slot-scope="text, record">
+          <a-select v-model="record.detailType" style="width: 110px" placeholder="大类" :disabled="title=='编辑'">
+            <a-select-option :value="0">产品定义</a-select-option>
+            <a-select-option :value="1">硬件开发</a-select-option>
+            <a-select-option :value="2">软件开发</a-select-option>
+            <a-select-option :value="3">结构开发</a-select-option>
+            <a-select-option :value="4">产品测试类</a-select-option>
+            <a-select-option :value="5">模具及工装</a-select-option>
+            <a-select-option :value="6">认证</a-select-option>
+            <a-select-option :value="7">其他研发相关费用</a-select-option>
+          </a-select>
         </span>
 
         <!-- 工种 -->
@@ -47,8 +54,7 @@
               :value="item.id"
               v-for="(item, index) in TradesList"
               :key="index"
-              >{{ item.categoryName }}</a-select-option
-            >
+            >{{ item.categoryName }}</a-select-option>
           </a-select>
         </span>
 
@@ -67,12 +73,7 @@
 
         <!-- 工程师级别 -->
         <span slot="engineerLevel" slot-scope="text, record">
-          <a-select
-            disabled
-            v-model="record.engineerLevel"
-            style="width: 80px"
-            placeholder="等级"
-          >
+          <a-select disabled v-model="record.engineerLevel" style="width: 80px" placeholder="等级">
             <a-select-option :value="0">初级</a-select-option>
             <a-select-option :value="1">中级</a-select-option>
             <a-select-option :value="2">高级</a-select-option>
@@ -107,7 +108,7 @@
 import {
   addRdProjectsDetailList,
   editRdProjectsDetailList,
-  getTradesList,
+  getTradesList
 } from "@/services/businessCode/quotationManagement/rdProjects";
 
 import cloneDeep from "lodash.clonedeep";
@@ -118,56 +119,64 @@ const columns = [
     title: "操作",
     dataIndex: "action",
     scopedSlots: {
-      customRender: "action",
-    },
+      customRender: "action"
+    }
+  },
+  {
+    title: "大类",
+    width: "110px",
+    dataIndex: "detailType",
+    scopedSlots: {
+      customRender: "detailType"
+    }
   },
   {
     title: "子类",
     width: "110px",
     dataIndex: "subclasses",
     scopedSlots: {
-      customRender: "subclasses",
-    },
+      customRender: "subclasses"
+    }
   },
   {
     title: "费用说明",
     width: "130px",
     dataIndex: "feeDescription",
     scopedSlots: {
-      customRender: "feeDescription",
-    },
+      customRender: "feeDescription"
+    }
   },
   {
     title: "工种",
     width: "130px",
     dataIndex: "trades",
     scopedSlots: {
-      customRender: "trades",
-    },
+      customRender: "trades"
+    }
   },
   {
     title: "费用类型",
     width: "130px",
     dataIndex: "detailFeeType",
     scopedSlots: {
-      customRender: "detailFeeType",
-    },
+      customRender: "detailFeeType"
+    }
   },
   {
     title: "工程师级别",
     width: "100px",
     dataIndex: "engineerLevel",
     scopedSlots: {
-      customRender: "engineerLevel",
-    },
+      customRender: "engineerLevel"
+    }
   },
   {
     title: "折扣率",
     width: "80px",
     dataIndex: "discountedRate",
     scopedSlots: {
-      customRender: "discountedRate",
-    },
+      customRender: "discountedRate"
+    }
   },
   // {
   //   title: "总价",
@@ -182,32 +191,32 @@ const columns = [
     width: "100px",
     dataIndex: "quantityNum",
     scopedSlots: {
-      customRender: "quantityNum",
-    },
+      customRender: "quantityNum"
+    }
   },
   {
     title: "参考值",
     width: "100px",
     dataIndex: "referenceValue",
     scopedSlots: {
-      customRender: "referenceValue",
-    },
+      customRender: "referenceValue"
+    }
   },
   {
     title: "单价",
     width: "100px",
     dataIndex: "unitPrice",
     scopedSlots: {
-      customRender: "unitPrice",
-    },
+      customRender: "unitPrice"
+    }
   },
   {
     title: "备注",
     dataIndex: "remarks",
     scopedSlots: {
-      customRender: "remarks",
-    },
-  },
+      customRender: "remarks"
+    }
+  }
 ];
 
 export default {
@@ -228,22 +237,22 @@ export default {
         "quantityNum",
         "referenceValue",
         "unitPrice",
-        "remarks",
+        "remarks"
       ],
       TradesList: [], //工种列表
-      detailDataList: [], //详情的列表
+      detailDataList: [] //详情的列表
     };
   },
   methods: {
     // openModules(type, info) {
     openModules(title, detailType, type, record) {
-      getTradesList().then((res) => {
+      getTradesList().then(res => {
         this.TradesList = res.data;
       });
       // this.title = title;
       this.detailType = detailType;
       this.detailDataList = [
-        { detailType: this.detailType, developProjectId: this.$route.query.id },
+        { detailType: this.detailType, developProjectId: this.$route.query.id }
       ];
       if (type == "add") {
         this.title = "新增";
@@ -261,7 +270,7 @@ export default {
       }
       this.detailDataList.push({
         detailType: this.detailType,
-        developProjectId: this.$route.query.id,
+        developProjectId: this.$route.query.id
       });
     },
     //删除表格
@@ -275,7 +284,7 @@ export default {
     },
     //编辑工种
     changeTrades(record) {
-      this.TradesList.map((item) => {
+      this.TradesList.map(item => {
         if (item.id == record.trades) {
           record.trades = item.categoryName; //工程师级别
           record.engineerLevel = item.categoryLevel; //工程师级别
@@ -300,10 +309,10 @@ export default {
     addRdProjectsDetailList() {
       let params = {
         developProjectId: this.$route.query.id,
-        devProDetails: this.detailDataList,
+        devProDetails: this.detailDataList
       };
       addRdProjectsDetailList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.$emit("ok");
@@ -313,7 +322,7 @@ export default {
           }
           this.confirmLoading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.confirmLoading = false;
         });
@@ -321,10 +330,10 @@ export default {
     //编辑基础数据
     editRdProjectsDetailList() {
       let params = {
-        ...this.detailDataList[0],
+        ...this.detailDataList[0]
       };
       editRdProjectsDetailList(params)
-        .then((res) => {
+        .then(res => {
           if (res.code == 1) {
             this.$message.success(res.msg);
             this.$emit("ok");
@@ -334,12 +343,12 @@ export default {
           }
           this.confirmLoading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.confirmLoading = false;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

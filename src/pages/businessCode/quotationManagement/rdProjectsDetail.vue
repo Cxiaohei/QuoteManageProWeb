@@ -53,64 +53,98 @@
         </a-descriptions-item>
       </a-descriptions>
     </div>
-    <a-tabs default-active-key="0">
-      <a-tab-pane
-        :tab="item.title"
-        v-for="(item, index) in hasDataList"
-        :key="index"
-      >
-      <h3>
-        {{ item.title }} (费用:
-        {{ detailData[item.moneyHasKey] ? detailData[item.moneyHasKey] : 0 }})
-      </h3>
-      <a-button
-        type="primary"
-        @click="addChildren(item.title, item.detailType)"
-        style="margin-bottom: 15px"
-      >新增</a-button>
-      <a-table
-        rowKey="id"
-        :columns="columns"
-        :dataSource="detailData[item.key]"
-        :pagination="false"
-        bordered
-      >
-        <span slot="action" slot-scope="text, record">
-          <a
-            href="javascript:;"
-            style="margin-right: 5px"
-            @click="editChildren(item.title, item.detailType, record)"
-          >编辑</a>
-          <a-popconfirm
-            title="确定删除吗?"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="deleteChildren(record.id)"
-          >
-            <a href="#">删除</a>
-          </a-popconfirm>
-        </span>
-        <span
-          slot="detailFeeType"
-          slot-scope="text, record"
-        >{{ record.detailFeeType == 0 ? "费用" : "人工" }}</span>
-        <span slot="engineerLevel" slot-scope="text, record">
-          {{
-          record.engineerLevel == 0
-          ? "初级"
-          : record.engineerLevel == 1
-          ? "中级"
-          : record.engineerLevel == 2
-          ? "高级"
-          : "资深"
-          }}
-        </span>
 
-        <span slot="creationTime" slot-scope="text, record">{{ record.creationTime }}</span>
-      </a-table>
+    <a-button type="primary" @click="addChildren" style="margin-bottom: 15px">新增</a-button>
+    <a-table rowKey="id" :columns="columns" :dataSource="allTableData" :pagination="false" bordered>
+      <span slot="action" slot-scope="text, record">
+        <a
+          href="javascript:;"
+          style="margin-right: 5px"
+          @click="editChildren(record.title, record.detailType, record)"
+        >编辑</a>
+        <a-popconfirm
+          title="确定删除吗?"
+          ok-text="确定"
+          cancel-text="取消"
+          @confirm="deleteChildren(record.id)"
+        >
+          <a href="#">删除</a>
+        </a-popconfirm>
+      </span>
+
+      <span
+        slot="detailFeeType"
+        slot-scope="text, record"
+      >{{ record.detailFeeType == 0 ? "费用" : "人工" }}</span>
+      <span slot="engineerLevel" slot-scope="text, record">
+        {{
+        record.engineerLevel == 0
+        ? "初级"
+        : record.engineerLevel == 1
+        ? "中级"
+        : record.engineerLevel == 2
+        ? "高级"
+        : "资深"
+        }}
+      </span>
+
+      <span slot="creationTime" slot-scope="text, record">{{ record.creationTime }}</span>
+    </a-table>
+
+    <!-- <a-tabs default-active-key="0">
+      <a-tab-pane :tab="item.title" v-for="(item, index) in hasDataList" :key="index">
+        <h3>
+          {{ item.title }} (费用:
+          {{ detailData[item.moneyHasKey] ? detailData[item.moneyHasKey] : 0 }})
+        </h3>
+        <a-button
+          type="primary"
+          @click="addChildren(item.title, item.detailType)"
+          style="margin-bottom: 15px"
+        >新增</a-button>
+        {{ hasDataList }}
+        <a-table
+          rowKey="id"
+          :columns="columns"
+          :dataSource="detailData[item.key]"
+          :pagination="false"
+          bordered
+        >
+          <span slot="action" slot-scope="text, record">
+            <a
+              href="javascript:;"
+              style="margin-right: 5px"
+              @click="editChildren(item.title, item.detailType, record)"
+            >编辑</a>
+            <a-popconfirm
+              title="确定删除吗?"
+              ok-text="确定"
+              cancel-text="取消"
+              @confirm="deleteChildren(record.id)"
+            >
+              <a href="#">删除</a>
+            </a-popconfirm>
+          </span>
+          <span
+            slot="detailFeeType"
+            slot-scope="text, record"
+          >{{ record.detailFeeType == 0 ? "费用" : "人工" }}</span>
+          <span slot="engineerLevel" slot-scope="text, record">
+            {{
+            record.engineerLevel == 0
+            ? "初级"
+            : record.engineerLevel == 1
+            ? "中级"
+            : record.engineerLevel == 2
+            ? "高级"
+            : "资深"
+            }}
+          </span>
+
+          <span slot="creationTime" slot-scope="text, record">{{ record.creationTime }}</span>
+        </a-table>
       </a-tab-pane>
-    </a-tabs>
-
+    </a-tabs>-->
 
     <RdProjectsDetailModal ref="RdProjectsDetailModalRefs" @ok="getRdProjectsDetail"></RdProjectsDetailModal>
 
@@ -125,12 +159,13 @@
     >
       备注：
       <a-input v-model="remarksAudite"></a-input>
-
-      
-
     </a-modal>
-    <SetShenPi ref="SetShenPiRef" :auditeType="2" :quoteId="$route.query.id" :finalScore="finalScore"></SetShenPi>
-
+    <SetShenPi
+      ref="SetShenPiRef"
+      :auditeType="2"
+      :quoteId="$route.query.id"
+      :finalScore="finalScore"
+    ></SetShenPi>
   </a-card>
 </template>
       
@@ -154,6 +189,17 @@ const columns = [
     scopedSlots: {
       customRender: "action"
     }
+  },
+  {
+    title: "大类",
+    dataIndex: "title",
+    scopedSlots: {
+      customRender: "title"
+    },
+    customRender: (title, record) => ({
+      children: title,
+      attrs: { rowSpan: record.rowSpan } // 通过设置colSpan为0来合并列
+    })
   },
   {
     title: "子类",
@@ -243,7 +289,7 @@ const columns = [
   }
 ];
 export default {
-  components: { RdProjectsDetailModal, CalculateProjectsModal , SetShenPi },
+  components: { RdProjectsDetailModal, CalculateProjectsModal, SetShenPi },
   data() {
     return {
       selectedRowKeys: [],
@@ -353,6 +399,7 @@ export default {
           title: " 其他研发相关费用"
         }
       ],
+      allTableData: [],
       hasDataList: [],
       allDataList: [],
       projectScoreId: "",
@@ -443,7 +490,7 @@ export default {
         .then(res => {
           if (res.code == 1) {
             this.detailData = res.data;
-            this.allDataList=res.data.allDetails;
+            this.allDataList = res.data.allDetails;
             //筛选出有数据的子项
             let newAllDetailListChildren = [];
             this.AlldetailListChildren.map(item => {
@@ -454,6 +501,25 @@ export default {
             this.hasDataList = newAllDetailListChildren;
             this.finalScore = res.data.finalScore;
             this.projectScoreId = res.data.projectScoreId;
+
+            var allTableData = [];
+            this.AlldetailListChildren.map(item => {
+              if (res.data[item.key][0]) {
+                res.data[item.key].map((childrenItem, childrenItemIndex) => {
+                  childrenItem["title"] = item.title;
+                  if (childrenItemIndex == 0) {
+                    childrenItem["rowSpan"] = res.data[item.key].length;
+                  } else {
+                    childrenItem["rowSpan"] = 0;
+                  }
+                });
+              }
+              allTableData.push(...res.data[item.key]);
+            });
+
+            this.allTableData = allTableData;
+
+            console.log(allTableData);
           } else {
             this.loading = false;
             this.$message.error(res.message);
