@@ -1,75 +1,66 @@
 <template>
   <a-card>
-    <div class="queryFromBox">
-      <a-form :model="queryFrom" layout="inline">
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" @click="add_pagelist">新增</a-button>
-          </a-space>
-        </a-form-item>
-        <a-form-item>
-          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
-            <a-button type="primary" @click="reset_pagelists">重置</a-button>
-          </a-space>
-        </a-form-item>
-        <!-- <a-form-item>
-          <a-space>
-            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
-              <a-button type="primary" icon="to-top">导入</a-button>
-            </a-upload>
-            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
-          </a-space>
-        </a-form-item>-->
-      </a-form>
-    </div>
-    <a-table
-      rowKey="id"
-      :row-selection="{
-        selectedRowKeys: selectedRowKeys,
-        onChange: onSelectChange,
-      }"
-      :columns="columns"
-      :dataSource="dataSource"
-      @change="handleTableChange"
-      :pagination="pagination"
+    <vxe-toolbar ref="xToolbar1" custom>
+      <template #buttons>
+        <a-form :model="queryFrom" layout="inline">
+          <a-form-item>
+            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+          </a-form-item>
+          <a-form-item label="年份">
+            <a-input v-model.trim="queryFrom.year" style="width: 180px" placeholder="输入年份"></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
+              <a-button type="primary" @click="reset_pagelists">重置</a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      ref="xTable1"
+      id="toolbar_demo5"
+      height="650"
+      size="large"
       :loading="loading"
-      :selectedRows.sync="selectedRows"
-      bordered
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
+      show-overflow="tooltip"
+      :row-config="rowConfig"
+      :custom-config="customConfig"
+      :data="dataSource"
+      @resizable-change="resizableChangeEvent"
+      
     >
-      <span slot="action" slot-scope="text, record">
-        <a href="javascript:;" @click="showEdit(record)" style="margin-right: 5px">查看</a>
-
-      </span>
-
-      <span slot="status" slot-scope="text, record">
-        {{  record.status == 0
-            ? "待审核"
-            : record.status == 1
-            ? "已审核"
-          :"未知"}}
-        <!-- {{
-          record.status == 0
-            ? "待提交"
-            : record.status == 1
-            ? "已确认"
-            : record.status == 2
-            ? "变更审批中"
-            : "项目中止"
-        }}-->
-      </span>
-      <span slot="creationTime" slot-scope="text, record">
+    <vxe-column type="seq" width="60"></vxe-column>
+    <vxe-column field="action" width="80px" title="操作">
+        <template #default="{ row }">
+          <a href="javascript:;" @click="showEdit(row)" style="margin-right: 5px">查看</a>
+        </template>
+      </vxe-column>
+      <vxe-column field="auditeNo"  title="审核编号" sort-type="string" sortable></vxe-column>
+      <vxe-column field="remarks"  title="申请备注" sort-type="string" sortable></vxe-column>
+      <vxe-column field="status" title="状态" sort-type="number" sortable>
+        <template #default="{ row }">
+          <span v-if="row.status == 0">待审核</span>
+          <span v-if="row.status == 1">已审核</span>
+        </template>
+      </vxe-column>
+      <vxe-column field="createUserName"  title="申请人" sort-type="string" sortable></vxe-column>
+      <vxe-column field="creationTime"   title="申请发起时间" sortable>
+        <template #default="{ row }">
+          <span >
         {{
-        record.creationTime
-        ? record.creationTime.substring(0, 19).replace("T", "/")
+        row.creationTime
+        ? row.creationTime.substring(0, 19).replace("T", "  ")
         : "/"
         }}
       </span>
-    </a-table>
-
+        </template>
+      </vxe-column>
+    </vxe-table>
     <a-modal
       title="变更申请"
       :visible="changeVisible"
@@ -520,7 +511,25 @@ export default {
         //   name: "审批人列表",
         //   key: "isTerminate"
         // }
-      ]
+      ] ,
+      // 表格配置
+      customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true,
+        },
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true,
+      },
+      rowConfig: {
+        keyField: "id",
+      },
     };
   },
   components: {},
@@ -552,7 +561,15 @@ export default {
         }
       });
     },
-
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map((column) => {
+        return {
+          width: column.renderWidth,
+        };
+      });
+      console.log(customData);
+    },
     //编辑
     productData_edit(record) {  
       this.statusAudite = 1;

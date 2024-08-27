@@ -20,8 +20,7 @@
                 v-if="
                   !detailData.auditeNo &&
                   detailData.auditeStatus != 0 &&
-                  finalScore &&
-                  finalScore < 60
+                  finalScore 
                 "
               >提交审批</a>
               <a
@@ -29,22 +28,19 @@
                 v-if="
                   detailData.auditeNo &&
                   detailData.auditeStatus == 10 &&
-                  finalScore &&
-                  finalScore < 60
+                  finalScore 
                 "
               >审批未通过,重新提交</a>
               <span
                 v-if="
                   detailData.auditeNo &&
-                  detailData.auditeStatus == 0 &&
-                  finalScore < 60
+                  detailData.auditeStatus == 0 
                 "
               >审批中</span>
               <span
                 v-if="
                   detailData.auditeNo &&
-                  detailData.auditeStatus == 1 &&
-                  finalScore  < 60
+                  detailData.auditeStatus == 1 
                 "
               >审批通过</span>
             </span>
@@ -332,6 +328,51 @@ export default {
         {
           label: "项目总费用",
           key: "totalFee",
+          type: "string"
+        },
+        {
+          label: "产品定义费",
+          key: "productDefinitionsMoney",
+          type: "string"
+        },
+        {
+          label: "硬件开发费",
+          key: "hardwareMoney",
+          type: "string"
+        },
+        {
+          label: "软件开发费",
+          key: "softwareMoney",
+          type: "string"
+        },
+        {
+          label: "结构开发费",
+          key: "structuralMoney",
+          type: "string"
+        },
+        {
+          label: "产品测试费",
+          key: "productTestMoney",
+          type: "string"
+        },
+        {
+          label: "模具及工装费",
+          key: "moldsAndToolingMoney",
+          type: "string"
+        },
+        {
+          label: "常规认证费",
+          key: "authenticationMoney",
+          type: "string"
+        },
+        {
+          label: "特种认证费",
+          key: "spicalAuthenticationMoney",
+          type: "string"
+        },
+        {
+          label: "其他研发相关费用",
+          key: "otherFeeMoney",
           type: "string"
         },
         {

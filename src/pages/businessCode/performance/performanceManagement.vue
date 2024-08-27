@@ -159,8 +159,28 @@
         width="150"
         title="项目开始时间"
         sortable
-      ></vxe-column>
-      <vxe-column field="endTime" width="150" title="项目终止时间" sortable></vxe-column>
+      >
+      <template #default="{ row }">
+          <span >
+        {{
+        row.startTime
+        ? row.startTime.substring(0, 10).replace("T", "  ")
+        : "/"
+        }}
+      </span>
+        </template>
+    </vxe-column>
+      <vxe-column field="endTime" width="150" title="项目终止时间" sortable>
+        <template #default="{ row }">
+          <span >
+        {{
+        row.endTime
+        ? row.endTime.substring(0, 10).replace("T", "  ")
+        : "/"
+        }}
+      </span>
+        </template>
+      </vxe-column>
       <vxe-column field="remarks" width="150" title="备注" sortable></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
