@@ -53,7 +53,6 @@
         </a-descriptions-item>
       </a-descriptions>
     </div>
-
     <a-tabs default-active-key="0">
       <a-tab-pane
         :tab="item.title"
@@ -112,57 +111,6 @@
       </a-tab-pane>
     </a-tabs>
 
-    <!-- <div v-for="(item, index) in hasDataList" :key="index" style="margin-bottom: 15px">
-      <h3>
-        {{ item.title }} (费用:
-        {{ detailData[item.moneyHasKey] ? detailData[item.moneyHasKey] : 0 }})
-      </h3>
-      <a-button
-        type="primary"
-        @click="addChildren(item.title, item.detailType)"
-        style="margin-bottom: 15px"
-      >新增</a-button>
-      <a-table
-        rowKey="id"
-        :columns="columns"
-        :dataSource="detailData[item.key]"
-        :pagination="false"
-        bordered
-      >
-        <span slot="action" slot-scope="text, record">
-          <a
-            href="javascript:;"
-            style="margin-right: 5px"
-            @click="editChildren(item.title, item.detailType, record)"
-          >编辑</a>
-          <a-popconfirm
-            title="确定删除吗?"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="deleteChildren(record.id)"
-          >
-            <a href="#">删除</a>
-          </a-popconfirm>
-        </span>
-        <span
-          slot="detailFeeType"
-          slot-scope="text, record"
-        >{{ record.detailFeeType == 0 ? "费用" : "人工" }}</span>
-        <span slot="engineerLevel" slot-scope="text, record">
-          {{
-          record.engineerLevel == 0
-          ? "初级"
-          : record.engineerLevel == 1
-          ? "中级"
-          : record.engineerLevel == 2
-          ? "高级"
-          : "资深"
-          }}
-        </span>
-
-        <span slot="creationTime" slot-scope="text, record">{{ record.creationTime }}</span>
-      </a-table>
-    </div> -->
 
     <RdProjectsDetailModal ref="RdProjectsDetailModalRefs" @ok="getRdProjectsDetail"></RdProjectsDetailModal>
 
@@ -406,6 +354,7 @@ export default {
         }
       ],
       hasDataList: [],
+      allDataList: [],
       projectScoreId: "",
       visibleAudite: false,
       remarksAudite: ""
@@ -494,6 +443,7 @@ export default {
         .then(res => {
           if (res.code == 1) {
             this.detailData = res.data;
+            this.allDataList=res.data.allDetails;
             //筛选出有数据的子项
             let newAllDetailListChildren = [];
             this.AlldetailListChildren.map(item => {
@@ -502,7 +452,6 @@ export default {
               }
             });
             this.hasDataList = newAllDetailListChildren;
-
             this.finalScore = res.data.finalScore;
             this.projectScoreId = res.data.projectScoreId;
           } else {

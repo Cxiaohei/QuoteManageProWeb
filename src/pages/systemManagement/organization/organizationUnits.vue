@@ -11,6 +11,7 @@
             rowKey="id"
             :customRow="onCustomRow"
             :rowClassName="setRowClassName"
+            :expandedRowKeys="expandedRowKeys"
           >
             <div slot="action" slot-scope="record">
               <a @click="$refs.createModal.openModal(record)" style="margin-right: 5px;">编辑</a>
@@ -254,6 +255,7 @@ export default {
   components: { CreateForm, StandardTable, TenantForm, AddMember, AddRoles },
   data() {
     return {
+      expandedRowKeys: [], // 用于存储展开的行ID
       sorter: {
         field: "id",
         order: "desc"
@@ -311,6 +313,9 @@ export default {
       getList()
         .then(res => {
           this.data = this.changeData(res.items);
+           // 获取所有的组织机构 ID 并设置为展开
+      const expandedRowKeys = res.items.map(item => item.id);
+      this.expandedRowKeys = expandedRowKeys;
           console.log(this.data);
         })
         .finally(() => {

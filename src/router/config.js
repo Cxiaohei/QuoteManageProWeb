@@ -48,7 +48,8 @@ const options = {
           path: 'category1',
           name: '物料管理',
           meta: {
-            icon: 'slack'
+            icon: 'slack',
+            authority: 'MaterialManagement',
           },
           component: PageView,
           children: [
@@ -56,7 +57,7 @@ const options = {
               path: 'materialManagement',
               name: '内部物料',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'InMaterialManagement',
               },
               component: () => import('@/pages/businessCode/category1/materialManagement'),
             },
@@ -64,7 +65,7 @@ const options = {
               path: 'outMaterialManagement',
               name: '外部物料',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'OutMaterialManagement',
               },
               component: () => import('@/pages/businessCode/category1/outMaterialManagement'),
             },
@@ -74,7 +75,8 @@ const options = {
           path: 'performance',
           name: '管理绩效',
           meta: {
-            icon: 'ant-cloud'
+            icon: 'ant-cloud',
+            authority: 'PerformanceManagement',
           },
           component: PageView,
           children: [
@@ -82,7 +84,7 @@ const options = {
               path: 'performanceManagement',
               name: '项目管理',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'KKProjectManagement',
               },
               component: () => import('@/pages/businessCode/performance/performanceManagement'),
             },
@@ -91,7 +93,7 @@ const options = {
               name: '夸克项目详情',
               meta: {
                 invisible: true,
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'KKProjectManagement',
               },
               component: () => import('@/pages/businessCode/performance/performanceManagementDetail'),
             },
@@ -99,7 +101,7 @@ const options = {
               path: 'perMonitoring',
               name: '项目预算监控',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'PerMonitoring',
               },
               component: () => import('@/pages/businessCode/performance/perMonitoring'),
             },
@@ -107,7 +109,7 @@ const options = {
               path: 'projectbg',
               name: '项目变更申请',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'Projectbg',
               },
               component: () => import('@/pages/businessCode/performance/projectbg'),
             },
@@ -115,7 +117,7 @@ const options = {
               path: 'projectkb',
               name: '项目看板',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ProjectKB',
               },
               component: () => import('@/pages/businessCode/performance/projectKB'),
             },
@@ -125,7 +127,8 @@ const options = {
           path: 'approveManagement',
           name: '审批管理',
           meta: {
-            icon: 'laptop'
+            icon: 'laptop',
+            authority: 'ApproveManagement',
           },
           component: PageView,
           children: [
@@ -133,23 +136,23 @@ const options = {
               path: 'allApprove',
               name: '审批单管理',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ApproveBillManagement',
               },
               component: () => import('@/pages/approveManagement/allApprove'),
             },
             {
               path: 'oemApprove',
-              name: 'Oem报价审批审批',
+              name: 'Bom报价审批',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'OemApprove',
               },
               component: () => import('@/pages/approveManagement/oemApprove'),
             },
             {
               path: 'zzApprove',
-              name: '制作费用报价审批',
+              name: '制造费用报价审批',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ZzApprove',
               },
               component: () => import('@/pages/approveManagement/zzApprove'),
             },
@@ -157,7 +160,7 @@ const options = {
               path: 'scoreApprove',
               name: '研发费用审批',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ScoreApprove',
               },
               component: () => import('@/pages/approveManagement/scoreApprove'),
             },
@@ -165,7 +168,7 @@ const options = {
               path: 'odmApprove',
               name: 'Odm报价审批',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'OdmApprove',
               },
               component: () => import('@/pages/approveManagement/odmApprove'),
             },
@@ -176,7 +179,8 @@ const options = {
           path: 'product',
           name: '产品管理',
           meta: {
-            icon: 'codepen-circle'
+            icon: 'codepen-circle',
+            authority: 'ProductManagement',
           },
           component: PageView,
           children: [
@@ -184,7 +188,7 @@ const options = {
               path: 'productAllManagement',
               name: '全部产品',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'AllProduct',
               },
               component: () => import('@/pages/businessCode/category1/productManagement'),
             },
@@ -192,7 +196,7 @@ const options = {
               path: 'productManagement',
               name: '标准产品',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'BzProduct',
               },
               component: () => import('@/pages/businessCode/category1/productManagement'),
             },
@@ -200,7 +204,7 @@ const options = {
               path: 'productNormManagement',
               name: '非标产品',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'FbProduct',
               },
               component: () => import('@/pages/businessCode/category1/productManagement'),
             },
@@ -211,7 +215,8 @@ const options = {
           path: 'quotationManagement',
           name: '报价管理',
           meta: {
-            icon: 'setting'
+            icon: 'setting',
+            authority: 'QuotationManagement',
           },
           component: PageView,
           children: [
@@ -219,7 +224,7 @@ const options = {
               path: 'allProjects',
               name: '报价单管理',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'QuotationBill',
               },
               component: () => import('@/pages/businessCode/quotationManagement/allProjects'),
             },
@@ -227,7 +232,7 @@ const options = {
               path: 'rdProjects',
               name: '研发费报价',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'RdProjects',
               },
               component: () => import('@/pages/businessCode/quotationManagement/rdProjects'),
             },
@@ -236,7 +241,7 @@ const options = {
               name: '研发费报价详情',
               meta: {
                 invisible: true,
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'RdProjects',
               },
               component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetail'),
             },
@@ -245,7 +250,7 @@ const options = {
               name: '查看研发费报价',
               meta: {
                 invisible: true,
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'RdProjects',
               },
               component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetailLook'),
             },
@@ -253,7 +258,7 @@ const options = {
               path: 'odmQuote',
               name: 'ODM报价',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'OdmQuote',
               },
               component: () => import('@/pages/businessCode/quotationManagement/odmQuote'),
             },
@@ -262,24 +267,24 @@ const options = {
               name: 'ODM详情',
               meta: {
                 invisible: true,
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'OdmQuote',
               },
               component: () => import('@/pages/businessCode/quotationManagement/odmQuoteDetail'),
             },
             {
               path: 'bomQuote',
-              name: 'OEM报价',
+              name: 'Bom报价',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'BomQuote',
               },
               component: () => import('@/pages/businessCode/quotationManagement/bomQuote'),
             },
             {
               path: 'bomQuoteDetail',
-              name: 'OEM报价详情',
+              name: 'Bom报价详情',
               meta: {
                 invisible: true,
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'BomQuote',
               },
               component: () => import('@/pages/businessCode/quotationManagement/bomQuoteDetail'),
             },
@@ -289,7 +294,8 @@ const options = {
           path: 'templateManagement',
           name: '模板管理',
           meta: {
-            icon: 'laptop'
+            icon: 'laptop',
+            authority: 'TemplateManagement',
           },
           component: PageView,
           children: [
@@ -297,7 +303,7 @@ const options = {
               path: 'basetemplate',
               name: '基础模板',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'BasetemplateManagement',
               },
               component: () => import('@/pages/approveManagement/basetemplate'),
             }
@@ -308,7 +314,8 @@ const options = {
           path: 'priceStrategyManagement',
           name: '价格策略',
           meta: {
-            icon: 'laptop'
+            icon: 'laptop',
+            authority: 'PriceStrategyManagement',
           },
           component: PageView,
           children: [
@@ -316,7 +323,7 @@ const options = {
               path: 'craftLine',
               name: '工艺线路',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'CraftLine',
               },
               component: () => import('@/pages/businessCode/category1/craftLine'),
             },
@@ -324,7 +331,7 @@ const options = {
               path: 'essentialData',
               name: '工时费用',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'EssentialData',
               },
               component: () => import('@/pages/businessCode/category1/essentialData'),
             },
@@ -332,7 +339,7 @@ const options = {
               path: 'essentialTwoData',
               name: '物料部件',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'EssentialTwoData',
               },
               component: () => import('@/pages/businessCode/category1/essentialTwoData'),
             },
@@ -341,7 +348,7 @@ const options = {
               path: 'pcbStrategy',
               name: 'PCB报价策略',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'PCBPriceStrategy',
               },
               component: () => import('@/pages/businessCode/category1/priceStrategy'),
             },
@@ -349,7 +356,7 @@ const options = {
               path: 'zzflpriceStrategy',
               name: '制造费率策略',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ZzflpriceStrategy',
               },
               component: () => import('@/pages/businessCode/category1/zzflpriceStrategy'),
             },
@@ -357,7 +364,7 @@ const options = {
               path: 'jgjpriceStrategy',
               name: '结构件报价策略',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'JgjpriceStrategy',
               },
               component: () => import('@/pages/businessCode/category1/jgjpriceStrategy'),
             },
@@ -365,7 +372,7 @@ const options = {
               path: 'jgfpriceStrategy',
               name: '加工费用报价策略',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'JgfpriceStrategy',
               },
               component: () => import('@/pages/businessCode/category1/jgfpriceStrategy'),
             },
@@ -376,7 +383,8 @@ const options = {
           path: 'system',
           name: '系统设置',
           meta: {
-            icon: 'setting'
+            icon: 'setting',
+          
           },
           component: PageView,
           children: [
@@ -384,7 +392,7 @@ const options = {
               path: 'productType',
               name: '产品类型',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ProductType',
               },
               component: () => import('@/pages/basicsSeting/productType'),
             },
@@ -392,7 +400,7 @@ const options = {
               path: 'productXian',
               name: '产品线',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'ProductXian',
               },
               component: () => import('@/pages/basicsSeting/productXian'),
             },
@@ -400,7 +408,7 @@ const options = {
               path: 'role',
               name: '角色管理',
               meta: {
-                // authority: 'AbpIdentity.Roles',
+                authority: 'AbpIdentity.Roles',
               },
               component: () => import('@/pages/systemManagement/identity/RoleList'),
             },
@@ -408,7 +416,7 @@ const options = {
               path: 'user',
               name: '用户管理',
               meta: {
-                // authority: 'AbpIdentity.Users',
+                authority: 'AbpIdentity.Users',
               },
               component: () => import('@/pages/systemManagement/identity/UserList'),
             },
@@ -416,7 +424,7 @@ const options = {
               path: 'organization',
               name: '组织机构',
               meta: {
-                // authority: 'AbpIdentity.OrganizationUnits',
+                authority: 'AbpIdentity.OrganizationUnits',
               },
               component: () => import('@/pages/systemManagement/organization/organizationUnits'),
             },

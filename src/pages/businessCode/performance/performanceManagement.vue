@@ -54,7 +54,7 @@
       height="400"
       size="small"
       :loading="loading"
-      :sort-config="sortConfig"
+  :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
       show-overflow="tooltip"
       :row-config="rowConfig"
       :custom-config="customConfig"
@@ -92,27 +92,30 @@
           >
         </template>
       </vxe-column>
-      <vxe-column field="department" width="150" title="部门"></vxe-column>
-      <vxe-column field="projectNo" width="150" title="项目编号"></vxe-column>
-      <vxe-column field="projectType" width="80" title="项目类型">
+      <vxe-column field="department" width="150" title="部门" sort-type="string" sortable></vxe-column>
+      <vxe-column field="projectNo" width="150" title="项目编号" sort-type="string" sortable></vxe-column>
+      <vxe-column field="projectType" width="80" title="项目类型" sort-type="string" sortable>
         <template #default="{ row }">
           <span v-if="row.projectType == 0">常规型</span>
           <span v-if="row.projectType == 1">战略型</span>
           <span v-if="row.projectType == 2">改善型</span>
         </template>
       </vxe-column>
-      <vxe-column field="projectName" width="320" title="项目名称"></vxe-column>
+      <vxe-column field="projectName" width="320" title="项目名称" sort-type="string" sortable></vxe-column>
       <vxe-column
         field="createUserName"
         width="150"
         title="立项人"
+        sort-type="string"
+        sortable
       ></vxe-column>
       <vxe-column
         field="projectManager"
         width="150"
         title="项目经理"
+        sort-type="string"
       ></vxe-column>
-      <vxe-column field="status" title="项目状态" width="80">
+      <vxe-column field="status" title="项目状态" sort-type="number" sortable width="80">
         <template #default="{ row }">
           <span v-if="row.status == 0">待提交</span>
           <span v-if="row.status == 1">已确认</span>
@@ -124,32 +127,41 @@
         field="projectBudget"
         width="150"
         title="项目预算"
+         sort-type="number"
+         sortable
       ></vxe-column>
 
       <vxe-column
         field="budgetMonthAvailableMoney"
         width="200"
         title="月均值"
+         sort-type="number"
+         sortable
       ></vxe-column>
       <vxe-column
         field="projectBudgetDetail"
         width="200"
         title="预算包含内容"
+         sort-type="string"
+         sortable
       ></vxe-column>
-      <vxe-column field="fixedCharge" width="150" title="固定费用"></vxe-column>
-      <vxe-column field="manufacturingContainCost" width="150" title="制造费包含金额"></vxe-column>
+      <vxe-column field="fixedCharge" width="150" title="固定费用"  sort-type="number" sortable></vxe-column>
+      <vxe-column field="manufacturingContainCost" width="150" title="制造费包含金额"  sort-type="number" sortable></vxe-column>
       <vxe-column
         field="projectCycle"
         width="150"
         title="项目周期"
+         sort-type="number"
+         sortable
       ></vxe-column>
       <vxe-column
         field="startTime"
         width="150"
         title="项目开始时间"
+        sortable
       ></vxe-column>
-      <vxe-column field="endTime" width="150" title="项目终止时间"></vxe-column>
-      <vxe-column field="remarks" width="150" title="备注"></vxe-column>
+      <vxe-column field="endTime" width="150" title="项目终止时间" sortable></vxe-column>
+      <vxe-column field="remarks" width="150" title="备注" sortable></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination

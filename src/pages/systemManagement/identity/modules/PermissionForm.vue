@@ -108,7 +108,7 @@ export default {
       this.confirmLoading = true;
       get(this.permissionsQuery)
         .then((res) => {
-          // this.permissionData = res;
+          console.log( 'res数据', res)
           for (const i in res.groups) {
             // let selectedPermissions = [];
             const keys = [];
@@ -124,7 +124,11 @@ export default {
             //   that.selectedPermissions[group.name] = selectedPermissions||[];
             // });
           }
+          res.groups= res.groups.filter(item=>item.displayName!='功能管理'&&item.displayName!='设置管理'&&item.displayName!='Saas'&&item.displayName!='审计日志'
+            &&item.displayName!='账户'&&item.displayName!='语言管理'&&item.displayName!='文本模板管理'&&item.displayName!='OpenId'
+          );
           this.permissionData = res;
+          console.log(  this.permissionData)
         })
         .finally(() => {
           this.confirmLoading = false;

@@ -126,26 +126,26 @@ export default {
         callback(new Error("密码必须是最大长度为128的字符串."));
         return;
       }
-      let reg = /\d+/;
-      if (!reg.test(value)) {
-        callback(new Error("密码至少包含一位数字 ('0'-'9')."));
-        return;
-      }
-      reg = /[a-z]+/;
-      if (!reg.test(value)) {
-        callback(new Error("密码至少包含一位小写字母 ('a'-'z')."));
-        return;
-      }
-      reg = /[A-Z]+/;
-      if (!reg.test(value)) {
-        callback("密码至少包含一位大写字母 ('A'-'Z').");
-        return;
-      }
-      reg = /\W+/;
-      if (!reg.test(value)) {
-        callback(new Error("密码至少包含一位非字母数字字符."));
-        return;
-      }
+      // let reg = /\d+/;
+      // if (!reg.test(value)) {
+      //   callback(new Error("密码至少包含一位数字 ('0'-'9')."));
+      //   return;
+      // }
+      // reg = /[a-z]+/;
+      // if (!reg.test(value)) {
+      //   callback(new Error("密码至少包含一位小写字母 ('a'-'z')."));
+      //   return;
+      // }
+      // reg = /[A-Z]+/;
+      // if (!reg.test(value)) {
+      //   callback("密码至少包含一位大写字母 ('A'-'Z').");
+      //   return;
+      // }
+      // reg = /\W+/;
+      // if (!reg.test(value)) {
+      //   callback(new Error("密码至少包含一位非字母数字字符."));
+      //   return;
+      // }
 
       callback();
     };
