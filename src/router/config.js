@@ -428,6 +428,15 @@ const options = {
               },
               component: () => import('@/pages/systemManagement/organization/organizationUnits'),
             },
+            {
+              path: 'userInfo',
+              name: '个人中心',
+              meta: {
+                invisible: true,
+              },
+              component: () =>
+                import('@/pages/systemManagement/identity/userInfo.vue'),
+            }
           ]
         },
       ]

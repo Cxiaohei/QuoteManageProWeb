@@ -5,14 +5,10 @@
       <span class="name">{{user.tenantName?user.tenantName+'/':''}}{{user.userName}}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
-      <!-- <a-menu-item>
+      <a-menu-item  @click="handleUserInfo">
         <a-icon type="user" />
         <span>个人中心</span>
       </a-menu-item>
-      <a-menu-item>
-        <a-icon type="setting" />
-        <span>设置</span>
-      </a-menu-item> -->
       <!-- <a-menu-divider /> -->
       <a-menu-item @click="logout">
         <a-icon style="margin-right: 8px;" type="poweroff" />
@@ -32,6 +28,9 @@ export default {
     ...mapGetters('account', ['user']),
   },
   methods: {
+    handleUserInfo() {
+      this.$router.push('/userInfo');
+    },
     logout() {
       logout()
       this.$router.push('/login')

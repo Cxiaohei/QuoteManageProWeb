@@ -229,14 +229,10 @@ export default {
           let values = this.form;
           createUpdate(values)
             .then(res => {
-              if (res.code == 1) {
-                this.visible = false;
+              this.visible = false;
                 form.resetFields();
                 this.$message.info("操作成功");
                 this.$emit("ok");
-              }else{
-                this.$message.error(res.msg);
-              }
             })
             .finally(() => {
               this.confirmLoading = false;

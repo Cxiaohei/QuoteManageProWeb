@@ -25,7 +25,7 @@ export function getRolesByUserId(id) {
     return request(`/api/identity/users/${id}/roles`, METHOD.GET)
 }
 export function getOrganizationsByUserId(id, includeDetails = false) {
-    return request(`/api/identity/users/${id}/organizations`, METHOD.GET,includeDetails)
+    return request(`/api/identity/users/${id}/organization-units`, METHOD.GET,includeDetails)
   }
 export default {
     getList,
