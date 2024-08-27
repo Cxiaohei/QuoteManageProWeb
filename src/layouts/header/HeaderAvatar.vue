@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     handleUserInfo() {
-      this.$router.push('/userInfo');
+      this.$router.push('/system/userInfo');
     },
     logout() {
       logout()
