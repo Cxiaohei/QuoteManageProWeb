@@ -62,7 +62,7 @@
           <a-tooltip>
             <template slot="title">总预算=三项费用+制造费用+领料</template>
             <a-icon type="info-circle" />
-          </a-tooltip> &nbsp;
+          </a-tooltip>&nbsp;
           <a-input
             v-model="queryFrom.projectBudget"
             disabled
@@ -350,6 +350,10 @@ export default {
       this.yusuanVisible = false;
     },
     quoteMean(key) {
+      if (!this.queryFrom.projectBudget) {
+        this.$message.error("请先填写项目预算");
+        this.queryFrom[key] = 0;
+      }
       if (
         this.queryFrom.fixedCharge + this.queryFrom.manufacturingContainCost >
         this.queryFrom.projectBudget
