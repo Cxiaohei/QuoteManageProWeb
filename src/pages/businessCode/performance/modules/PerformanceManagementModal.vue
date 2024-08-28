@@ -60,7 +60,7 @@
         </a-form-model-item>
         <a-form-model-item label="项目预算">
           <a-tooltip>
-            <template slot="title">总预算=三项费用+制造费用+领料</template>
+            <template slot="title">总预算=三项费用+制造费用+领料，固定收费+监控费用不能大于项目预算</template>
             <a-icon type="info-circle" />
           </a-tooltip>&nbsp;
           <a-input
