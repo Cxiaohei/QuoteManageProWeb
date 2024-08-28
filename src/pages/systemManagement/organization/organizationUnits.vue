@@ -11,8 +11,9 @@
             rowKey="id"
             :customRow="onCustomRow"
             :rowClassName="setRowClassName"
-            :expandedRowKeys="expandedRowKeys"
           >
+          <!-- :expandedRowKeys="expandedRowKeys" -->
+
             <div slot="action" slot-scope="record">
               <a @click="$refs.createModal.openModal(record)" style="margin-right: 5px;">编辑</a>
               <a @click="$refs.create.openModal(record)" style="margin-right: 5px;">添加子机构</a>
@@ -102,9 +103,9 @@
                   @change="handleRTableChange"
                 >
                   <div slot="action" slot-scope="{ record }">
-                      <a-popconfirm title="确定要删除吗？" @confirm="handleDelRole(record.id)">
-                        <a href="javascript:;">删除</a>
-                      </a-popconfirm>
+                    <a-popconfirm title="确定要删除吗？" @confirm="handleDelRole(record.id)">
+                      <a href="javascript:;">删除</a>
+                    </a-popconfirm>
                     <!-- <template>
                       <a-dropdown>
                         <a class="ant-dropdown-link" href="javascript:;">
@@ -313,9 +314,9 @@ export default {
       getList()
         .then(res => {
           this.data = this.changeData(res.items);
-           // 获取所有的组织机构 ID 并设置为展开
-      const expandedRowKeys = res.items.map(item => item.id);
-      this.expandedRowKeys = expandedRowKeys;
+          // 获取所有的组织机构 ID 并设置为展开
+          const expandedRowKeys = res.items.map(item => item.id);
+          this.expandedRowKeys = expandedRowKeys;
           console.log(this.data);
         })
         .finally(() => {

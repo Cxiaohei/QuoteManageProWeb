@@ -51,7 +51,7 @@
         <a-form-model-item label="项目时间">
           <a-range-picker
             v-model.trim="timeArr1"
-            style="width: 350px" 
+            style="width: 350px"
             :allowClear="false"
             format="YYYY-MM-DD"
             valueFormat="YYYY-MM-DD"
@@ -59,6 +59,10 @@
           <!-- <a-input v-model="queryFrom.timeArr" style="width: 350px" placeholder="projectManager"></a-input> -->
         </a-form-model-item>
         <a-form-model-item label="项目预算">
+          <a-tooltip>
+            <template slot="title">总预算=三项费用+制造费用+领料</template>
+            <a-icon type="info-circle" />
+          </a-tooltip> &nbsp;
           <a-input
             v-model="queryFrom.projectBudget"
             disabled
@@ -87,14 +91,16 @@
           </div>
         </a-form-model-item>
         <a-form-model-item label="固定费用">
-          <a-input v-model="queryFrom.fixedCharge" style="width: 350px" placeholder="固定费用"></a-input>
+          <a-input
+            v-model="queryFrom.fixedCharge"
+            style="width: 350px"
+            placeholder="固定费用"
+            @change="quoteMean('fixedCharge')"
+          ></a-input>
         </a-form-model-item>
-       
+
         <a-form-model-item label="监控手段">
-          <a-select
-            v-model="queryFrom.monitoringMeans"
-            style="width: 250px"
-          >
+          <a-select v-model="queryFrom.monitoringMeans" style="width: 250px">
             <a-select-option value="固定费用">固定费用</a-select-option>
             <a-select-option value="月度监控">月度监控</a-select-option>
             <a-select-option value="条件使用">条件使用</a-select-option>
@@ -105,6 +111,7 @@
             v-model="queryFrom.manufacturingContainCost"
             style="width: 350px"
             placeholder="制造费包含金额"
+            @change="quoteMean('manufacturingContainCost')"
           ></a-input>
         </a-form-model-item>
 
@@ -199,8 +206,6 @@
             v-model="kkProjectBugetPart.otherMoneyReamrk"
           />
         </div>
-
-        
       </a-modal>
     </a-modal>
   </div>
@@ -343,6 +348,15 @@ export default {
       });
       this.queryFrom.projectBudget = projectBudgetNum;
       this.yusuanVisible = false;
+    },
+    quoteMean(key) {
+      if (
+        this.queryFrom.fixedCharge + this.queryFrom.manufacturingContainCost >
+        this.queryFrom.projectBudget
+      ) {
+        this.$message.error("固定收费+监控费用不能大于项目预算");
+        this.queryFrom[key] = 0;
+      }
     },
     // 确定
     handleOk() {
