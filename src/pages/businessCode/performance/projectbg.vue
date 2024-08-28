@@ -40,7 +40,17 @@
           <a href="javascript:;" @click="showEdit(row)" style="margin-right: 5px">查看</a>
         </template>
       </vxe-column>
-      <vxe-column field="auditeNo"  title="审核编号" sort-type="string" sortable></vxe-column>
+      <vxe-column field="auditeNo"  title="审核编号" sort-type="string" sortable>
+        <template #default="{ row }">
+          <a
+          href="javascript:;"
+          @click="showEdit(row)"
+          style="margin-right: 5px;"
+        >  {{
+        row.auditeNo
+        }}</a>
+        </template>
+      </vxe-column>
       <vxe-column field="remarks"  title="申请备注" sort-type="string" sortable></vxe-column>
       <vxe-column field="status" title="状态" sort-type="number" sortable>
         <template #default="{ row }">

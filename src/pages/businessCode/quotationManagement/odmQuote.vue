@@ -1,70 +1,91 @@
 <template>
   <a-card>
-    <div class="queryFromBox">
-      <a-form :model="queryFrom" layout="inline">
-        <a-form-item>
+    <vxe-toolbar ref="xToolbar1" custom>
+      <template #buttons>
+        <a-form :model="queryFrom" layout="inline">
+          <a-form-item>
           <a-space>
             <a-button type="primary" @click="add_pagelist">新增</a-button>
           </a-space>
         </a-form-item>
-        <a-form-item>
-          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
-            <a-button type="primary" @click="reset_pagelists">重置</a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-    </div>
-    <a-table
-      rowKey="id"
-      :row-selection="{
-        selectedRowKeys: selectedRowKeys,
-        onChange: onSelectChange,
-      }"
-      :columns="columns"
-      :dataSource="dataSource"
-      @change="handleTableChange"
-      :pagination="pagination"
+          <a-form-item>
+            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+          </a-form-item>
+          <a-form-item label="年份">
+            <a-input v-model.trim="queryFrom.year" style="width: 180px" placeholder="输入年份"></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
+              <a-button type="primary" @click="reset_pagelists">重置</a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      ref="xTable1"
+      id="toolbar_demo5"
+      height="650"
+      size="large"
       :loading="loading"
-      :selectedRows.sync="selectedRows"
-      bordered
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
+      show-overflow="tooltip"
+      :row-config="rowConfig"
+      :custom-config="customConfig"
+      :data="dataSource"
+      @resizable-change="resizableChangeEvent"
     >
-      <span slot="action" slot-scope="text, record">
-        <a
+    <vxe-column type="seq" width="60"></vxe-column>
+    <vxe-column field="action" width="80px" title="操作">
+        <template #default="{ row }">
+          <a
           href="javascript:;"
-          @click="odmQuoteDetail(record, 'detail')"
+          @click="odmQuoteDetail(row, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a>
-      </span>
-
-      <span slot="categoryLevel" slot-scope="text, record">
+        <a href="javascript:;" @click="showLog(row)">日志</a>
+        </template>
+      </vxe-column>
+      <vxe-column field="odmQuoteNo"  title="ODM编号" sort-type="string" sortable>
+        <template #default="{ row }">
+          <a
+          href="javascript:;"
+          @click="odmQuoteDetail(row, 'detail')"
+          style="margin-right: 5px;"
+        >  {{
+        row.odmQuoteNo
+        }}</a>
+        </template>
+      </vxe-column>
+      <vxe-column field="odmQuoteName"  title="ODM名称" sort-type="string" sortable></vxe-column>
+      <vxe-column field="productName"  title="报价产品名" sort-type="string" sortable></vxe-column>
+      <vxe-column field="creationTime"   title="发起时间" sortable>
+        <template #default="{ row }">
+          <span >
         {{
-        record.categoryLevel == 0
-        ? "初级"
-        : record.categoryLevel == 1
-        ? "中级"
-        : record.categoryLevel == 2
-        ? "高级"
-        : "资深"
-        }}
-      </span>
-      <span
-        slot="categoryType"
-        slot-scope="text, record"
-      >{{ record.categoryType == 0 ? "岗位" : "-" }}</span>
-      <span slot="creationTime" slot-scope="text, record">
-        {{
-        record.creationTime
-        ? record.creationTime.substring(0, 19).replace("T", "/")
+        row.creationTime
+        ? row.creationTime.substring(0, 19).replace("T", "  ")
         : "/"
         }}
       </span>
-    </a-table>
-
+        </template>
+      </vxe-column>
+      <vxe-column field="remarks"  title="备注" sort-type="string" sortable></vxe-column>
+     
+    </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
     <OdmQuoteModal ref="OdmQuoteModalRefs" @ok="getPageList"></OdmQuoteModal>
     <LogListModal ref="LogListModalRefs"></LogListModal>
   </a-card>
@@ -122,6 +143,24 @@ export default {
       selectedRowKeys: [],
       queryFrom: {
         processStepName: ""
+      },
+            // 表格配置
+            customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true,
+        },
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true,
+      },
+      rowConfig: {
+        keyField: "id",
       },
       loading: true,
       dataSource: [],
@@ -189,6 +228,15 @@ export default {
           this.loading = false;
           console.log(err);
         });
+    },
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map((column) => {
+        return {
+          width: column.renderWidth,
+        };
+      });
+      console.log(customData);
     },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {

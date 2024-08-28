@@ -51,7 +51,17 @@
 
         </template>
       </vxe-column>
-      <vxe-column field="projectNo"  title="研发项目编号" sort-type="string" sortable></vxe-column>
+      <vxe-column field="projectNo"  title="研发项目编号" sort-type="string" sortable>
+        <template #default="{ row }">
+          <a
+          href="javascript:;"
+          @click="rdProjectsDetail(row, 'detail')"
+          style="margin-right: 5px;"
+        >  {{
+        row.projectNo
+        }}</a>
+        </template>
+      </vxe-column>
       <vxe-column field="projectName"  title="研发项目名称" sort-type="string" sortable></vxe-column>
       <vxe-column field="createUserName"  title="项目发起人" sort-type="string" sortable></vxe-column>
       <vxe-column field="creationTime"   title="发起时间" sortable>
@@ -78,6 +88,16 @@
       <vxe-column field="spicalAuthenticationMoney"  title="特种认证费" sort-type="number" sortable></vxe-column>
       <vxe-column field="otherFeeMoney"  title="其他研发相关费用" sort-type="number" sortable></vxe-column>
     </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
     <RdProjectsModal ref="RdProjectsModalRefs" @ok="getPageList"></RdProjectsModal>
     <CalculateProjectsModal ref="CalculateProjectsModalRefs" @ok="getPageList"></CalculateProjectsModal>
     <LogListModal ref="LogListModalRefs"></LogListModal>

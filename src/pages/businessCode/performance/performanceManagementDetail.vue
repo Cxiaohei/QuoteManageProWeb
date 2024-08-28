@@ -320,7 +320,7 @@
           />
         </div>
       </a-modal>
-      <h3>页面保存</h3>
+      <h3 v-if="pageType != 'detail'">页面保存</h3>
       <div>
         <a-button type="primary" @click="sendDetail" v-if="pageType != 'detail'">保存草稿</a-button>
         <a-button

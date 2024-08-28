@@ -43,7 +43,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="项目目的">
-          <a-input v-model="queryFrom.projectPurpose" style="width: 350px" placeholder="项目目的"></a-input>
+          <a-textarea v-model="queryFrom.projectPurpose" style="width: 350px" placeholder="项目目的"></a-textarea>
         </a-form-model-item>
         <a-form-model-item label="项目经理">
           <a-input v-model="queryFrom.projectManager" style="width: 350px" placeholder="项目经理"></a-input>
@@ -86,15 +86,19 @@
             </ul>
           </div>
         </a-form-model-item>
-        <a-form-model-item label="预算包含内容">
-          <a-input
-            v-model="queryFrom.projectBudgetDetail"
-            style="width: 350px"
-            placeholder="预算包含内容"
-          ></a-input>
+        <a-form-model-item label="固定费用">
+          <a-input v-model="queryFrom.fixedCharge" style="width: 350px" placeholder="固定费用"></a-input>
         </a-form-model-item>
+       
         <a-form-model-item label="监控手段">
-          <a-input v-model="queryFrom.monitoringMeans" style="width: 350px" placeholder="监控手段"></a-input>
+          <a-select
+            v-model="queryFrom.monitoringMeans"
+            style="width: 250px"
+          >
+            <a-select-option value="固定费用">固定费用</a-select-option>
+            <a-select-option value="月度监控">月度监控</a-select-option>
+            <a-select-option value="条件使用">条件使用</a-select-option>
+          </a-select>
         </a-form-model-item>
         <a-form-model-item label="制造费包含金额">
           <a-input
@@ -103,11 +107,16 @@
             placeholder="制造费包含金额"
           ></a-input>
         </a-form-model-item>
-        <a-form-model-item label="固定费用">
-          <a-input v-model="queryFrom.fixedCharge" style="width: 350px" placeholder="固定费用"></a-input>
-        </a-form-model-item>
+
         <a-form-model-item label="费用备注">
           <a-input v-model="queryFrom.remark" style="width: 350px" placeholder="费用备注"></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="预算包含内容">
+          <a-input
+            v-model="queryFrom.projectBudgetDetail"
+            style="width: 350px"
+            placeholder="预算包含内容"
+          ></a-input>
         </a-form-model-item>
       </a-form-model>
 
