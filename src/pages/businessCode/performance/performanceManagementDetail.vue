@@ -85,12 +85,16 @@
           />
         </a-form-model-item>
         <a-form-model-item label="项目预算" style="width: 31%">
-          <a-input
+          <a-tooltip>
+            <template slot="title">总预算=三项费用+制造费用+领料，固定收费+监控费用不能大于项目预算</template>
+            <a-icon type="info-circle" />
+          </a-tooltip>&nbsp;
+          <a-input-number
             v-model="queryFrom.projectBudget"
             disabled
             style="width: 150px;margin-right: 5px;"
             placeholder="项目预算"
-          ></a-input>
+          ></a-input-number>
           <a-button type="primary" @click="yusuanVisible=true">预算明细项</a-button>
         </a-form-model-item>
         <a-form-model-item label="预算监控方式" style="width: 31%">
@@ -105,20 +109,22 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="制造费用" style="width: 31%">
-          <a-input
+          <a-input-number
             v-model="queryFrom.manufacturingContainCost"
             style="width: 250px;"
             placeholder="制造费用"
+            @change="quoteMean('manufacturingContainCost')"
             :disabled="pageType == 'detail'"
-          ></a-input>
+          ></a-input-number>
         </a-form-model-item>
         <a-form-model-item label="固定费用" style="width: 31%">
-          <a-input
+          <a-input-number
             v-model="queryFrom.fixedCharge"
             style="width: 250px;"
             placeholder="固定费用"
+            @change="quoteMean('fixedCharge')"
             :disabled="pageType == 'detail'"
-          ></a-input>
+          ></a-input-number>
         </a-form-model-item>
         <a-form-model-item label="项目目的" style="width: 31%">
           <a-textarea
@@ -598,6 +604,19 @@ export default {
           }
           this.bugetFromVisible = false;
         });
+      }
+    },
+    quoteMean(key) {
+      if (!this.queryFrom.projectBudget) {
+        this.$message.error("请先填写项目预算");
+        this.queryFrom[key] = 0;
+      }
+      if (
+        this.queryFrom.fixedCharge + this.queryFrom.manufacturingContainCost >
+        this.queryFrom.projectBudget
+      ) {
+        this.$message.error("固定收费+制造费用不能大于项目预算");
+        this.queryFrom[key] = 0;
       }
     },
     //目标

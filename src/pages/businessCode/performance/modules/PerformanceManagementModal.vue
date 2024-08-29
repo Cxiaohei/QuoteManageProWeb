@@ -358,7 +358,7 @@ export default {
         this.queryFrom.fixedCharge + this.queryFrom.manufacturingContainCost >
         this.queryFrom.projectBudget
       ) {
-        this.$message.error("固定收费+监控费用不能大于项目预算");
+        this.$message.error("固定收费+制造费用不能大于项目预算");
         this.queryFrom[key] = 0;
       }
     },
