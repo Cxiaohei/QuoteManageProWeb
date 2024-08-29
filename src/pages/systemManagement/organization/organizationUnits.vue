@@ -11,8 +11,9 @@
             rowKey="id"
             :customRow="onCustomRow"
             :rowClassName="setRowClassName"
+            @expandedRowsChange ="expandedRowsChange "
+            :expandedRowKeys.sync="expandedRowKeys"
           >
-          <!-- :expandedRowKeys="expandedRowKeys" -->
 
             <div slot="action" slot-scope="record">
               <a @click="$refs.createModal.openModal(record)" style="margin-right: 5px;">编辑</a>
@@ -282,7 +283,7 @@ export default {
       datas,
       checkedId: "",
       memberColumns,
-      roleColumns
+      roleColumns,
     };
   },
   methods: {
@@ -317,11 +318,14 @@ export default {
           // 获取所有的组织机构 ID 并设置为展开
           const expandedRowKeys = res.items.map(item => item.id);
           this.expandedRowKeys = expandedRowKeys;
-          console.log(this.data);
         })
         .finally(() => {
           this.loading = false;
         });
+    },
+    expandedRowsChange(expandedRowKeys){
+      this.expandedRowKeys=expandedRowKeys
+
     },
     changeData(data) {
       let result = [];
