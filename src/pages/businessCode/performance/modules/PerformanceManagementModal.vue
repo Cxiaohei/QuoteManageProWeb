@@ -60,15 +60,15 @@
         </a-form-model-item>
         <a-form-model-item label="项目预算">
           <a-tooltip>
-            <template slot="title">总预算=三项费用+制造费用+领料，固定收费+监控费用不能大于项目预算</template>
+            <template slot="title">总预算=三项费用+制造费用+领料</template>
             <a-icon type="info-circle" />
           </a-tooltip>&nbsp;
-          <a-input
+          <a-input-number
             v-model="queryFrom.projectBudget"
             disabled
             style="width: 150px;margin-right: 5px;"
             placeholder="项目预算"
-          ></a-input>
+          ></a-input-number>
           <a-button type="primary" style @click="yusuanVisible=true">预算明细项</a-button>
         </a-form-model-item>
         <a-form-model-item label="关联目标">
@@ -91,28 +91,28 @@
           </div>
         </a-form-model-item>
         <a-form-model-item label="固定费用">
-          <a-input
+          <a-input-number
             v-model="queryFrom.fixedCharge"
             style="width: 350px"
             placeholder="固定费用"
             @change="quoteMean('fixedCharge')"
-          ></a-input>
+          ></a-input-number>
         </a-form-model-item>
 
         <a-form-model-item label="监控手段">
           <a-select v-model="queryFrom.monitoringMeans" style="width: 250px">
-            <a-select-option value="固定费用">固定费用</a-select-option>
+            <a-select-option value="月度定额">月度定额</a-select-option>
             <a-select-option value="月度监控">月度监控</a-select-option>
             <a-select-option value="条件使用">条件使用</a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="制造费包含金额">
-          <a-input
+          <a-input-number
             v-model="queryFrom.manufacturingContainCost"
             style="width: 350px"
             placeholder="制造费包含金额"
             @change="quoteMean('manufacturingContainCost')"
-          ></a-input>
+          ></a-input-number>
         </a-form-model-item>
 
         <a-form-model-item label="费用备注">

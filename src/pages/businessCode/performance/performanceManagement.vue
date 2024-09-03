@@ -24,6 +24,13 @@
             ></a-input>
           </a-form-item>
           <a-form-item>
+            <a-select v-model="queryFrom.projectType" style="width: 200px;" placeholder="项目类型">
+            <a-select-option :value="0">常规型</a-select-option>
+            <a-select-option :value="1">战略型</a-select-option>
+            <a-select-option :value="3">改善型</a-select-option>
+          </a-select>
+          </a-form-item>
+          <a-form-item>
             <a-space>
               <a-button type="primary" icon="search" @click="search_pagelist"
                 >查询</a-button

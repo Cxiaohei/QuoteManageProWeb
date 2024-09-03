@@ -58,7 +58,6 @@
         >  {{
         row.bomQuoteNo
         }}</a>
-
         </template>
       </vxe-column>
       <vxe-column field="createUserName"  title="报价人姓名" sort-type="string" sortable></vxe-column>

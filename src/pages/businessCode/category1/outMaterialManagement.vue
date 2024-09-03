@@ -16,6 +16,14 @@
             ></a-input>
           </a-form-item>
           <a-form-item>
+            <a-select v-model="queryFrom.externalSource" style="width: 200px;" placeholder="物料来源">
+            <a-select-option :value="0">嘉立创</a-select-option>
+            <a-select-option :value="1">华秋</a-select-option>
+            <a-select-option :value="3">猎芯网</a-select-option>
+            <a-select-option :value="4">圣禾堂</a-select-option>
+          </a-select>
+          </a-form-item>
+          <a-form-item>
             <a-space>
               <a-button type="primary" icon="search" @click="search_pagelist"
                 >查询</a-button
@@ -34,7 +42,7 @@
       height="600"
       size="small"
       :loading="loading"
-      :sort-config="sortConfig"
+      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
       show-overflow="tooltip"
       :row-config="rowConfig"
       :custom-config="customConfig"
@@ -42,24 +50,13 @@
       @resizable-change="resizableChangeEvent"
     >
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="action" title="操作">
-        <template #default="{ row }">
-          <a
-            href="javascript:;"
-            @click="edit_record(row)"
-            style="margin-right: 5px"
-            >编辑</a
-          >
-          <a href="javascript:;" @click="view_details(row)">详情</a>
-        </template>
-      </vxe-column>
-      <vxe-column field="bomNo" title="物料编号"></vxe-column>
-      <vxe-column field="bomName" title="物料名称"></vxe-column>
-      <vxe-column field="bomCode" title="物料代码"></vxe-column>
-      <vxe-column field="brand" title="品牌"></vxe-column>
-      <vxe-column field="specification" title="规格"></vxe-column>
-      <vxe-column field="bomModel" title="型号"></vxe-column>
-      <vxe-column field="bomCraft" title="物料工艺">
+  
+      <vxe-column field="bomName" title="物料名称" sort-type="string" sortable></vxe-column>
+      <vxe-column field="bomCode" title="物料代码" sort-type="string" sortable></vxe-column>
+      <vxe-column field="brand" title="品牌" sort-type="string" sortable></vxe-column>
+      <vxe-column field="specification" title="规格" sort-type="string" sortable></vxe-column>
+      <vxe-column field="bomModel" title="型号" sort-type="string" sortable></vxe-column>
+      <vxe-column field="bomCraft" title="物料工艺" sort-type="number" sortable>
         <template #default="{ row }">
           <span v-if="row.bomCraft === 0">贴片</span>
           <span v-if="row.bomCraft === 5">插件</span>
@@ -67,7 +64,7 @@
         </template>
       </vxe-column>
 
-      <vxe-column field="dataSource" title="外部物料来源">
+      <vxe-column field="dataSource" title="外部物料来源" sort-type="number" sortable>
         <template #default="{ row }">
           <span v-if="row.dataSource === 0">嘉立创</span>
           <span v-if="row.dataSource === 1">华秋</span>
@@ -76,10 +73,12 @@
         </template>
       </vxe-column>
 
-      <vxe-column field="bomLegNum" title="物料脚数"></vxe-column>
-      <vxe-column field="recentUseBomNum" title="最近一次使用数量"></vxe-column>
-      <vxe-column field="currentPrice" title="当前市场价格"></vxe-column>
-      <vxe-column field="recentPrice" title="最近一次采购价"></vxe-column>
+      <vxe-column field="bomLegNum" title="物料脚数" sort-type="number" sortable></vxe-column>
+      <vxe-column field="currentPrice" title="最低价" sort-type="number" sortable></vxe-column>
+      <vxe-column field="currentPriceNeedBugNum" title="最低价采购数量" sort-type="number" sortable></vxe-column>
+      <vxe-column field="secondPrice" title="次低价" sort-type="number" sortable></vxe-column>
+      <vxe-column field="secondNeedBugNum" title="次低价采购数量" sort-type="number" sortable></vxe-column>
+      <vxe-column field="currentAvailablePrice" title="平均价" sort-type="number" sortable></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination

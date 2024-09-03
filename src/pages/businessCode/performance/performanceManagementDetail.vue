@@ -86,7 +86,7 @@
         </a-form-model-item>
         <a-form-model-item label="项目预算" style="width: 31%">
           <a-tooltip>
-            <template slot="title">总预算=三项费用+制造费用+领料，固定收费+监控费用不能大于项目预算</template>
+            <template slot="title">总预算=三项费用+制造费用+领料</template>
             <a-icon type="info-circle" />
           </a-tooltip>&nbsp;
           <a-input-number
@@ -97,13 +97,13 @@
           ></a-input-number>
           <a-button type="primary" @click="yusuanVisible=true">预算明细项</a-button>
         </a-form-model-item>
-        <a-form-model-item label="预算监控方式" style="width: 31%">
+        <a-form-model-item label="监控手段" style="width: 31%">
           <a-select
             v-model="queryFrom.monitoringMeans"
             :disabled="pageType == 'detail'"
             style="width: 250px"
           >
-            <a-select-option value="固定费用">固定费用</a-select-option>
+            <a-select-option value="月度定额">月度定额</a-select-option>
             <a-select-option value="月度监控">月度监控</a-select-option>
             <a-select-option value="条件使用">条件使用</a-select-option>
           </a-select>
