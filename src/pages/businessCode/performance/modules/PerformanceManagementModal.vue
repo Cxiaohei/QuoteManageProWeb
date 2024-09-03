@@ -198,6 +198,7 @@
             v-model="kkProjectBugetPart.otherMoney"
           />
         </div>
+        <p>请预估你这一年要计入到制造费用、研发领料、客户免费样机、固定费用（一般指折旧，政府收费），或其他以上项目未提及的费用总额填写到其它费用预算框内，同时在其他费用说明文本框内列明明细。</p>
         <div style="margin-bottom: 15px">
           其他费用说明:
           <a-input
@@ -366,7 +367,22 @@ export default {
     handleOk() {
       this.$refs.userRefs.validate(valid => {
         if (valid) {
+          if(!this.queryFrom.projectBudget){
+            this.$message.error("项目预算不可为空");
+            return false
+          }
+          if(!this.queryFrom.fixedCharge){
+            this.$message.error("固定收费不可为空");
+            return false
+          }
+          if(!this.queryFrom.manufacturingContainCost){
+            this.$message.error("制造费用不可为空");
+            return false
+          }
           this.confirmLoading = true;
+
+
+
           if (this.title == "新增") {
             this.addProductDataList();
           } else {

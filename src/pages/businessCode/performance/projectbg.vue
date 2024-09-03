@@ -296,9 +296,8 @@
                   >
                     <a-textarea
                       v-model="item.objective"
-                      style="width: 600px;"
+                      style="width: 600px;max-height: 400px"
                       placeholder="项目目标"
-                      rows="3"
                       disabled
                     ></a-textarea>
                   </li>
@@ -313,7 +312,7 @@
                   >
                     <a-textarea
                       v-model="item.objective"
-                      style="width: 600px;"
+                      style="width: 600px;max-height: 400px"
                       placeholder="项目目标"
                       rows="3"
                       disabled
