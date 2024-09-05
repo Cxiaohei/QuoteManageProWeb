@@ -1,5 +1,47 @@
 import Cookie from 'js-cookie'
 const xsrfHeaderName = 'Authorization'
+// 400拦截
+const resp400 = {
+  /**
+   * 响应数据之前做点什么
+   * @param response 响应对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {*}
+   */
+  onFulfilled(response, options) {
+    const { message } = options
+    if (response.code === 401) {
+      message.error('无此权限')
+    }
+    return response
+  },
+  /**
+   * 响应出错时执行
+   * @param error 错误对象
+   * @param options 应用配置 包含: {router, i18n, store, message}
+   * @returns {Promise<never>}
+   */
+  onRejected(error, options) {
+    const { message } = options
+    let msg = ''
+    if(error.response && error.response.data && error.response.data.error_description){
+      msg = error.response.data.error_description
+    }
+    else if (error.response && error.response.data ) {
+      msg = error.response.data.message
+      if(error.response.data.errors)
+      {
+        msg+=':'+error.response.data.errors[0].errorMessage
+
+      }
+    } else {
+      msg = error.message
+    }
+    message.error(msg)
+    return Promise.reject(error)
+  }
+}
+
 // 401拦截
 const resp401 = {
   /**
@@ -43,7 +85,8 @@ const resp401 = {
     message.error(msg)
     return Promise.reject(error)
   }
-}
+}  
+
 
 const resp403 = {
   onFulfilled(response, options) {
@@ -62,7 +105,6 @@ const resp403 = {
   //   return Promise.reject(error)
   // }
 }
-
 const reqCommon = {
   /**
    * 发送请求之前做些什么
@@ -104,5 +146,5 @@ const reqCommon = {
 
 export default {
   request: [reqCommon], // 请求拦截
-  response: [resp401, resp403] // 响应拦截
+  response: [resp401, resp403,resp400] // 响应拦截
 }

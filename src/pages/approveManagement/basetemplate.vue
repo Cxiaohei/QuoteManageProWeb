@@ -60,16 +60,6 @@
       @ok="handleOkAudite"
       @cancel="visibleAudite=false"
     >
-      状态：
-      <a-radio-group v-model="templateFileType">
-        <a-radio :value="0">内部物料模板</a-radio>
-        <a-radio :value="1">BOM报价单模板</a-radio>
-        <a-radio :value="2">ODM报价单模板</a-radio>
-        <a-radio :value="3">研发费报价模板</a-radio>
-        <a-radio :value="4">管理项目立项模板</a-radio>
-        <a-radio :value="5">项目变更申请模板</a-radio>
-      </a-radio-group>
-      <br />
       <br />说明：
       <input type="file" @change="handleFileChange" />
     </a-modal>
@@ -149,7 +139,7 @@ export default {
       auditeRemarks: "",
       modalTitle: "新增",
       templateFileId: "",
-      templateFileType: "",
+      templateFileType: 0,
       templateFileName: "",
       templateFileData: null // 用于存储文件的ArrayBuffer
     };
@@ -192,11 +182,11 @@ export default {
               this.getPageList();
               this.visibleAudite = false;
             } else {
-              this.$message.error(res.message);
+              this.$message.error(res.msg);
             }
           })
           .catch(err => {
-            this.$message.error(err.message);
+
           });
       } else {
         templateFileEdit(formData,this.templateFileId)
@@ -241,7 +231,7 @@ export default {
             this.loading = false;
           } else {
             this.loading = false;
-            this.$message.error(res.message);
+            this.$message.error(res.msg);
           }
         })
         .catch(err => {

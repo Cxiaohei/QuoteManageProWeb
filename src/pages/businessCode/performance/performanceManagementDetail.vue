@@ -334,7 +334,7 @@
           @click="sendconfigDetail"
           v-if="pageType != 'detail'"
           style="margin-left: 15px"
-        >提交</a-button>
+        >提交审核</a-button>
       </div>
     </a-card>
 

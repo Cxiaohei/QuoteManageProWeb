@@ -86,9 +86,16 @@
       </table>
 
       <div style="text-align: center; color: red; line-height: 42px">
-        是否终止项目:
-        <a-switch v-model="queryFrom.isTerminate" />
-        {{ queryFrom.isTerminate ? "是" : "否" }}
+        申请变更类型：
+        <a-select
+            v-model="queryFrom.changeType"
+            placeholder="变更类型："
+            style="width: 350px"
+          >
+            <a-select-option value="1">项目变更</a-select-option>
+            <a-select-option value="3">项目中止</a-select-option>
+            <a-select-option value="4">项目结案</a-select-option>
+          </a-select>
       </div>
 
       <a-form-model
@@ -98,7 +105,7 @@
         :rules="rules"
         ref="userRefs"
       >
-        <template v-if="!queryFrom.isTerminate">
+        <template v-if="queryFrom.changeType==1">
           <a-form-model-item label="部门">
             <a-input v-model="tableData.department" style="width: 250px" placeholder="部门" disabled></a-input>
             <a-input v-model="queryFrom.department" style="width: 250px" placeholder="部门"></a-input>
@@ -472,6 +479,10 @@
         <a-form-model-item label="变更申请备注">
           <a-textarea v-model="queryFrom.remark" style="width: 550px" placeholder="变更申请备注"></a-textarea>
         </a-form-model-item>
+        <a-form-model-item label="上传报告" v-if="queryFrom.changeType!=1">
+          <input type="file" @change="handleFileChange" />
+        </a-form-model-item>
+
       </a-form-model>
     </a-modal>
   </div>
@@ -486,6 +497,8 @@ export default {
   props: {},
   data() {
     return {
+      projectReportFile:null,
+      projectReportFileName: "",
       title: "标题",
       uservisible: false,
       tableKey: [
@@ -590,17 +603,24 @@ export default {
     }
   },
   methods: {
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      this.projectReportFileName = file.name;
+      if (!file) {
+        console.log("No file selected");
+        return;
+      }
+      this.projectReportFile = file;
+    },
     openModules(type, info) {
       this.queryFrom = {};
       this.queryFrom = cloneDeep(info);
       this.tableData = cloneDeep(info);
-      console.log(info);
       this.uservisible = true;
       this.projectObjectivesList = this.queryFrom.projectObjectives;
       this.newprojectBugetParts = this.queryFrom.projectBugetParts;
       this.timeArr1 = [this.queryFrom.startTime, this.queryFrom.endTime];
       this.newtimeArr1 = [this.queryFrom.startTime, this.queryFrom.endTime];
-      console.log(this.queryFrom.projectObjectives);
       if (this.projectObjectivesList.length == 0) {
         this.projectObjectivesList = [{ value: "" }];
       }
@@ -632,7 +652,8 @@ export default {
       this.logDataSource = [];
       let params = {
         ...this.queryFrom,
-        kkProjectId: this.queryFrom.id
+        kkProjectId: this.queryFrom.id,
+        projectReportFile:this.projectReportFile
       };
       const projectObjectives = [];
       this.projectObjectivesList.map(item => {
@@ -652,7 +673,6 @@ export default {
       params["projectObjectives"] = this.queryFrom.projectObjectives;
       params["auditeUserNames"] = auditeUserNames;
       params["kKProjectBugetPart"] = this.newprojectBugetParts[0];
-      console.log(params);
       changeProductDataList(params)
         .then(res => {
           if (res.code == 1) {
