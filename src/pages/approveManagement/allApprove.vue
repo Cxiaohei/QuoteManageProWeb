@@ -1,16 +1,16 @@
 <template>
   <div>
     <a-tabs default-active-key="1">
-      <a-tab-pane key="1" tab="Oem报价审批审批">
+      <a-tab-pane key="0" tab="Bom报价审批审批">
         <TypeApprove :auditeType="0"></TypeApprove>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="制作费用报价审批">
+      <a-tab-pane key="1" tab="制作费用报价审批">
         <TypeApprove :auditeType="1"></TypeApprove>
       </a-tab-pane>
-      <a-tab-pane key="3" tab="研发费用报价审批">
+      <a-tab-pane key="2" tab="研发费用报价审批">
         <TypeApprove :auditeType="2"></TypeApprove>
       </a-tab-pane>
-      <a-tab-pane key="4" tab="Odm报价审批">
+      <a-tab-pane key="3" tab="Odm报价审批">
         <TypeApprove :auditeType="3"></TypeApprove>
       </a-tab-pane>
     </a-tabs>

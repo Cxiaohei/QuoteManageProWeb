@@ -50,7 +50,7 @@
 
       <span slot="auditeType" slot-scope="text, record">
         {{
-        record.auditeType == 0 ?"Oem报价审批":
+        record.auditeType == 0 ?"Bom报价审批":
         record.auditeType == 1 ?"制作费用报价审批":
         record.auditeType == 2 ?"研发费用报价审批":"Odm报价审批"
         }}

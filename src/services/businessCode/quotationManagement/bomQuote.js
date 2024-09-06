@@ -66,7 +66,7 @@ export function downloadTemplate() {
 
 
 
-/// Oem报价日志 0
+/// Bom报价日志 0
 /// 制作费用报价日志 1
 /// 研发费用报价日志 2
 /// Odm报价日志 3

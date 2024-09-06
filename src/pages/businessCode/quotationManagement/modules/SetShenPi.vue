@@ -12,7 +12,7 @@
       <a-form-model :model="queryFrom" :label-col="{ span: 4 }" :rules="rules" ref="userRefs">
         <a-form-model-item label="类型">
           <a-select v-model="queryFrom.auditeType" style="width: 450px" placeholder="类型" disabled>
-            <a-select-option :value="0">Oem报价审批</a-select-option>
+            <a-select-option :value="0">Bom报价审批</a-select-option>
             <a-select-option :value="1">制作费用报价审批</a-select-option>
             <a-select-option :value="2">研发费用报价审批</a-select-option>
             <a-select-option :value="3">Odm报价审批</a-select-option>

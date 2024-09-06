@@ -7,7 +7,7 @@
       <a-tab-pane key="2" tab="ODM报价">
         <odmQuote></odmQuote>
       </a-tab-pane>
-      <a-tab-pane key="3" tab="OEM报价">
+      <a-tab-pane key="3" tab="Bom报价">
         <bomQuote></bomQuote>
       </a-tab-pane>
     </a-tabs>

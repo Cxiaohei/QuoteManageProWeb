@@ -52,7 +52,7 @@ export default {
               path: "/quotationManagement/rdProjects"
             },
             {
-              name: "OEM报价",
+              name: "Bom报价",
               path: "/quotationManagement/bomQuote"
             }
           ]
