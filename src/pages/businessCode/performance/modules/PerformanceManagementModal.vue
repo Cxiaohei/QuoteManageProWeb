@@ -348,7 +348,7 @@ export default {
         ],
       },
       kkProjectBugetPart: {
-        kkProjectId: "",
+        // kkProjectId: "",
         trafficMoney: 0,
         accommodationMoney: 0,
         tableMoney: 0,
@@ -359,7 +359,7 @@ export default {
         otherMoney: 0,
         otherMoneyReamrk: "",
         projectChangeType: 0,
-        projectChangeRequestId: "",
+        // projectChangeRequestId: "",
       },
       yusuanVisible: false, //项目预算
     };
@@ -442,8 +442,10 @@ export default {
                 } else {
                   self.editProductInfo();
                 }
+                self.confirmLoading = false;
               },
               onCancel() {
+                self.confirmLoading = false;
               },
             });
           } else {
