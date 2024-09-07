@@ -19,6 +19,7 @@ export async function getPageListDetail(params) {
 
 //新增夸克
 export async function addProductDataList(params) {
+    console.log(params)
     return request("/api/app/k-kProject/k-kProject", METHOD.POST, params)
 }
 //编辑夸克

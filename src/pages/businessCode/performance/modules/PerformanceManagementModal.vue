@@ -426,8 +426,9 @@ export default {
         var isadd = this.title == "新增";
         var titleStr = titleisbudgetStr + titleisfiedStr + titleismanufStr;
         if (valid) {
+          const self = this;
           if (titleStr) {
-            const self = this;
+          
             this.$confirm({
               title:
                 "你的" +
@@ -437,9 +438,9 @@ export default {
                 "请确认是否漏填，一旦你提交表单，所有的变更都只能走变更申请",
               onOk() {
                 if (isadd) {
-                  self.addProductDataList();
+                  self.addProductInfo();
                 } else {
-                  editProductDataList();
+                  self.editProductInfo();
                 }
               },
               onCancel() {
@@ -447,9 +448,9 @@ export default {
             });
           } else {
             if (isadd) {
-              addProductDataList();
+              this.addProductInfo();
             } else {
-              editProductDataList();
+              this.editProductInfo();
             }
           }
           this.confirmLoading = true;
@@ -461,7 +462,7 @@ export default {
       this.$refs.userRefs.resetFields();
     },
     //新增基础数据
-    addProductDataList() {
+    addProductInfo() {
       this.logDataSource = [];
       let params = {
         ...this.queryFrom,
@@ -497,7 +498,7 @@ export default {
         });
     },
     //编辑基础数据
-    editProductDataList() {
+    editProductInfo() {
       this.logDataSource = [];
       let params = {
         ...this.queryFrom,
