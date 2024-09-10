@@ -71,6 +71,16 @@
         </template>
       </vxe-column>
     </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
     <a-modal
       title="变更申请"
       :visible="changeVisible"
@@ -79,7 +89,7 @@
       width="95%"
       :bodyStyle="{ height: '90%', overflowY: 'auto' }"
     >
-      <div v-if="changeListData.length > 0">
+      <div v-if="changeListData.length > 0&&changeListData[1].changeType==1">
         <!-- 表格 -->
         <table class="scrapBalanceTable" style="margin-bottom: 20px">
           <tr>
@@ -338,7 +348,26 @@
           </div>
         </a-form-model>
       </div>
-      <div style="text-align: center;" v-if="this.auditeStatus==0">
+      <div v-if="changeListData.length > 0&&changeListData[1].changeType!=1">
+        <div style="display: flex; gap: 16px; flex-wrap: nowrap;">
+              <div style="flex: 1; min-width: 0;">
+                <a href="javascript:;" @click="lookProduct(changeListData[1])" style="margin-right: 5px;color:#666">点击下载：{{changeListData[1].changeFileName}}</a>
+              </div>
+            </div>
+        <div style="display: flex; gap: 16px; flex-wrap: nowrap;">
+              <div style="flex: 1; min-width: 0;">
+                <a-form-model-item label="变更申请备注" style="margin: 0;">
+                  <a-textarea
+                    v-model="changeListData[1].remark"
+                    style="width: 1200px;"
+                    placeholder="变更申请备注"
+                    disabled
+                  ></a-textarea>
+                </a-form-model-item>
+              </div>
+            </div>
+      </div>
+      <div style="text-align: center;" v-if="this.auditeStatus<=1">
         <a-button type="primary" style="width: 150px;height: 40px;font-size: x-large;" @click="productData_edit(changeListData[1])">审核</a-button>
       </div>
 
@@ -348,7 +377,7 @@
       状态：
       <a-radio-group v-model="statusAudite">
         <!-- <a-radio :value="0">待审核</a-radio> -->
-        <a-radio :value="1">通过</a-radio>
+        <a-radio :value="2">通过</a-radio>
         <a-radio :value="10">不通过</a-radio>
       </a-radio-group>
       <br />
@@ -359,7 +388,7 @@
 </template>
 
 <script>
-import { getPageList, getPagechange,checkAudite } from "@/services/performance/projectbg";
+import { getPageList, getPagechange,checkAudite,downloadChangeFile } from "@/services/performance/projectbg";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 
@@ -481,7 +510,7 @@ export default {
       auditeId: "",
       auditeStatus:0,
       visibleAudite: false,
-      statusAudite: 1,
+      statusAudite: 2,
       auditeRemarks: "",
       changeList: [
         {
@@ -552,6 +581,11 @@ export default {
   },
   methods: {
     checkPermission,
+       //查看项目
+      lookProduct(record) {
+        console.log(record)
+        downloadChangeFile(record);
+    },
     //新增
     add_pagelist() {
       this.$refs.PerformanceManagementModalRefs.openModules("add");
@@ -581,7 +615,7 @@ export default {
     },
     //编辑
     productData_edit(record) {  
-      this.statusAudite = 1;
+      this.statusAudite = 2;
       this.auditeRemarks = "";
       this.visibleAudite = true;
     },
@@ -667,11 +701,8 @@ export default {
     },
     //页数切换
     handleTableChange(pagination) {
-      const pager = {
-        ...this.pagination
-      };
-      pager.current = pagination.current;
-      this.pagination = pager;
+      
+      this.pagination.current = pagination;
       this.getPageList();
     },
     //重置

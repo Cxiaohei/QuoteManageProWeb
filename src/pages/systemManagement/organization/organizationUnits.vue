@@ -289,14 +289,14 @@ export default {
   methods: {
     handleMTableChange(pagination, filters, sorter) {
       const pager = { ...this.pagination };
-      pager.current = pagination.current;
-      this.pagination = pager;
+      this.pagination.current = pagination;
+      
       if (sorter.field) this.sorter = sorter;
       this.getMemberData(this.checkedId);
     },
     handleRTableChange(pagination, filters, sorter) {
       const pager = { ...this.memberPagination };
-      pager.current = pagination.current;
+      this.pagination.current = pagination;
       this.memberPagination = pager;
       if (sorter.field) this.sorter = sorter;
       this.getRoleData(this.checkedId);

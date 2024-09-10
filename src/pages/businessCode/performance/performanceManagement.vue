@@ -381,7 +381,7 @@ export default {
         ...this.pagination,
       };
       pager.current = pagination;
-      this.pagination = pager;
+      
       this.getPageList();
     },
     //重置

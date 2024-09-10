@@ -16,6 +16,9 @@ export async function getPagechange(params) {
 export async function checkAudite(params) {
     return request("/api/app/k-kProject/do-audite-quote", METHOD.POST, params)
 }
-
+export function downloadChangeFile(params) {
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/DownTempExcel/DownLoadChangeFileAsync?ChangeFileBlobName=` + params.changeFileBlobName+'&downFileName='+params.changeFileName;
+    download(url,  params.changeFileName);
+}
 
 

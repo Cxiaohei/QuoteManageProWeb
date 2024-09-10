@@ -661,7 +661,7 @@
           </a-form-model-item>
         </template>
 
-        <a-form-model-item label="审批人">
+        <a-form-model-item label="审批人"  v-if="queryFrom.changeType">
           <div style="overflow: hidden; width: auto; display: flex">
             <ul style="padding: 0; flex: 1">
               <li
@@ -698,14 +698,14 @@
           </div>
         </a-form-model-item>
 
-        <a-form-model-item label="变更申请备注">
+        <a-form-model-item label="变更申请备注"  v-if="queryFrom.changeType">
           <a-textarea
             v-model="queryFrom.remark"
             style="width: 550px"
             placeholder="变更申请备注"
           ></a-textarea>
         </a-form-model-item>
-        <a-form-model-item label="上传报告" v-if="queryFrom.changeType != 1">
+        <a-form-model-item label="上传报告" v-if="queryFrom.changeType&&queryFrom.changeType != 1">
           <input type="file" @change="handleFileChange" />
         </a-form-model-item>
       </a-form-model>
@@ -716,7 +716,7 @@
 <script>
 import {
   changeProductDataList,
-  uploadChangeFile,
+  changeProductTerminated,
 } from "@/services/performance/performanceManagement";
 import cloneDeep from "lodash.clonedeep";
 
@@ -901,24 +901,15 @@ export default {
       params["projectObjectives"] = this.queryFrom.projectObjectives;
       params["auditeUserNames"] = auditeUserNames;
       params["kKProjectBugetPart"] = this.newprojectBugetParts[0];
-
-      changeProductDataList(params)
+      if(this.queryFrom.changeType==1)
+      {
+        changeProductDataList(params)
         .then((res) => {
           if (res.code == 1) {
-            let formData = new FormData();
-            formData.append("ChangeId", res.data);
-            formData.append("ProjectReportFile", this.projectReportFile);
-            uploadChangeFile(formData)
-              .then((uploadres) => {
-                if (uploadres.code == 1) {
-                  this.$message.success(res.msg);
+            this.$message.success(res.msg);
                   this.$emit("ok");
                   this.uservisible = false;
-                } else {
-                  this.$message.error(uploadres.msg);
-                }
-              })
-              .catch((err) => {});
+                  this.confirmLoading = false;
           } else {
             this.$message.error(res.msg);
           }
@@ -928,6 +919,39 @@ export default {
           this.loading = false;
           this.confirmLoading = false;
         });
+      }
+      else
+      {
+        if(!this.projectReportFile)
+      {
+        this.$message.error('必须选择上传结案报告');
+        return;
+      }
+        let formData = new FormData();
+            
+            formData.append("kkProjectId", this.queryFrom.id);
+            formData.append("remark", this.queryFrom.remark);
+            formData.append("changeType", this.queryFrom.changeType);
+            formData.append("auditeUserNames", auditeUserNames);
+            formData.append("ProjectReportFile", this.projectReportFile);
+            changeProductTerminated(formData)
+        .then((res) => {
+          if (res.code == 1) {
+            this.$message.success(res.msg);
+                  this.$emit("ok");
+                  this.uservisible = false;
+                  this.confirmLoading = false;
+          } else {
+            this.$message.error(res.msg);
+          }
+          this.confirmLoading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.confirmLoading = false;
+        });
+      }
+     
     },
   },
 };

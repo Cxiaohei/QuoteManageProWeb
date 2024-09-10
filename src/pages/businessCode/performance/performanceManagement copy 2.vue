@@ -281,8 +281,8 @@ export default {
       const pager = {
         ...this.pagination,
       };
-      pager.current = pagination.current;
-      this.pagination = pager;
+      this.pagination.current = pagination;
+      
       this.getPageList();
     },
     //重置

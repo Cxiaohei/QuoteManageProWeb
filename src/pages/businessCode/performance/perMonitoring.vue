@@ -587,7 +587,7 @@ export default {
         ...this.pagination,
       };
       pager.current = pagination;
-      this.pagination = pager;
+      
       this.getMonitoringPageList();
     },
     //重置

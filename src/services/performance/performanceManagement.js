@@ -30,17 +30,11 @@ export async function editProductDataList(params) {
 
 //项目变更
 export async function changeProductDataList(params) {
-    params.productId = params.id;
     return request("/api/app/k-kProject/submit-project-change-request", METHOD.POST, params)
 }
-//项目变更文件上传
-export async function uploadChangeFile(params) {
-    return request("/api/app/k-kProject/upload-project-change-file", METHOD.POST, params, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    })
-
+//项目中止或结案
+export async function changeProductTerminated(params) {
+    return request("/api/app/k-kProject/terminate-project-request", METHOD.POST, params)
 }
 
 

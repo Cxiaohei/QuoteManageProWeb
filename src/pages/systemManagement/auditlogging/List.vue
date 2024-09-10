@@ -365,8 +365,8 @@ export default {
     },
     handleTableChange(pagination, filters, sorter) {
       const pager = { ...this.pagination };
-      pager.current = pagination.current;
-      this.pagination = pager;
+      this.pagination.current = pagination;
+      
       if(sorter.field) this.sorter = sorter;
       this.loadData();
     },
