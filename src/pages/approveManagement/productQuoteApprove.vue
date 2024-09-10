@@ -1,90 +1,162 @@
 <template>
   <a-card>
-    <div class="queryFromBox">
-      <a-form :model="queryFrom" layout="inline">
-        <!-- <a-form-item>
-          <a-space>
-            <a-button type="primary" @click="add_pagelist">新增</a-button>
-          </a-space>
-        </a-form-item>-->
-        <a-form-item>
-          <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" icon="search" @click="search_pagelist">查询</a-button>
-            <a-button type="primary" @click="reset_pagelists">重置</a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-    </div>
-    <a-table
-      rowKey="id"
-      :row-selection="{
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange,
-          }"
-      :columns="columns"
-      :dataSource="dataSource"
-      @change="handleTableChange"
-      :pagination="pagination"
+    <vxe-toolbar ref="xToolbar1" custom>
+      <template #buttons>
+        <a-form :model="queryFrom" layout="inline">
+          <a-form-item>
+            <a-input
+              v-model.trim="queryFrom.Filter"
+              style="width: 180px"
+              placeholder="关键字"
+            ></a-input>
+          </a-form-item>
+          <a-form-item label="年份">
+            <a-input
+              v-model.trim="queryFrom.year"
+              style="width: 180px"
+              placeholder="输入年份"
+            ></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-space>
+              <a-button type="primary" icon="search" @click="search_pagelist"
+                >查询</a-button
+              >
+              <a-button type="primary" @click="reset_pagelists">重置</a-button>
+            </a-space>
+          </a-form-item>
+        </a-form>
+      </template>
+    </vxe-toolbar>
+    <vxe-table
+      border
+      resizable
+      ref="xTable1"
+      id="toolbar_demo5"
+      height="650"
+      size="large"
       :loading="loading"
-      :selectedRows.sync="selectedRows"
-      bordered
+      :sort-config="{
+        trigger: 'cell',
+        defaultSort: { field: 'age', order: 'desc' },
+        orders: ['desc', 'asc', null],
+      }"
+      show-overflow="tooltip"
+      :row-config="rowConfig"
+      :custom-config="customConfig"
+      :data="dataSource"
+      @resizable-change="resizableChangeEvent"
     >
-      <span slot="action" slot-scope="text, record">
-        <a
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="action" width="80px" title="操作">
+        <template #default="{ row }">
+          <a
           href="javascript:;"
-          v-if="record.status==0"
-          @click="productData_edit(record)"
+          v-if="row.status==0"
+          @click="productData_edit(row)"
           style="margin-right: 5px;"
         >审核</a>
-        <!-- <a
-          href="javascript:;"
-          @click="lookProduct(record)"
-          style="margin-right: 5px;color:#666"
-        >查看项目</a> -->
-        <!-- <a href="javascript:;" @click="pinbanOrder_edit(record, 'detail')">详情</a>
-        <a href="javascript:;" @click="showLog(record)">日志</a>-->
-      </span>
+        </template>
+      </vxe-column>
+      <vxe-column field="auditeNo" title="审核编号" sort-type="string" sortable>
+        <template #default="{ row }">
+          <a
+            href="javascript:;"
+            @click="showEdit(row)"
+            style="margin-right: 5px"
+          >
+            {{ row.auditeNo }}</a
+          >
+        </template>
+      </vxe-column>
+      <vxe-column
+        field="remarks"
+        title="申请备注"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="currentStepUserName"
+        title="当前待审批人"
+        sort-type="string"
+        sortable
+      >
+      </vxe-column>
+      <vxe-column
+        field="auditeRecords"
+        title="审批流程"
+        sort-type="string"
+        sortable
+      >
+        <template #default="{ row }">
+          <div style="overflow: hidden; width: 350px">
+            <ul style="padding: 0">
+              <li
+                style="list-style: none"
+                v-for="(item, index) in row.auditeRecords"
+                :key="index"
+              >
+                <span>{{ item.auditeUserName }}：</span>
+                <span v-if="item.status == 0" style="color: red">待审核</span>
+                <span v-if="item.status == 2" style="color: green">通过</span>
+                <span v-if="item.status == 10" style="color: red">不通过</span>
+              </li>
+            </ul>
+          </div>
+        </template>
+      </vxe-column>
+      <vxe-column field="status" title="状态" sort-type="number" sortable>
+        <template #default="{ row }">
+          <span v-if="row.status == 0">待审核</span>
+          <span v-if="row.status == 1">审核中</span>
+          <span v-if="row.status == 2">通过</span>
+          <span v-if="row.status == 10">不通过</span>
+        </template>
+      </vxe-column>
+      <vxe-column
+        field="createUserName"
+        title="申请人"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column field="creationTime" title="申请发起时间" sortable>
+        <template #default="{ row }">
+          <span>
+            {{
+              row.creationTime
+                ? row.creationTime.substring(0, 19).replace("T", "  ")
+                : "/"
+            }}
+          </span>
+        </template>
+      </vxe-column>
+    </vxe-table>
+    <div style="margin-top: 10px; display: flex; justify-content: flex-end">
+      <a-pagination
+        :total="pagination.total"
+        :showQuickJumper="pagination.showQuickJumper"
+        :current="pagination.current"
+        :pageSize="pagination.pageSize"
+        :show-total="pagination.showTotal"
+        @change="handleTableChange"
+      />
+    </div>
 
-      <span slot="auditeType" slot-scope="text, record">
-        {{
-        record.auditeType == 0 ?"Bom报价审批":
-        record.auditeType == 1 ?"制作费用报价审批":
-        record.auditeType == 2 ?"研发费用报价审批":"Odm报价审批"
-        }}
-      </span>
-      <span slot="auditeUserNames" slot-scope="text, record">
-        {{
-        record.auditeUserNames.join(",")
-        }}
-      </span>
-
-      <span slot="status" slot-scope="text, record">
-        {{
-        record.status == 0 ?"待审核":
-        record.status == 1 ?"通过":
-        "不通过"
-        }}
-      </span>
-      <span slot="creationTime" slot-scope="text, record">
-        {{
-        record.creationTime?record.creationTime.substring(0,19).replace('T','/'):"/"
-        }}
-      </span>
-    </a-table>
-
-    <a-modal title="审批" :visible="visibleAudite" @ok="handleOkAudite" @cancel="visibleAudite=false">
+    <a-modal
+      title="审批"
+      :visible="visibleAudite"
+      @ok="handleOkAudite"
+      @cancel="visibleAudite = false"
+    >
       状态：
       <a-radio-group v-model="statusAudite">
         <!-- <a-radio :value="0">待审核</a-radio> -->
-        <a-radio :value="1">通过</a-radio>
+        <a-radio :value="2">通过</a-radio>
         <a-radio :value="10">不通过</a-radio>
       </a-radio-group>
       <br />
       <br />说明：
-      <a-input v-model="auditeRemarks" style="width: 80%;"></a-input>
+      <a-input v-model="auditeRemarks" style="width: 80%"></a-input>
     </a-modal>
   </a-card>
 </template>
@@ -152,6 +224,24 @@ const columns = [
 export default {
   data() {
     return {
+        // 表格配置
+        customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true,
+        },
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true,
+      },
+      rowConfig: {
+        keyField: "id",
+      },
       selectedRowKeys: [],
       queryFrom: {
         processStepName: ""
@@ -181,6 +271,15 @@ export default {
     ...mapGetters("account", ["organizationId"])
   },
   methods: {
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map((column) => {
+        return {
+          width: column.renderWidth,
+        };
+      });
+      console.log(customData);
+    },
     checkPermission,
     //审核确认
     handleOkAudite() {
