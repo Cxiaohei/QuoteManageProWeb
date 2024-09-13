@@ -59,15 +59,6 @@
         </template>
       </vxe-column>
       <vxe-column field="auditeNo" title="审核编号" sort-type="string" sortable>
-        <template #default="{ row }">
-          <a
-            href="javascript:;"
-            @click="showEdit(row)"
-            style="margin-right: 5px"
-          >
-            {{ row.auditeNo }}</a
-          >
-        </template>
       </vxe-column>
       <vxe-column
         field="remarks"

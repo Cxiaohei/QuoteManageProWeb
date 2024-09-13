@@ -62,7 +62,7 @@
         <template #default="{ row }">
           <a
             href="javascript:;"
-            @click="showEdit(row)"
+            @click="productData_edit(row)"
             style="margin-right: 5px"
           >
             {{ row.auditeNo }}</a
