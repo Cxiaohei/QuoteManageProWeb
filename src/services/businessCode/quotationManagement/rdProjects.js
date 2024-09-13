@@ -14,7 +14,10 @@ export async function editEssentialDataList(params) {
     params.baseDataId = params.id;
     return request("/api/app/basic-configuration/base-data-info", METHOD.PUT, params)
 }
-
+//删除研发项目报价
+export async function deleteDevProject(params) {
+    return request(`/api/app/develop-project/dev-project/${params}`, METHOD.DELETE)
+}
 //研发项目详情
 export async function getRdProjectsDetail(Id) {
     return request(`/api/app/develop-project/dev-project-detail/${Id}`, METHOD.GET)
@@ -24,14 +27,14 @@ export async function addRdProjectsDetailList(params) {
     return request(`/api/app/develop-project/dev-project-detail-list`, METHOD.POST, params)
 }
 export async function editRdProjectsDetailList(params) {
-    return request(`/api/app/develop-project/dev-project-detail`, METHOD.PUT, params)
+    return request(`/api/app/develop-project/dev-project-detail-list`, METHOD.PUT, params)
 }
 export async function deleteRdProjectsDetailList(params) {
     return request(`/api/app/develop-project/dev-pro-detail/${params}`, METHOD.DELETE)
 }
 //获取工种列表
-export async function getTradesList() {
-    return request("/api/app/basic-configuration/base-datas", METHOD.GET)
+export async function getTradesList(params) {
+    return request("/api/app/basic-configuration/base-datas", METHOD.GET,params)
 }
 
 //计算项目得分

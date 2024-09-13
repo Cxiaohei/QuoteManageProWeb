@@ -389,6 +389,14 @@ const options = {
           component: PageView,
           children: [
             {
+              path: 'developmentType',
+              name: '研发类型',
+              meta: {
+                // authority: 'ProductType',
+              },
+              component: () => import('@/pages/basicsSeting/developmentType'),
+            },
+            {
               path: 'productType',
               name: '产品类型',
               meta: {

@@ -52,7 +52,7 @@
         <template #default="{ row }">
           <a
           href="javascript:;"
-          v-if="row.status==0"
+          v-if="row.status<2"
           @click="productData_edit(row)"
           style="margin-right: 5px;"
         >审核</a>
@@ -257,7 +257,7 @@ export default {
       },
       visibleAudite: false,
       auditeId: "",
-      statusAudite: 1,
+      statusAudite: 2,
       auditeRemarks: ""
     };
   },
@@ -305,7 +305,7 @@ export default {
     //编辑
     productData_edit(record) {
       this.auditeId = record.id;
-      this.statusAudite = 1;
+      this.statusAudite = 2;
       this.auditeRemarks = "";
       this.visibleAudite = true;
     },

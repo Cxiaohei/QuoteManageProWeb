@@ -47,8 +47,15 @@
           @click="rdProjectsDetail(row, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
-        <a href="javascript:;" @click="showLog(row)">日志</a>
-
+        <a href="javascript:;" @click="showLog(row)"   style="margin-right: 5px;">日志</a>
+        <a-popconfirm
+            title="确定删除吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="deleteDevProject(row)"
+          >
+            <a href="#"  v-if="row.status == 0"   style="margin-right: 5px">删除</a>
+          </a-popconfirm>
         </template>
       </vxe-column>
       <vxe-column field="projectNo"  title="研发项目编号" sort-type="string" sortable>
@@ -62,9 +69,12 @@
         }}</a>
         </template>
       </vxe-column>
-      <vxe-column field="projectName"  title="研发项目名称" sort-type="string" sortable></vxe-column>
+      <vxe-column field="projectName"  title="项目名称" sort-type="string" sortable></vxe-column>
+      <vxe-column field="customerName"  title="客户名称" sort-type="string" sortable></vxe-column>
       <vxe-column field="createUserName"  title="项目发起人" sort-type="string" sortable></vxe-column>
-      <vxe-column field="creationTime"   title="发起时间" sortable>
+      <vxe-column field="developmentType"  title="研发类型" sort-type="string" sortable></vxe-column>
+      <vxe-column field="productType"  title="产品类型" sort-type="string" sortable></vxe-column>
+      <!-- <vxe-column field="creationTime"   title="发起时间" sortable>
         <template #default="{ row }">
           <span >
         {{
@@ -74,11 +84,12 @@
         }}
       </span>
         </template>
-      </vxe-column>
-      <vxe-column field="totalFee"  title="项目总费用" sort-type="number" sortable></vxe-column>
-      <vxe-column field="laborCost"  title="总人工费" sort-type="number" sortable></vxe-column>
-      <vxe-column field="otherFee"  title="其他费用" sort-type="number" sortable></vxe-column>
-      <vxe-column field="productDefinitionsMoney"  title="产品定义费" sort-type="number" sortable></vxe-column>
+      </vxe-column> -->
+      <vxe-column field="totalFee"  title="研发总费用" sort-type="number" sortable></vxe-column>
+      <vxe-column field="finalScore"  title="项目评分" sort-type="number" sortable></vxe-column>
+      <vxe-column field="laborCost"  title="研发-工费" sort-type="number" sortable></vxe-column>
+      <vxe-column field="otherFee"  title="研发-物料" sort-type="number" sortable></vxe-column>
+      <!-- <vxe-column field="productDefinitionsMoney"  title="产品定义费" sort-type="number" sortable></vxe-column>
       <vxe-column field="hardwareMoney"  title="硬件开发费" sort-type="number" sortable></vxe-column>
       <vxe-column field="softwareMoney"  title="软件开发费" sort-type="number" sortable></vxe-column>
       <vxe-column field="structuralMoney"  title="结构开发费" sort-type="number" sortable></vxe-column>
@@ -86,7 +97,7 @@
       <vxe-column field="moldsAndToolingMoney"  title="模具及工装费" sort-type="number" sortable></vxe-column>
       <vxe-column field="authenticationMoney"  title="常规认证费" sort-type="number" sortable></vxe-column>
       <vxe-column field="spicalAuthenticationMoney"  title="特种认证费" sort-type="number" sortable></vxe-column>
-      <vxe-column field="otherFeeMoney"  title="其他研发相关费用" sort-type="number" sortable></vxe-column>
+      <vxe-column field="otherFeeMoney"  title="其他研发相关费用" sort-type="number" sortable></vxe-column> -->
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination
@@ -105,7 +116,7 @@
 </template>
       
   <script>
-import { getPageList } from "@/services/businessCode/quotationManagement/rdProjects";
+import { getPageList,deleteDevProject } from "@/services/businessCode/quotationManagement/rdProjects";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import RdProjectsModal from "./modules/RdProjectsModal.vue";
@@ -209,6 +220,13 @@ export default {
     ...mapGetters("account", ["organizationId"])
   },
   methods: {
+    deleteDevProject(record){
+      console.log(record)
+      deleteDevProject(record.id).then(res => {
+        this.$message.success("删除成功");
+        this.getPageList();
+      });
+    },
     checkPermission,
     //新增
     add_pagelist() {

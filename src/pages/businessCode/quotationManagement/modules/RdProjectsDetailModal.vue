@@ -246,7 +246,10 @@ export default {
   methods: {
     // openModules(type, info) {
     openModules(title, detailType, type, record) {
-      getTradesList().then(res => {
+      let params={
+      "CategoryType":0
+    }
+    getTradesList(params).then((res) => {
         this.TradesList = res.data;
       });
       // this.title = title;

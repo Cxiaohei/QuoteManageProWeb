@@ -21,16 +21,49 @@
           :key="index"
           :label="item.label"
         >
-          <a-switch
-            v-model="queryFrom[item.key]"
-            v-if="item.type == 'boolean'"
-          />
           <a-input
-            v-else-if="item.type == 'string'"
             v-model="queryFrom[item.key]"
             style="width: 150px"
             :placeholder="item.label"
           ></a-input>
+        </a-form-model-item>
+        <a-form-model-item style="width: 31%" label="产品类型">
+          <!-- 产品类别 -->
+          <a-select
+            v-model="queryFrom.productType"
+            style="width: 150px"
+            placeholder="产品类型"
+            allowClear
+          >
+            <a-select-option
+              :value="item.productTypeName"
+              v-for="(item,index) in ProductTypeList"
+              :key="index"
+            >{{item.productTypeName}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item style="width: 31%" label="研发类型">
+          <a-select
+            v-model="queryFrom.developmentType"
+            style="width: 150px"
+            placeholder="研发类型"
+            allowClear
+          >
+            <a-select-option
+              :value="item.categoryName"
+              v-for="(item,index) in DevelopmentTypeList"
+              :key="index"
+            >{{item.categoryName}}</a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="项目周期">
+          <a-range-picker
+            v-model.trim="timeArr1"
+            style="width: 350px"
+            :allowClear="false"
+            format="YYYY-MM-DD"
+            valueFormat="YYYY-MM-DD"
+          />
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -42,6 +75,12 @@ import {
   addEssentialDataList,
   editEssentialDataList,
 } from "@/services/businessCode/quotationManagement/rdProjects";
+import {
+  getPageListTypeSelect
+} from "@/services/basicsSeting/productXian";
+import {
+  getDevelopmentTypeListSelect,
+  } from "@/services/basicsSeting/developmentType";
 import cloneDeep from "lodash.clonedeep";
 
 export default {
@@ -49,6 +88,9 @@ export default {
   props: {},
   data() {
     return {
+      timeArr1: [],
+      DevelopmentTypeList: [], //研发类型
+      ProductTypeList: [], //产品类型
       title: "标题",
       uservisible: false,
       queryFrom: {},
@@ -60,50 +102,15 @@ export default {
           type: "string",
         },
         {
-          label: "产品定义",
-          key: "haveProductDefinitions",
-          type: "boolean",
-        },
-        {
-          label: "硬件开发",
-          key: "haveHardware",
-          type: "boolean",
-        },
-        {
-          label: "软件开发",
-          key: "haveSoftware",
-          type: "boolean",
-        },
-        {
-          label: "结构开发",
-          key: "haveStructural",
-          type: "boolean",
-        },
-        {
-          label: "产品测试",
-          key: "haveProductTest",
-          type: "boolean",
-        },
-        {
-          label: "模具及工装",
-          key: "haveMoldsAndTooling",
-          type: "boolean",
-        },
-        {
-          label: "认证",
-          key: "haveAuthentication",
-          type: "boolean",
-        },
-        {
-          label: "其他研发相关费",
-          key: "haveOtherFee",
-          type: "boolean",
-        },
-        {
-          label: "项目发起人姓名",
-          key: "createUserName",
+          label: "客户名称",
+          key: "customerName",
           type: "string",
         },
+        {
+          label: "样机数量",
+          key: "prototypeNum",
+          type: "string",
+        }
       ],
       rules: {
         categoryName: [
@@ -137,6 +144,14 @@ export default {
         this.queryFrom = cloneDeep(info);
       }
       this.uservisible = true;
+       //产品类型
+       getPageListTypeSelect().then(res => {
+        this.ProductTypeList = res.data;
+      });
+             //研发类型
+             getDevelopmentTypeListSelect().then(res => {
+        this.DevelopmentTypeList = res.data;
+      });
     },
     // 确定
     handleOk() {
@@ -161,6 +176,10 @@ export default {
       let params = {
         ...this.queryFrom,
       };
+      if (this.timeArr1 && this.timeArr1.length > 0) {
+        params.startTime = this.timeArr1[0];
+        params.endTime = this.timeArr1[1];
+      }
       addEssentialDataList(params)
         .then((res) => {
           if (res.code == 1) {
@@ -183,6 +202,10 @@ export default {
       let params = {
         ...this.queryFrom,
       };
+      if (this.timeArr1 && this.timeArr1.length > 0) {
+        params.startTime = this.timeArr1[0];
+        params.endTime = this.timeArr1[1];
+      }
       editEssentialDataList(params)
         .then((res) => {
           if (res.code == 1) {
