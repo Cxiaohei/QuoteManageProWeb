@@ -59,7 +59,10 @@ export async function setAudite(params) {
     return request(`/api/app/develop-project/quote-audite`, METHOD.POST, params)
 }
 
-
+//再次报价研发项目
+export async function reCreateDevProject(params) {
+    return request(`/api/app/develop-project/re-create-develop-project/${params}`, METHOD.POST)
+}
 
 export default {
     getPageList,
@@ -73,5 +76,6 @@ export default {
     calculateProjectScore,
     setProjectScore,
     editProjectScore,
-    setAudite
+    setAudite,
+    reCreateDevProject
 }

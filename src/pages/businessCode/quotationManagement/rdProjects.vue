@@ -56,6 +56,14 @@
           >
             <a href="#"  v-if="row.status == 0"   style="margin-right: 5px">删除</a>
           </a-popconfirm>
+          <a-popconfirm
+            title="确定再次报价吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="reCreateDevelopProject(row)"
+          >
+            <a href="#"  v-if="row.status > 0"   style="margin-right: 5px">再次报价</a>
+          </a-popconfirm>
         </template>
       </vxe-column>
       <vxe-column field="projectNo"  title="研发项目编号" sort-type="string" sortable>
@@ -116,7 +124,7 @@
 </template>
       
   <script>
-import { getPageList,deleteDevProject } from "@/services/businessCode/quotationManagement/rdProjects";
+import { getPageList,deleteDevProject,reCreateDevProject } from "@/services/businessCode/quotationManagement/rdProjects";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import RdProjectsModal from "./modules/RdProjectsModal.vue";
@@ -220,6 +228,12 @@ export default {
     ...mapGetters("account", ["organizationId"])
   },
   methods: {
+    reCreateDevelopProject(record){
+      reCreateDevProject(record.id).then(res => {
+        this.$message.success("重新报价成功");
+        this.getPageList();
+      });
+    },
     deleteDevProject(record){
       console.log(record)
       deleteDevProject(record.id).then(res => {

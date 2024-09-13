@@ -124,6 +124,7 @@
       >评分</a-button
     >
     <a :disabled="developStatus>1"
+       v-if="finalScore != '0'"
       @click="getcalculateProjects()"
       style="margin-right: 15px; text-decoration: underline"
       ><span style="font-size: 50px;">{{ finalScore }}</span>
