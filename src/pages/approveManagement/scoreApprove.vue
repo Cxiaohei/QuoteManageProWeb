@@ -33,7 +33,6 @@
       resizable
       ref="xTable1"
       id="toolbar_demo5"
-      height="650"
       size="large"
       :loading="loading"
       :sort-config="{
@@ -41,7 +40,6 @@
         defaultSort: { field: 'age', order: 'desc' },
         orders: ['desc', 'asc', null],
       }"
-      show-overflow="tooltip"
       :row-config="rowConfig"
       :custom-config="customConfig"
       :data="dataSource"

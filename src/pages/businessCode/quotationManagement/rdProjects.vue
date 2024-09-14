@@ -66,6 +66,15 @@
           </a-popconfirm>
         </template>
       </vxe-column>
+      <vxe-column field="status" title="状态" sort-type="number" sortable>
+        <template #default="{ row }">
+          <span v-if="row.status == 0" >草稿</span>
+          <span v-if="row.status == 1">已确认</span>
+          <span v-if="row.status == 2" style="color: green;">审批中</span>
+          <span v-if="row.status == 3" style="color: green;">审批通过</span>
+          <span v-if="row.status == 10" style="color: red;">不通过</span>
+        </template>
+      </vxe-column>
       <vxe-column field="projectNo"  title="研发项目编号" sort-type="string" sortable>
         <template #default="{ row }">
           <a

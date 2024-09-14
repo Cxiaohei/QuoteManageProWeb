@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal
-      :width="1100"
+      :width="900" 
       :title="title"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
@@ -10,61 +10,70 @@
     >
       <a-form-model
         :model="queryFrom"
-        layout="inline"
-        :label-col="{ span: 8 }"
+        layout="inline" 
         :rules="rules"
         ref="userRefs"
       >
-        <a-form-model-item
-          style="width: 31%"
-          v-for="(item, index) in queryFromDataList"
-          :key="index"
-          :label="item.label"
-        >
-          <a-input
-            v-model="queryFrom[item.key]"
-            style="width: 150px"
-            :placeholder="item.label"
-          ></a-input>
-        </a-form-model-item>
-        <a-form-model-item style="width: 31%" label="产品类型">
-          <!-- 产品类别 -->
-          <a-select
-            v-model="queryFrom.productType"
-            style="width: 150px"
-            placeholder="产品类型"
-            allowClear
-          >
-            <a-select-option
-              :value="item.productTypeName"
-              v-for="(item,index) in ProductTypeList"
-              :key="index"
-            >{{item.productTypeName}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item style="width: 31%" label="研发类型">
-          <a-select
-            v-model="queryFrom.developmentType"
-            style="width: 150px"
-            placeholder="研发类型"
-            allowClear
-          >
-            <a-select-option
-              :value="item.categoryName"
-              v-for="(item,index) in DevelopmentTypeList"
-              :key="index"
-            >{{item.categoryName}}</a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item label="项目周期">
-          <a-range-picker
-            v-model.trim="timeArr1"
-            style="width: 350px"
-            :allowClear="false"
-            format="YYYY-MM-DD"
-            valueFormat="YYYY-MM-DD"
-          />
-        </a-form-model-item>
+        <a-row :gutter="16"> <!-- 设置合适的间距 -->
+          <!-- 遍历生成表单项 -->
+          <a-col :span="8" v-for="(item, index) in queryFromDataList" :key="index">
+            <a-form-model-item :label="item.label">
+              <a-input
+                v-model="queryFrom[item.key]"
+                :placeholder="item.label"
+                style="width: 150px" 
+              />
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 产品类型 -->
+          <a-col :span="8">
+            <a-form-model-item label="产品类型">
+              <a-select
+                v-model="queryFrom.productType"
+                placeholder="产品类型"
+                style="width: 150px"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.productTypeName"
+                  v-for="(item,index) in ProductTypeList"
+                  :key="index"
+                >{{item.productTypeName}}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 研发类型 -->
+          <a-col :span="8">
+            <a-form-model-item label="研发类型">
+              <a-select
+                v-model="queryFrom.developmentType"
+                placeholder="研发类型"
+                style="width: 150px"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.categoryName"
+                  v-for="(item,index) in DevelopmentTypeList"
+                  :key="index"
+                >{{item.categoryName}}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 项目周期 -->
+          <a-col :span="12">
+            <a-form-model-item label="项目周期">
+              <a-range-picker
+                v-model.trim="timeArr1"
+                style="width: 300px" 
+                :allowClear="false"
+                format="YYYY-MM-DD"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
       </a-form-model>
     </a-modal>
   </div>
@@ -80,48 +89,29 @@ import {
 } from "@/services/basicsSeting/productXian";
 import {
   getDevelopmentTypeListSelect,
-  } from "@/services/basicsSeting/developmentType";
+} from "@/services/basicsSeting/developmentType";
 import cloneDeep from "lodash.clonedeep";
 
 export default {
   name: "customerModal",
-  props: {},
   data() {
     return {
       timeArr1: [],
-      DevelopmentTypeList: [], //研发类型
-      ProductTypeList: [], //产品类型
+      DevelopmentTypeList: [], // 研发类型
+      ProductTypeList: [], // 产品类型
       title: "标题",
       uservisible: false,
       queryFrom: {},
       confirmLoading: false,
       queryFromDataList: [
-        {
-          label: "研发项目名称",
-          key: "projectName",
-          type: "string",
-        },
-        {
-          label: "客户名称",
-          key: "customerName",
-          type: "string",
-        },
-        {
-          label: "样机数量",
-          key: "prototypeNum",
-          type: "string",
-        }
+        { label: "研发项目名称", key: "projectName", type: "string" },
+        { label: "客户名称", key: "customerName", type: "string" },
+        { label: "样机数量", key: "prototypeNum", type: "string" }
       ],
       rules: {
-        categoryName: [
-          { required: true, message: "请输入类别名称", trigger: "change" },
-        ],
-        categoryLevel: [
-          { required: true, message: "请选择等级", trigger: "change" },
-        ],
-        categoryType: [
-          { required: true, message: "请选择岗位", trigger: "change" },
-        ],
+        projectName: [{ required: true, message: "请输入研发项目名称", trigger: "blur" }],
+        customerName: [{ required: true, message: "请输入客户名称", trigger: "blur" }],
+        prototypeNum: [{ required: true, message: "请输入样机数量", trigger: "blur" }]
       },
     };
   },
@@ -144,16 +134,15 @@ export default {
         this.queryFrom = cloneDeep(info);
       }
       this.uservisible = true;
-       //产品类型
-       getPageListTypeSelect().then(res => {
+      
+      getPageListTypeSelect().then(res => {
         this.ProductTypeList = res.data;
       });
-             //研发类型
-             getDevelopmentTypeListSelect().then(res => {
+      
+      getDevelopmentTypeListSelect().then(res => {
         this.DevelopmentTypeList = res.data;
       });
     },
-    // 确定
     handleOk() {
       this.$refs.userRefs.validate((valid) => {
         if (valid) {
@@ -170,9 +159,7 @@ export default {
       this.uservisible = false;
       this.$refs.userRefs.resetFields();
     },
-    //新增基础数据
     addEssentialDataList() {
-      this.logDataSource = [];
       let params = {
         ...this.queryFrom,
       };
@@ -192,13 +179,10 @@ export default {
           this.confirmLoading = false;
         })
         .catch((err) => {
-          this.loading = false;
           this.confirmLoading = false;
         });
     },
-    //编辑基础数据
     editEssentialDataList() {
-      this.logDataSource = [];
       let params = {
         ...this.queryFrom,
       };
@@ -218,7 +202,6 @@ export default {
           this.confirmLoading = false;
         })
         .catch((err) => {
-          this.loading = false;
           this.confirmLoading = false;
         });
     },
@@ -226,4 +209,11 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+/* 控制表单元素之间的距离，确保一行内元素对齐 */
+a-form-model-item {
+  margin-bottom: 16px;
+  white-space: nowrap; /* 防止换行 */
+}
+
+</style>

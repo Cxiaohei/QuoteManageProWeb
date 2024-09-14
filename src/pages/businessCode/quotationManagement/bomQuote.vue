@@ -60,6 +60,14 @@
         }}</a>
         </template>
       </vxe-column>
+      <vxe-column field="status" title="状态" sort-type="number" sortable>
+        <template #default="{ row }">
+          <span v-if="row.status == 0">待审核</span>
+          <span v-if="row.status == 1">审核中</span>
+          <span v-if="row.status == 2">通过</span>
+          <span v-if="row.status == 10">不通过</span>
+        </template>
+      </vxe-column>
       <vxe-column field="createUserName"  title="报价人姓名" sort-type="string" sortable></vxe-column>
       <vxe-column field="bomNum"  title="物料种类数" sort-type="number" sortable></vxe-column>
       <vxe-column field="electronicNum"  title="电子料种类数" sort-type="number" sortable></vxe-column>
@@ -130,6 +138,24 @@ export default {
   components: { BomQuoteModal,LogListModal },
   data() {
     return {
+        // 表格配置
+    customConfig: {
+        storage: {
+          visible: true,
+          resizable: true,
+          sort: true,
+          fixed: true,
+        },
+      },
+      sortConfig: {
+        defaultSort: [],
+        multiple: true,
+        trigger: "cell",
+        remote: true,
+      },
+      rowConfig: {
+        keyField: "id",
+      },
       selectedRowKeys: [],
       queryFrom: {
         processStepName: ""
@@ -173,6 +199,15 @@ export default {
           id: record.id
         }
       });
+    },
+    resizableChangeEvent() {
+      const columns = this.$refs.xTable1.getColumns();
+      const customData = columns.map((column) => {
+        return {
+          width: column.renderWidth,
+        };
+      });
+      console.log(customData);
     },
     //获取列表数据
     getPageList() {

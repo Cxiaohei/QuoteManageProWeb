@@ -253,8 +253,8 @@ export default {
           if (res == "success") {
             this.$message.success("登录成功", 3);
             if (this.setPassword) {
-              Cookie.set("loginName", this.form.name);
-              Cookie.set("loginPassword", this.form.password);
+              Cookie.set("loginName", this.form.name, { expires: 7 });
+              Cookie.set("loginPassword", this.form.password, { expires: 7 });
             } else {
               Cookie.set("loginName", "");
               Cookie.set("loginPassword", "");
