@@ -10,7 +10,11 @@ import 'animate.css/source/animate.css'
 import Plugins from '@/plugins'
 import {initI18n} from '@/utils/i18n'
 import bootstrap from '@/bootstrap'
+
+import moment from 'moment'; //导入模块
 import 'moment/locale/zh-cn'
+moment.locale('zh-cn'); //设置语言 或 moment.lang('zh-cn'); 
+Vue.prototype.$moment = moment;//赋值使用
 import './utils/filter'
 import DragModal from '@/components/dragModal'
 Vue.component('DragModal', DragModal)

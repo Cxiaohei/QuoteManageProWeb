@@ -144,7 +144,7 @@ const options = {
               path: 'oemApprove',
               name: 'Bom报价审批',
               meta: {
-                authority: 'OemApprove',
+                authority: 'BomApprove',
               },
               component: () => import('@/pages/approveManagement/oemApprove'),
             },

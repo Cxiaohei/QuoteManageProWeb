@@ -35,7 +35,14 @@ export async function BomDetailDataList(Id) {
     return request(`/api/app/bom-quote/bom-quote-detail/${Id}`, METHOD.GET)
 }
 
-
+//删除bom报价
+export async function deleteBomQuote(params) {
+    return request(`/api/app/bom-quote/bom-quote/${params}`, METHOD.DELETE)
+}
+//再次报价bom
+export async function reCreateBomQuote(params) {
+    return request(`/api/app/bom-quote/re-create-bom-quote/${params}`, METHOD.POST)
+}
 
 //新增明细
 export async function addBomDetail(params) {

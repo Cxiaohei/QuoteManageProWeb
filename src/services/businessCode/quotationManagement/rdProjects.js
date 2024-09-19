@@ -5,6 +5,15 @@ import qs from 'querystring'
 export async function getPageList(params) {
     return request("/api/app/develop-project/develop-project-list", METHOD.GET, transformAbpListQuery(params))
 }
+//获取所有研发报价单不分页
+export async function getAlldevelopProjectList() {
+    return request("/api/app/develop-project/develop-project-all-select", METHOD.GET, {
+        "maxResultCount": 0,
+        "skipCount": 0,
+        "pageIndx": 0,
+        // "filter": "string"
+    })
+}
 //新增基础数据
 export async function addEssentialDataList(params) {
     return request("/api/app/develop-project/dev-project", METHOD.POST, params)

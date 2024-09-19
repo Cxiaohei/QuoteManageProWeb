@@ -244,7 +244,6 @@ export default {
       });
     },
     deleteDevProject(record){
-      console.log(record)
       deleteDevProject(record.id).then(res => {
         this.$message.success("删除成功");
         this.getPageList();

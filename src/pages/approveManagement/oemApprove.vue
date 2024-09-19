@@ -33,7 +33,6 @@
       resizable
       ref="xTable1"
       id="toolbar_demo5"
-      height="650"
       size="large"
       :loading="loading"
       :sort-config="{
@@ -41,7 +40,7 @@
         defaultSort: { field: 'age', order: 'desc' },
         orders: ['desc', 'asc', null],
       }"
-      show-overflow="tooltip"
+
       :row-config="rowConfig"
       :custom-config="customConfig"
       :data="dataSource"
@@ -52,7 +51,7 @@
         <template #default="{ row }">
           <a
           href="javascript:;"
-          v-if="row.status==0"
+          v-if="row.status<2"
           @click="productData_edit(row)"
           style="margin-right: 5px;"
         >审核</a>
@@ -296,7 +295,7 @@ export default {
     //编辑
     productData_edit(record) {
       this.auditeId = record.id;
-      this.statusAudite = 1;
+      this.statusAudite = 2;
       this.auditeRemarks = "";
       this.visibleAudite = true;
     },

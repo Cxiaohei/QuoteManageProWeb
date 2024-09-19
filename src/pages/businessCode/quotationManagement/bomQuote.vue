@@ -46,10 +46,27 @@
           @click="rdProjectsDetail(row, 'detail')"
           style="margin-right: 5px;"
         >详情</a>
-        <a href="javascript:;" @click="showLog(row)">日志</a>
+        <a href="javascript:;" @click="showLog(row)"    style="margin-right: 5px;">日志</a>
+        <a-popconfirm
+            title="确定删除吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="deleteBomQuote(row)"
+          >
+            <a href="#"  v-if="row.status == 0"   style="margin-right: 5px">删除</a>
+          </a-popconfirm>
+          <a-popconfirm
+            title="确定再次报价吗?"
+            ok-text="确定"
+            cancel-text="取消"
+            @confirm="reCreateBomQuote(row)"
+          >
+            <a href="#"  v-if="row.status > 0"   style="margin-right: 5px">再次报价</a>
+          </a-popconfirm>
         </template>
       </vxe-column>
-      <vxe-column field="bomQuoteNo"  title="Bom报价编号" sort-type="string" sortable>
+      <vxe-column field="bomQuoteName"  title="报价单名称" sort-type="string" sortable></vxe-column>
+      <vxe-column field="bomQuoteNo"  title="报价单编号" sort-type="string" sortable>
         <template #default="{ row }">
           <a
           href="javascript:;"
@@ -62,10 +79,11 @@
       </vxe-column>
       <vxe-column field="status" title="状态" sort-type="number" sortable>
         <template #default="{ row }">
-          <span v-if="row.status == 0">待审核</span>
-          <span v-if="row.status == 1">审核中</span>
-          <span v-if="row.status == 2">通过</span>
-          <span v-if="row.status == 10">不通过</span>
+          <span v-if="row.status == 0" >草稿</span>
+          <span v-if="row.status == 1">已确认</span>
+          <span v-if="row.status == 2" style="color: green;">审批中</span>
+          <span v-if="row.status == 3" style="color: green;">审批通过</span>
+          <span v-if="row.status == 10" style="color: red;">不通过</span>
         </template>
       </vxe-column>
       <vxe-column field="createUserName"  title="报价人姓名" sort-type="string" sortable></vxe-column>
@@ -105,7 +123,7 @@
 </template>
       
   <script>
-import { getPageList } from "@/services/businessCode/quotationManagement/bomQuote";
+import { getPageList,deleteBomQuote,reCreateBomQuote } from "@/services/businessCode/quotationManagement/bomQuote";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import BomQuoteModal from "./modules/BomQuoteModal.vue";
@@ -179,6 +197,17 @@ export default {
     ...mapGetters("account", ["organizationId"])
   },
   methods: {
+    reCreateBomQuote(record){
+      reCreateBomQuote(record.id).then(res => {
+        if(res.code == 1) {
+          this.$message.success("重新报价成功");
+          this.getPageList();
+        }
+        else{
+          this.$message.error(res.msg);
+        }
+      });
+    },
     checkPermission,
     //新增
     add_pagelist() {
@@ -235,6 +264,12 @@ export default {
           this.loading = false;
           console.log(err);
         });
+    },
+    deleteBomQuote(record){
+      deleteBomQuote(record.id).then(res => {
+        this.$message.success("删除成功");
+        this.getPageList();
+      });
     },
     //切换选中
     onSelectChange(selectedRowKeys, selectedRows) {

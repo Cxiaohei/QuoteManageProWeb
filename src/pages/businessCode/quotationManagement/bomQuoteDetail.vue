@@ -1,6 +1,18 @@
 <template>
   <div>
     <a-card>
+      <div class="queryFromBox">
+      <a-descriptions title="基础信息" bordered>
+        <a-descriptions-item
+          :label="item.label"
+          bordered
+          v-for="(item, index) in queryFromDataList"
+          :key="index"
+        >
+          <span>{{ queryFrom[item.key] }}</span>
+        </a-descriptions-item>
+      </a-descriptions>
+    </div>
       <a-form-model
         :model="queryFrom"
         layout="inline"
@@ -8,36 +20,6 @@
         :rules="rules"
         ref="userRefs"
       >
-        <a-form-model-item
-          style="width: 31%"
-          v-for="(item, index) in queryFromDataList"
-          :key="index"
-          :label="item.label"
-        >
-          <!-- 布尔 -->
-          <a-switch v-model="queryFrom[item.key]" v-if="item.type == 'boolean'" />
-          <!-- 输入框 -->
-          <a-input
-            v-else-if="item.type == 'string'"
-            v-model="queryFrom[item.key]"
-            style="width: 300px"
-            :placeholder="item.label"
-          ></a-input>
-          <!-- 产品下拉 -->
-          <a-select
-            v-else-if="item.label == '产品'"
-            v-model="queryFrom[item.key]"
-            style="width: 300px"
-            :placeholder="item.label"
-            allowClear
-          >
-            <a-select-option
-              :value="item.id"
-              v-for="(item, index) in ProductList"
-              :key="index"
-            >{{ item.productNo }}</a-select-option>
-          </a-select>
-        </a-form-model-item>
         <a-form-item>
           <a-space>
             <h2>导入物料明细</h2>
@@ -46,117 +28,12 @@
             </a-upload>
             <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
 
-            <a-button type="primary" @click="setShenpiBtn">发起审批</a-button>
-            <SetShenPi ref="SetShenPiRef" :auditeType="0" :quoteId="$route.query.id"></SetShenPi>
+           
           </a-space>
         </a-form-item>
       </a-form-model>
       <!-- {{detailDataList1}} -->
-
-      <a-tabs default-active-key="1">
-        <a-tab-pane key="1" tab="结构料">
-          <div style="padding-top: 20px">
-            <h3>
-              结构料
-              <a-button type="primary" @click="addDetailDataList1">新增</a-button>
-            </h3>
-            <a-table
-              :rowKey="
-                (data, index) => {
-                  return index;
-                }
-              "
-              :columns="columns"
-              :dataSource="detailDataList1"
-              :pagination="false"
-              bordered
-            >
-              <span slot="action" slot-scope="text, record, index">
-                <a-popconfirm
-                  v-if="record.isadd"
-                  title="确定新增该条数据吗?"
-                  ok-text="确定"
-                  cancel-text="取消"
-                  @confirm="confirmAddList(record)"
-                >
-                  <a href="javascript:;" style="margin-right: 5px">新增</a>
-                </a-popconfirm>
-                <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList1(index)">取消</a>
-
-                <a
-                  href="javascript:;"
-                  v-if="!record.isadd"
-                  style="margin-right: 5px"
-                  @click="editDetailDataList(record)"
-                >保存</a>
-
-                <a-popconfirm
-                  v-if="!record.isadd"
-                  title="确定删除吗?"
-                  ok-text="确定"
-                  cancel-text="取消"
-                  @confirm="confirmDelete(record.id)"
-                >
-                  <a href="javascript:;">删除</a>
-                </a-popconfirm>
-              </span>
-              <!-- 物料结构 -->
-              <span slot="dsBaseDataType" slot-scope="text, record">
-                {{
-                record.dsBaseDataType == 0 ? "结构料" : "电子料"
-                }}
-              </span>
-
-              <!-- 部件名称 -->
-              <span slot="categoryName" slot-scope="text, record">
-                <a-select
-                  v-model="record.categoryName"
-                  style="width: 120px"
-                  show-search
-                  :filter-option="filterOption"
-                  placeholder="部件名称"
-                >
-                  <a-select-option
-                    :value="Citem.categoryName"
-                    v-for="(Citem, categoryNameindex) in dataSource1"
-                    :key="categoryNameindex"
-                  >{{ Citem.categoryName }}</a-select-option>
-                </a-select>
-              </span>
-
-              <span
-                :slot="tdItem"
-                slot-scope="text, record"
-                v-for="(tdItem, tdIndex) in TdArr"
-                :key="tdIndex"
-              >
-                <a-auto-complete
-                  v-model="record[tdItem]"
-                  :data-source="seachData"
-                  style="width: 100px"
-                  placeholder="请输入内容查询"
-                  @select="onSelect($event, record, [tdItem])"
-                  @change="onChange(record, [tdItem])"
-                >
-                  <template slot="dataSource">
-                    <a-select-option
-                      v-for="item in seachData"
-                      :key="item.id"
-                      :value="item[tdItem]"
-                    >{{ item[tdItem] }}</a-select-option>
-                  </template>
-                </a-auto-complete>
-              </span>
-
-              <!-- 总价 -->
-              <span slot="totalPrice" slot-scope="text, record">
-                <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
-              </span>
-            </a-table>
-          </div>
-        </a-tab-pane>
-        <a-tab-pane key="2" tab="电子料" force-render>
-          <div style="padding-top: 20px">
+      <div style="padding-top: 20px">
             <h3>
               电子料
               <a-button type="primary" @click="addDetailDataList2">新增</a-button>
@@ -255,8 +132,134 @@
               </span>
             </a-table>
           </div>
-        </a-tab-pane>
-      </a-tabs>
+      <div style="padding-top: 20px">
+            <h3>
+              结构料
+              <a-button type="primary" @click="addDetailDataList1">新增</a-button>
+            </h3>
+            <a-table
+              :rowKey="
+                (data, index) => {
+                  return index;
+                }
+              "
+              :columns="columns"
+              :dataSource="detailDataList1"
+              :pagination="false"
+              bordered
+            >
+              <span slot="action" slot-scope="text, record, index">
+                <a-popconfirm
+                  v-if="record.isadd"
+                  title="确定新增该条数据吗?"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="confirmAddList(record)"
+                >
+                  <a href="javascript:;" style="margin-right: 5px">新增</a>
+                </a-popconfirm>
+                <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList1(index)">取消</a>
+
+                <a
+                  href="javascript:;"
+                  v-if="!record.isadd"
+                  style="margin-right: 5px"
+                  @click="editDetailDataList(record)"
+                >保存</a>
+
+                <a-popconfirm
+                  v-if="!record.isadd"
+                  title="确定删除吗?"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="confirmDelete(record.id)"
+                >
+                  <a href="javascript:;">删除</a>
+                </a-popconfirm>
+              </span>
+              <!-- 物料结构 -->
+              <span slot="dsBaseDataType" slot-scope="text, record">
+                {{
+                record.dsBaseDataType == 0 ? "结构料" : "电子料"
+                }}
+              </span>
+
+              <!-- 部件名称 -->
+              <span slot="categoryName" slot-scope="text, record">
+                <a-select
+                  v-model="record.categoryName"
+                  style="width: 120px"
+                  show-search
+                  :filter-option="filterOption"
+                  placeholder="部件名称"
+                >
+                  <a-select-option
+                    :value="Citem.categoryName"
+                    v-for="(Citem, categoryNameindex) in dataSource1"
+                    :key="categoryNameindex"
+                  >{{ Citem.categoryName }}</a-select-option>
+                </a-select>
+              </span>
+
+              <span
+                :slot="tdItem"
+                slot-scope="text, record"
+                v-for="(tdItem, tdIndex) in TdArr"
+                :key="tdIndex"
+              >
+                <a-auto-complete
+                  v-model="record[tdItem]"
+                  :data-source="seachData"
+                  style="width: 100px"
+                  placeholder="请输入内容查询"
+                  @select="onSelect($event, record, [tdItem])"
+                  @change="onChange(record, [tdItem])"
+                >
+                  <template slot="dataSource">
+                    <a-select-option
+                      v-for="item in seachData"
+                      :key="item.id"
+                      :value="item[tdItem]"
+                    >{{ item[tdItem] }}</a-select-option>
+                  </template>
+                </a-auto-complete>
+              </span>
+
+              <!-- 总价 -->
+              <span slot="totalPrice" slot-scope="text, record">
+                <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
+              </span>
+            </a-table>
+          </div>
+          <h3>保存审批</h3>
+    <div>
+      <!-- <a-button type="primary" @click="editRdProjectsDetail()" v-if="queryFrom.status==0"
+        >保存草稿</a-button
+      > -->
+      <a-button
+        type="primary"
+        @click="setShenpiBtn"
+        style="margin-left: 15px"
+         v-if="queryFrom.status < 2"
+        >提交审核</a-button
+      >
+      <span v-if="queryFrom.status == 2" style="font-size: xx-large;">审批中</span>
+        <span v-if="queryFrom.status == 3" style="font-size: xx-large;"
+          >审批通过</span
+        >
+        <span v-if="queryFrom.status == 10" style="font-size: xx-large;"
+          >审批不通过</span
+        >
+        <a-button
+        type="primary"
+        @click="setShenpiBtn"
+        style="margin-left: 15px"
+         v-if="queryFrom.status == 10"
+        >提交审核</a-button
+      >
+      <SetShenPi ref="SetShenPiRef" :auditeType="0" :quoteId="$route.query.id"></SetShenPi>
+    </div>
+
     </a-card>
   </div>
 </template>
@@ -365,42 +368,33 @@ export default {
       queryFromDataList: [
         {
           label: "报价单名称",
-          key: "bomQuoteNo",
+          key: "bomQuoteName",
           type: "string"
         },
-        // {
-        //   label: "物料种类",
-        //   key: "bomNum",
-        //   type: "string"
-        // },
-        // {
-        //   label: "电子料种",
-        //   key: "electronicNum",
-        //   type: "string"
-        // },
-        // {
-        //   label: "结构料种",
-        //   key: "structuralNum",
-        //   type: "string"
-        // },
-        // {
-        //   label: "创建人姓名",
-        //   key: "createUserName",
-        //   type: "string"
-        // },
-        // {
-        //   label: "电子料总价",
-        //   key: "electronicMoney",
-        //   type: "string"
-        // },
-        // {
-        //   label: "结构料总价",
-        //   key: "structuralMoney",
-        //   type: "string"
-        // },
+        
+        {
+          label: "客户名称",
+          key: "customerName",
+          type: "string",
+        },
+        {
+          label: "项目发起人",
+          key: "createUserName",
+          type: "string",
+        },
+        {
+          label: "研发类型",
+          key: "developmentType",
+          type: "string",
+        },
+        {
+          label: "产品类型",
+          key: "productType",
+          type: "string",
+        },
         {
           label: "产品",
-          key: "dsProductsId",
+          key: "productName",
           type: "select"
         },
         {
@@ -408,11 +402,6 @@ export default {
           key: "remarks",
           type: "string"
         }
-        // {
-        //   label: "软件开发",
-        //   key: "haveSoftware",
-        //   type: "boolean"
-        // }
       ],
       detailDataList1: [],
       detailDataList2: [],
