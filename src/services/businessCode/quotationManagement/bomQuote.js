@@ -14,6 +14,15 @@ export async function getAllProductList() {
         // "filter": "string"
     })
 }
+//获取所有bom报价单不分页
+export async function getBomQuoteAllSelect(params) {
+    return request("/api/app/bom-quote/bom-quote-all-select", METHOD.GET, {
+        "maxResultCount": 0,
+        "skipCount": 0,
+        "pageIndx": 0,
+        "developProjectId": params
+    })
+}
 
 export async function bomfilterApi(params) {
     return request("/api/app/bom-details/bom-detail-list-by-filter", METHOD.GET, transformAbpListQuery(params))

@@ -636,14 +636,6 @@ export default {
           this.loading = false;
           console.log(err);
         });
-
-      // getProjectScore(params).then(res => {
-      //   if (res.code == 1) {
-      //     console.log("得分");
-      //     console.log(res.data);
-      //     this.finalScore = res.data.finalScore;
-      //   }
-      // });
     },
     //下拉筛选
     filterOption(input, option) {

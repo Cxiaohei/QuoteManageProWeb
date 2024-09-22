@@ -92,6 +92,15 @@
       <vxe-column field="electronicMoney"  title="电子料总价" sort-type="number" sortable></vxe-column>
       <vxe-column field="structuralNum"  title="结构料种类数" sort-type="number" sortable></vxe-column>
       <vxe-column field="structuralMoney"  title="结构料总价" sort-type="number" sortable></vxe-column>
+      <vxe-column  title="BOM总价" sortable>
+        <template #default="{ row }">
+          <span >
+        {{
+        row.electronicMoney + row.structuralMoney
+        }}
+      </span>
+        </template>
+      </vxe-column>
       <vxe-column field="productName"  title="报价产品名" sort-type="string" sortable></vxe-column>
       <vxe-column field="creationTime"   title="发起时间" sortable>
         <template #default="{ row }">

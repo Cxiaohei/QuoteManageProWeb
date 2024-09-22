@@ -61,7 +61,7 @@
               <a-input
                 v-model="queryFrom.customerName"
                 style="width: 150px"
-                placeholder="item.label"
+                placeholder="客户名称"
               ></a-input>
             </a-form-model-item>
           </a-col>
@@ -741,6 +741,10 @@ export default {
       let params = {
         ...this.queryFrom,
       };
+      if (this.timeArr1 && this.timeArr1.length > 0) {
+        params.startTime = this.timeArr1[0];
+        params.endTime = this.timeArr1[1];
+      }
       editBomDataList(params)
         .then((res) => {
           if (res.code == 1) {
