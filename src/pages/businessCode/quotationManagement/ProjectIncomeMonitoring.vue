@@ -24,100 +24,65 @@
       </template>
     </vxe-toolbar>
     <vxe-table
-      border
-      resizable
-      ref="xTable1"
-      id="toolbar_demo5"
-      height="650"
-      size="large"
-      :loading="loading"
-      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
-      show-overflow="tooltip"
-      :row-config="rowConfig"
-      :custom-config="customConfig"
-      :data="dataSource"
-      @resizable-change="resizableChangeEvent"
-      
-    >
-    <vxe-column type="seq" width="60"></vxe-column>
-    <vxe-column field="action" width="80px" title="操作">
-        <template #default="{ row }">
-          <!-- <a
-          href="javascript:;"
-          @click="rdProjectsDetail(row, 'detail')"
-          style="margin-right: 5px;"
-        >详情</a> -->
-        <a href="javascript:;" @click="showLog(row)"   style="margin-right: 5px;">日志</a>
-        <a href="javascript:;" @click="essentialData_edit(row)"   style="margin-right: 5px;">编辑</a>
-        <a-popconfirm
-            title="确定删除吗?"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="deleteDevProject(row)"
-          >
-            <a href="#"  v-if="row.status == 0"   style="margin-right: 5px">删除</a>
-          </a-popconfirm>
-          <!-- <a-popconfirm
-            title="确定再次报价吗?"
-            ok-text="确定"
-            cancel-text="取消"
-            @confirm="reCreateDevelopProject(row)"
-          >
-            <a href="#"  v-if="row.status > 0"   style="margin-right: 5px">再次报价</a>
-          </a-popconfirm> -->
-        </template>
-      </vxe-column>
-      <vxe-column field="developStatus" title="研发状态" sort-type="number" sortable>
-        <template #default="{ row }">
-          <span v-if="row.status == 0" >草稿</span>
-          <span v-if="row.status == 1">已确认</span>
-          <span v-if="row.status == 2" style="color: green;">审批中</span>
-          <span v-if="row.status == 3" style="color: green;">审批通过</span>
-          <span v-if="row.status == 10" style="color: red;">不通过</span>
-        </template>
-      </vxe-column>
-      <vxe-column field="customerAttribute"  title="客户属性" sort-type="string" sortable></vxe-column>
+  border
+  resizable
+  ref="xTable1"
+  id="toolbar_demo5"
+  height="650"
+  size="large"
+  :loading="loading"
+  :sort-config="{ trigger: 'cell', defaultSort: { field: 'age', order: 'desc' }, orders: ['desc', 'asc', null] }"
+  :row-config="rowConfig"
+  :custom-config="customConfig"
+  :data="dataSource"
+  @resizable-change="resizableChangeEvent"
+  show-overflow
 
-      <!-- <vxe-column field="projectNo"  title="研发项目编号" sort-type="string" sortable>
-        <template #default="{ row }">
-          <a
-          href="javascript:;"
-          @click="rdProjectsDetail(row, 'detail')"
-          style="margin-right: 5px;"
-        >  {{
-        row.projectNo
-        }}</a>
-        </template>
-      </vxe-column> -->
-      <vxe-column field="researchDevelopMoney"  title="投入研发费" sort-type="string" sortable></vxe-column>
-      <vxe-column field="quotationAccuracy"  title="报价准确率" sort-type="string" sortable></vxe-column>
-      <vxe-column field="developmentType"  title="研发类型" sort-type="string" sortable></vxe-column>
-      <vxe-column field="signedContractMoney"  title="已签合同订单金额" sort-type="string" sortable></vxe-column>
-      <!-- <vxe-column field="creationTime"   title="发起时间" sortable>
-        <template #default="{ row }">
-          <span >
-        {{
-        row.creationTime
-        ? row.creationTime.substring(0, 19).replace("T", "  ")
-        : "/"
-        }}
+>
+  <vxe-column type="seq" width="60"></vxe-column>
+  
+  <vxe-column field="action" width="120px" title="操作">
+    <template #default="{ row }">
+      <!-- <a href="javascript:;" @click="showLog(row)" style="margin-right: 5px;">日志</a> -->
+      <a href="javascript:;" @click="essentialData_edit(row)" style="margin-right: 5px;">编辑</a>
+    </template>
+  </vxe-column>
+
+  <vxe-column field="creationTime" title="发起时间" width="180px" sortable>
+    <template #default="{ row }">
+      <span>
+        {{ row.creationTime ? row.creationTime.substring(0, 19).replace('T', ' ') : '/' }}
       </span>
-        </template>
-      </vxe-column> -->
-      <vxe-column field="shipmentOrderMoney"  title="出货订单金额" sort-type="number" sortable></vxe-column>
-      <vxe-column field="shippingProfit"  title="出货利润" sort-type="number" sortable></vxe-column>
-      <vxe-column field="financialGrossMargin"  title="财务利润率" sort-type="number" sortable></vxe-column>
-      <vxe-column field="estimatedGrossProfit"  title="预估毛利" sort-type="number" sortable></vxe-column>
-      <vxe-column field="estimatedProfit"  title="预估利润额" sort-type="number" sortable></vxe-column>
-      <vxe-column field="customerAcquisitionCost"  title="获客成本" sort-type="number" sortable></vxe-column>
-      <vxe-column field="projectProfitLoss"  title="项目盈亏" sort-type="number" sortable></vxe-column>
-      <vxe-column field="unfinishedCause"  title="未完成原因" sort-type="number" sortable></vxe-column>
-      <vxe-column field="projectRisk"  title="项目风险" sort-type="number" sortable></vxe-column>
-      <vxe-column field="salesForecast"  title="本年度销售额预测" sort-type="number" sortable></vxe-column>
-      <!-- <vxe-column field="authenticationMoney"  title="常规认证费" sort-type="number" sortable></vxe-column>
-      <vxe-column field="spicalAuthenticationMoney"  title="特种认证费" sort-type="number" sortable></vxe-column>
-      <vxe-column field="otherFeeMoney"  title="其他研发相关费用" sort-type="number" sortable></vxe-column> -->
-    </vxe-table>
+    </template>
+  </vxe-column>
+  
+  <vxe-column field="customerName" title="客户名称" width="180px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="customerAttribute" title="客户属性" width="180px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="developmentType" title="研发类型" width="180px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="productType" title="产品类型" width="180px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="finalScore" title="项目评分" width="120px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="developStatus" title="研发状态" width="150px" sort-type="string" sortable></vxe-column>
+  
+  <vxe-column field="collectDevelopMoney" title="收取研发费（不含模具费）" width="200px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="researchDevelopMoney" title="投入研发费" width="180px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="totalFee" title="模板报价" width="150px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="quotationAccuracy" title="报价准确率" width="160px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="expenseProfitLoss" title="研发费盈亏" width="150px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="orderStatus" title="订单状态" width="150px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="signedContractMoney" title="已签合同订单金额" width="200px" sort-type="string" sortable></vxe-column>
+  <vxe-column field="shipmentOrderMoney" title="出货订单金额" width="180px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="shippingProfit" title="出货利润" width="150px" sort-type="number" sortable></vxe-column>
+
+  <vxe-column field="financialGrossMargin" title="财务毛利率" width="180px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="estimatedGrossProfit" title="预估毛利" width="150px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="estimatedProfit" title="预估利润额" width="150px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="customerAcquisitionCost" title="获客成本" width="180px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="projectProfitLoss" title="项目盈亏" width="150px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="unfinishedCause" title="未完成原因" width="180px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="projectRisk" title="项目风险" width="180px" sort-type="number" sortable></vxe-column>
+  <vxe-column field="salesForecast" title="本年度销售额预测" width="200px" sort-type="number" sortable></vxe-column>
+</vxe-table>
+
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination
         :total="pagination.total"

@@ -13,8 +13,8 @@
           </a-descriptions-item>
         </a-descriptions>
       </div>
-      <a-button type="primary" @click="setShenpi">发起审批</a-button>
-      研发报价单：{{ queryFrom.developProjectId }}
+      <!-- <a-button type="primary" @click="setShenpi">发起审批</a-button>
+      研发报价单：{{ queryFrom.developProjectId }} -->
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="研发费报价">
           <div style="padding-top: 30px">
@@ -138,8 +138,22 @@
         <a-tab-pane key="2" tab="BOM报价" force-render>
           <div style="padding-top: 30px">
             <h3>
-              BOM报价
-              <a-button type="primary" @click="addBomQuote" v-if="data22.length == 0">添加</a-button>
+              BOM报价：
+              <a-select
+                style="width: 250px"
+                v-model="queryFrom.bomQuoteId"
+                :disabled="queryFrom.bomQuoteId"
+                placeholder="BOM报价单"
+                @change="bomQuoteSelect()"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.id"
+                  v-for="(item, index) in BomQuoteList"
+                  :key="index"
+                  >{{ item.bomQuoteName }}</a-select-option
+                >
+              </a-select>
             </h3>
             <div style="padding-top: 20px">
               <h3>

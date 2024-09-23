@@ -32,14 +32,14 @@
       size="large"
       :loading="loading"
       :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
-      show-overflow="tooltip"
+      show-overflow
       :row-config="rowConfig"
       :custom-config="customConfig"
       :data="dataSource"
       @resizable-change="resizableChangeEvent"
     >
     <vxe-column type="seq" width="60"></vxe-column>
-    <vxe-column field="action" width="80px" title="操作">
+    <vxe-column field="action" width="100px" title="操作">
         <template #default="{ row }">
           <a
           href="javascript:;"
@@ -49,7 +49,7 @@
         <a href="javascript:;" @click="showLog(row)">日志</a>
         </template>
       </vxe-column>
-      <vxe-column field="odmQuoteNo"  title="ODM编号" sort-type="string" sortable>
+      <vxe-column field="odmQuoteNo"  title="ODM编号" width="180px"  sort-type="string" sortable>
         <template #default="{ row }">
           <a
           href="javascript:;"
@@ -60,21 +60,37 @@
         }}</a>
         </template>
       </vxe-column>
-      <vxe-column field="odmQuoteName"  title="ODM名称" sort-type="string" sortable></vxe-column>
-      <vxe-column field="productName"  title="报价产品名" sort-type="string" sortable></vxe-column>
-      <vxe-column field="creationTime"   title="发起时间" sortable>
+      <vxe-column field="status" title="状态" sort-type="number"  width="180px"  sortable>
+        <template #default="{ row }">
+          <span v-if="row.status == 0" >草稿</span>
+          <span v-if="row.status == 1">已确认</span>
+          <span v-if="row.status == 2" style="color: green;">审批中</span>
+          <span v-if="row.status == 3" style="color: green;">审批通过</span>
+          <span v-if="row.status == 10" style="color: red;">不通过</span>
+        </template>
+      </vxe-column>
+      <vxe-column field="odmQuoteName"  title="ODM名称" width="180px"  sort-type="string" sortable></vxe-column>
+      <vxe-column field="projectName"  title="项目名称" width="180px"  sort-type="string" sortable></vxe-column>
+      <vxe-column field="customerName"  title="客户名称" width="180px"  sort-type="string" sortable></vxe-column>
+      <vxe-column field="productType"  title="产品类型" width="180px"  sort-type="string" sortable></vxe-column>
+      <vxe-column field="developmentType"  title="研发类型" width="180px"  sort-type="string" sortable></vxe-column>
+      <vxe-column field="totalFee"  title="研发总费用" width="180px"  sort-type="number" sortable></vxe-column>
+      <vxe-column field="finalScore"  title="项目评分" width="180px"  sort-type="number" sortable></vxe-column>
+      <vxe-column field="electronicMoney"  title="电子料总价" width="180px"  sort-type="number" sortable></vxe-column>
+      <vxe-column field="structuralMoney"  title="结构料总价" width="180px"  sort-type="number" sortable></vxe-column>
+      <vxe-column  title="BOM总价" width="180px"  sortable>
         <template #default="{ row }">
           <span >
         {{
-        row.creationTime
-        ? row.creationTime.substring(0, 19).replace("T", "  ")
-        : "/"
+        row.electronicMoney + row.structuralMoney
         }}
       </span>
         </template>
       </vxe-column>
-      <vxe-column field="remarks"  title="备注" sort-type="string" sortable></vxe-column>
-     
+      <vxe-column field="electronicMoney" width="180px"   title="加工费" sort-type="number" sortable></vxe-column>
+      <vxe-column field="structuralMoney"  width="180px"  title="运输费" sort-type="number" sortable></vxe-column>
+      <vxe-column field="electronicMoney"  width="180px"  title="管理费" sort-type="number" sortable></vxe-column>
+      <vxe-column field="structuralMoney"  width="180px"  title="利润" sort-type="number" sortable></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination

@@ -12,75 +12,55 @@
       <a-form-model
         :model="queryFrom"
         layout="inline"
-        :label-col="{ span: 8 }"
         :rules="rules"
         ref="userRefs"
       >
-        <!-- <a-form-model-item style="width: 31%" label="客户属性">
-          <a-input
-            v-model="queryFrom.nineNC"
-            style="width: 150px"
-            placeholder="9NC"
-          ></a-input>
-        </a-form-model-item>
-
-        <a-form-model-item style="width: 31%" label="产品名称">
-          <a-input
-            v-model="queryFrom.productName"
-            style="width: 150px"
-            placeholder="产品名称"
-          ></a-input>
-        </a-form-model-item>
-        <a-form-model-item style="width: 31%" label="引用价格策略">
-          <a-auto-complete
-            v-model="queryFrom.priceStrategyId"
-            style="width: 150px"
-            placeholder="请输入内容查询"
-            @select="onSelectPric"
-            @change="onChangePric"
-          >
-            <template slot="dataSource">
-              <a-select-option
-                v-for="item in seachPriceData"
-                :key="item.id"
-                :value="item.id"
-                >{{ item.priceStrategyName }}</a-select-option
-              >
-            </template>
-          </a-auto-complete>
-        </a-form-model-item>
-
-        <a-form-model-item style="width: 31%" label="工艺路线">
-          <a-auto-complete
-            v-model="queryFrom.processRote"
-            style="width: 150px"
-            placeholder="请输入内容查询"
-            @select="onSelect"
-            @change="onChange"
-          >
-            <template slot="dataSource">
-              <a-select-option
-                v-for="item in seachData"
-                :key="item.id"
-                :value="item.processRote"
-                >{{ item.processRote }}</a-select-option
-              >
-            </template>
-          </a-auto-complete>
-        </a-form-model-item> -->
-
         <a-form-model-item
-          style="width: 31%"
+        style="width: 40%;margin-left: 50px;"
           :label="item.title"
           v-for="(item, index) in processRoteList"
           :key="index"
         >
           <a-input
             v-model="queryFrom[item.key]"
-            style="width: 150px"
             :placeholder="item.title"
-            @change="getCalculate(item.key)"
           ></a-input>
+        </a-form-model-item>
+        <a-form-model-item label="研发状态" style="width: 40%;margin-left: 50px;">
+          <a-select
+            v-model="queryFrom.developStatus"
+            style="width: 150px;"
+          >
+            <a-select-option value="方案确定">方案确定</a-select-option>
+            <a-select-option value="样品确认">样品确认</a-select-option>
+            <a-select-option value="试产">试产</a-select-option>
+            <a-select-option value="量产">量产</a-select-option>
+            <a-select-option value="暂停">暂停</a-select-option>
+            <a-select-option value="终止">终止</a-select-option>
+            <a-select-option value="结案">结案</a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="订单状态" style="width: 40%;margin-left: 50px;">
+          <a-select
+            v-model="queryFrom.orderStatus"
+            style="width: 150px;"
+          >
+            <a-select-option value="待定">待定</a-select-option>
+            <a-select-option value="进行中">进行中</a-select-option>
+            <a-select-option value="已结案">已结案</a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="未完成原因" style="width: 40%;margin-left: 50px;">
+          <a-textarea
+            v-model="queryFrom.unfinishedCause"
+            placeholder="未完成原因"
+          ></a-textarea>
+        </a-form-model-item>
+        <a-form-model-item label="项目风险" style="width: 40%;margin-left: 50px;">
+          <a-textarea
+            v-model="queryFrom.projectRisk"
+            placeholder="项目风险"
+          ></a-textarea>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -111,37 +91,75 @@ export default {
       seachData: [],
       seachPriceData: [], //价格策略
       rules: {
-        // categoryName: [
-        //   { required: true, message: "请输入类别名称", trigger: "change" }
-        // ],
-        // categoryLevel: [
-        //   { required: true, message: "请选择等级", trigger: "change" }
-        // ],
-        // categoryType: [
-        //   { required: true, message: "请选择岗位", trigger: "change" }
-        // ]
+
       },
       processRoteList: [
         { key: "customerAttribute", title: "客户属性" },
-        { key: "developStatus", title: "研发状态" },
+        // { key: "developStatus", title: "研发状态" },
         { key: "collectDevelopMoney", title: "收取研发费（不含模具费）" },
         { key: "researchDevelopMoney", title: "投入研发费" },
         { key: "quotationAccuracy", title: "报价准确率" },
         { key: "expenseProfitLoss", title: "研发费盈亏(收取研发费-投入研发费)" },
-        { key: "orderStatus", title: "订单状态" },
+        // { key: "orderStatus", title: "订单状态" },
         { key: "signedContractMoney", title: "已签合同订单金额" },
         { key: "shipmentOrderMoney", title: "出货订单金额" },
         { key: "shippingProfit", title: "出货利润" },
         { key: "financialGrossMargin", title: "财务利润率" },
         { key: "estimatedGrossProfit", title: "预估毛利" },
         { key: "estimatedProfit", title: "预估利润额" },
-        { key: "customerAcquisitionCost ", title: "获客成本" },
+        { key: "customerAcquisitionCost", title: "获客成本" },
         { key: "projectProfitLoss", title: "项目盈亏" },
-        { key: "unfinishedCause", title: "未完成原因" },
-        { key: "projectRisk", title: "项目风险" },
+        // { key: "unfinishedCause", title: "未完成原因" },
+        // { key: "projectRisk", title: "项目风险" },
         { key: "salesForecast", title: "本年度销售额预测" },
       ],
     };
+  },
+  computed: {
+    quotationAccuracy() {
+      const { collectDevelopMoney, researchDevelopMoney } = this.queryFrom;
+      return researchDevelopMoney ? (collectDevelopMoney / researchDevelopMoney).toFixed(2) : 0;
+    },
+    expenseProfitLoss() {
+      const { collectDevelopMoney, researchDevelopMoney } = this.queryFrom;
+      return collectDevelopMoney && researchDevelopMoney
+        ? (collectDevelopMoney - researchDevelopMoney).toFixed(2)
+        : 0;
+    },
+    estimatedProfit() {
+      const { signedContractMoney, estimatedGrossProfit } = this.queryFrom;
+      return signedContractMoney && estimatedGrossProfit
+        ? (signedContractMoney * estimatedGrossProfit).toFixed(2)
+        : 0;
+    },
+    projectProfitLoss() {
+      return (
+        parseFloat(this.expenseProfitLoss) + parseFloat(this.estimatedProfit)
+      ).toFixed(2);
+    },
+  },
+  watch: {
+    // Watching for changes in relevant fields and updating computed fields automatically
+    'queryFrom.collectDevelopMoney': function() {
+      this.queryFrom.quotationAccuracy = this.quotationAccuracy;
+      this.queryFrom.expenseProfitLoss = this.expenseProfitLoss;
+    },
+    'queryFrom.researchDevelopMoney': function() {
+      this.queryFrom.quotationAccuracy = this.quotationAccuracy;
+      this.queryFrom.expenseProfitLoss = this.expenseProfitLoss;
+    },
+    'queryFrom.signedContractMoney': function() {
+      this.queryFrom.estimatedProfit = this.estimatedProfit;
+    },
+    'queryFrom.estimatedGrossProfit': function() {
+      this.queryFrom.estimatedProfit = this.estimatedProfit;
+    },
+    expenseProfitLoss(newVal) {
+      this.queryFrom.projectProfitLoss = this.projectProfitLoss;
+    },
+    estimatedProfit(newVal) {
+      this.queryFrom.projectProfitLoss = this.projectProfitLoss;
+    },
   },
   methods: {
     openModules(type, info) {
@@ -158,6 +176,7 @@ export default {
         this.title = "编辑";
         this.queryFrom = cloneDeep(info);
       }
+      this.queryFrom.developProjectId=this.queryFrom.id;
       this.uservisible = true;
     },
     //工艺线路
