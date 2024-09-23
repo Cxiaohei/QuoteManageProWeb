@@ -229,6 +229,14 @@ const options = {
               component: () => import('@/pages/businessCode/quotationManagement/allProjects'),
             },
             {
+              path: 'ProjectIncomeMonitoring',
+              name: '项目收益监控',
+              meta: {
+                authority: 'RdProjects',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/ProjectIncomeMonitoring'),
+            },
+            {
               path: 'rdProjects',
               name: '研发费报价',
               meta: {
