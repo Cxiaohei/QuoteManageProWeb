@@ -16,6 +16,12 @@
             ></a-input>
           </a-form-item>
           <a-form-item>
+            <a-select v-model="queryFrom.dataSource" style="width: 200px;" placeholder="物料来源">
+            <a-select-option :value="0">ERP</a-select-option>
+            <a-select-option :value="1">手动录入</a-select-option>
+          </a-select>
+          </a-form-item>
+          <a-form-item>
             <a-space>
               <a-button type="primary" icon="search" @click="search_pagelist"
                 >查询</a-button
@@ -56,7 +62,7 @@
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="action" title="操作">
         <template #default="{ row }">
-          <a
+          <a v-if="row.dataSource==1"
             href="javascript:;"
             @click="editBomDetail(row)"
             style="margin-right: 5px"
@@ -80,7 +86,7 @@
       </vxe-column>
 
       <vxe-column field="bomLegNum" title="物料脚数" width="150"  sort-type="number" sortable></vxe-column>
-      <vxe-column
+      <!-- <vxe-column
         field="inventoriesBomNum"
         title="物料库存数"
         width="150"  
@@ -97,7 +103,7 @@
         title="最近一次使用数量"
         width="200"
         sort-type="number" sortable
-      ></vxe-column>
+      ></vxe-column> -->
       <vxe-column field="maxPrice" title="历史最高价" width="150"  sort-type="number" sortable></vxe-column>
       <vxe-column field="minPrice" title="历史最低价" width="150"  sort-type="number" sortable></vxe-column>
       <vxe-column

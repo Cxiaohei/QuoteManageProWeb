@@ -4,11 +4,6 @@
       <template #buttons>
         <a-form :model="queryFrom" layout="inline">
           <a-form-item>
-            <a-space>
-              <a-button type="primary" @click="add_pagelist">新增</a-button>
-            </a-space>
-          </a-form-item>
-          <a-form-item>
             <a-input
               v-model.trim="queryFrom.Filter"
               style="width: 180px"
