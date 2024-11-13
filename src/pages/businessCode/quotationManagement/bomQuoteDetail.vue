@@ -23,19 +23,10 @@
         <a-form-item>
           <a-space>
             <h2>导入物料明细</h2>
-            <a-upload
-              name="file"
-              :fileList="[]"
-              action
-              :customRequest="importExcel"
-            >
+            <a-upload name="file" :fileList="[]" action :customRequest="importExcel">
               <a-button type="primary" icon="to-top">导入</a-button>
             </a-upload>
-            <span
-              @click="downloadTemplate"
-              style="color: #1890ff; cursor: pointer"
-              >下载导入模板</span
-            >
+            <span @click="downloadTemplate" style="color: #1890ff; cursor: pointer">下载导入模板</span>
           </a-space>
         </a-form-item>
       </a-form-model>
@@ -57,6 +48,11 @@
           bordered
         >
           <span slot="action" slot-scope="text, record, index">
+            <a
+              href="javascript:;"
+              style="margin-right: 5px"
+              @click="SeachBomModalClick(index,'type2')"
+            >查询</a>
             <a-popconfirm
               v-if="record.isadd"
               title="确定新增该条数据吗?"
@@ -66,20 +62,14 @@
             >
               <a href="javascript:;" style="margin-right: 5px">新增</a>
             </a-popconfirm>
-            <a
-              href="javascript:;"
-              v-if="record.isadd"
-              @click="removeDetailDataList2(index)"
-              >取消</a
-            >
+            <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList2(index)">取消</a>
 
             <a
               href="javascript:;"
               v-if="!record.isadd"
               style="margin-right: 5px"
               @click="editDetailDataList(record)"
-              >保存</a
-            >
+            >保存</a>
 
             <a-popconfirm
               v-if="!record.isadd"
@@ -92,9 +82,10 @@
             </a-popconfirm>
           </span>
           <!-- 物料结构 -->
-          <span slot="dsBaseDataType" slot-scope="text, record">
-            {{ record.dsBaseDataType == 0 ? "结构料" : "电子料" }}
-          </span>
+          <span
+            slot="dsBaseDataType"
+            slot-scope="text, record"
+          >{{ record.dsBaseDataType == 0 ? "结构料" : "电子料" }}</span>
 
           <!-- 部件名称 -->
           <span slot="categoryName" slot-scope="text, record">
@@ -109,8 +100,7 @@
                 :value="Citem.categoryName"
                 v-for="(Citem, categoryNameindex) in dataSource2"
                 :key="categoryNameindex"
-                >{{ Citem.categoryName }}</a-select-option
-              >
+              >{{ Citem.categoryName }}</a-select-option>
             </a-select>
           </span>
 
@@ -120,7 +110,8 @@
             v-for="(tdItem, tdIndex) in TdArr"
             :key="tdIndex"
           >
-            <a-auto-complete
+            <a-input v-model="record[tdItem]"></a-input>
+            <!-- <a-auto-complete
               v-model="record[tdItem]"
               :data-source="seachData"
               style="width: 100px"
@@ -136,16 +127,12 @@
                   >{{ item[tdItem] }}</a-select-option
                 >
               </template>
-            </a-auto-complete>
+            </a-auto-complete>-->
           </span>
 
           <!-- 总价 -->
           <span slot="totalPrice" slot-scope="text, record">
-            <a-input
-              v-model="record.totalPrice"
-              style="width: 80px"
-              placeholder="总价"
-            />
+            <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
           </span>
         </a-table>
       </div>
@@ -166,6 +153,11 @@
           bordered
         >
           <span slot="action" slot-scope="text, record, index">
+            <a
+              href="javascript:;"
+              style="margin-right: 5px"
+              @click="SeachBomModalClick(index,'type1')"
+            >查询</a>
             <a-popconfirm
               v-if="record.isadd"
               title="确定新增该条数据吗?"
@@ -175,20 +167,14 @@
             >
               <a href="javascript:;" style="margin-right: 5px">新增</a>
             </a-popconfirm>
-            <a
-              href="javascript:;"
-              v-if="record.isadd"
-              @click="removeDetailDataList1(index)"
-              >取消</a
-            >
+            <a href="javascript:;" v-if="record.isadd" @click="removeDetailDataList1(index)">取消</a>
 
             <a
               href="javascript:;"
               v-if="!record.isadd"
               style="margin-right: 5px"
               @click="editDetailDataList(record)"
-              >保存</a
-            >
+            >保存</a>
 
             <a-popconfirm
               v-if="!record.isadd"
@@ -201,9 +187,10 @@
             </a-popconfirm>
           </span>
           <!-- 物料结构 -->
-          <span slot="dsBaseDataType" slot-scope="text, record">
-            {{ record.dsBaseDataType == 0 ? "结构料" : "电子料" }}
-          </span>
+          <span
+            slot="dsBaseDataType"
+            slot-scope="text, record"
+          >{{ record.dsBaseDataType == 0 ? "结构料" : "电子料" }}</span>
 
           <!-- 部件名称 -->
           <span slot="categoryName" slot-scope="text, record">
@@ -218,8 +205,7 @@
                 :value="Citem.categoryName"
                 v-for="(Citem, categoryNameindex) in dataSource1"
                 :key="categoryNameindex"
-                >{{ Citem.categoryName }}</a-select-option
-              >
+              >{{ Citem.categoryName }}</a-select-option>
             </a-select>
           </span>
 
@@ -229,7 +215,8 @@
             v-for="(tdItem, tdIndex) in TdArr"
             :key="tdIndex"
           >
-            <a-auto-complete
+            <a-input v-model="record[tdItem]"></a-input>
+            <!-- <a-auto-complete
               v-model="record[tdItem]"
               :data-source="seachData"
               style="width: 100px"
@@ -245,16 +232,12 @@
                   >{{ item[tdItem] }}</a-select-option
                 >
               </template>
-            </a-auto-complete>
+            </a-auto-complete>-->
           </span>
 
           <!-- 总价 -->
           <span slot="totalPrice" slot-scope="text, record">
-            <a-input
-              v-model="record.totalPrice"
-              style="width: 80px"
-              placeholder="总价"
-            />
+            <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
           </span>
         </a-table>
       </div>
@@ -262,37 +245,27 @@
       <div>
         <!-- <a-button type="primary" @click="editRdProjectsDetail()" v-if="queryFrom.status==0"
         >保存草稿</a-button
-      > -->
+        >-->
         <a-button
           type="primary"
           @click="setShenpiBtn"
           style="margin-left: 15px"
           v-if="queryFrom.status < 2"
-          >提交审核</a-button
-        >
-        <span v-if="queryFrom.status == 2" style="font-size: xx-large"
-          >审批中</span
-        >
-        <span v-if="queryFrom.status == 3" style="font-size: xx-large"
-          >审批通过</span
-        >
-        <span v-if="queryFrom.status == 10" style="font-size: xx-large"
-          >审批不通过</span
-        >
+        >提交审核</a-button>
+        <span v-if="queryFrom.status == 2" style="font-size: xx-large">审批中</span>
+        <span v-if="queryFrom.status == 3" style="font-size: xx-large">审批通过</span>
+        <span v-if="queryFrom.status == 10" style="font-size: xx-large">审批不通过</span>
         <a-button
           type="primary"
           @click="setShenpiBtn"
           style="margin-left: 15px"
           v-if="queryFrom.status == 10"
-          >提交审核</a-button
-        >
-        <SetShenPi
-          ref="SetShenPiRef"
-          :auditeType="0"
-          :quoteId="$route.query.id"
-        ></SetShenPi>
+        >提交审核</a-button>
+        <SetShenPi ref="SetShenPiRef" :auditeType="0" :quoteId="$route.query.id"></SetShenPi>
       </div>
     </a-card>
+
+    <SeachBomModal ref="SeachBomModal" @checkDataSet="checkDataSet"></SeachBomModal>
   </div>
 </template>
 
@@ -307,84 +280,86 @@ import {
   addBomDetail,
   editBomDetail,
   importExcel,
-  downloadTemplate,
+  downloadTemplate
   // editBomDataList
 } from "@/services/businessCode/quotationManagement/bomQuote";
 import cloneDeep from "lodash.clonedeep";
 import SetShenPi from "./modules/SetShenPi";
 
+import SeachBomModal from "./modules/SeachBomModal.vue";
+
 const columns = [
   {
     title: "操作",
-    width: "120px",
+    width: "140px",
     dataIndex: "action",
     scopedSlots: {
-      customRender: "action",
-    },
+      customRender: "action"
+    }
   },
   {
     title: "物料结构",
     width: "100px",
     dataIndex: "dsBaseDataType",
     scopedSlots: {
-      customRender: "dsBaseDataType",
-    },
+      customRender: "dsBaseDataType"
+    }
   },
   {
     title: "部件名称",
     dataIndex: "categoryName",
     scopedSlots: {
-      customRender: "categoryName",
-    },
+      customRender: "categoryName"
+    }
   },
   {
     title: "9NC",
     dataIndex: "nineNC",
     scopedSlots: {
-      customRender: "nineNC",
-    },
+      customRender: "nineNC"
+    }
   },
   {
     title: "物料名称",
     dataIndex: "bomName",
     scopedSlots: {
-      customRender: "bomName",
-    },
+      customRender: "bomName"
+    }
   },
   {
     title: "物料代码",
     dataIndex: "bomCode",
     scopedSlots: {
-      customRender: "bomCode",
-    },
+      customRender: "bomCode"
+    }
   },
   {
     title: "型号",
     dataIndex: "bomModel",
     scopedSlots: {
-      customRender: "bomModel",
-    },
+      customRender: "bomModel"
+    }
   },
   {
     title: "规格",
     dataIndex: "specification",
     scopedSlots: {
-      customRender: "specification",
-    },
+      customRender: "specification"
+    }
   },
   {
     title: "总价",
     dataIndex: "totalPrice",
     scopedSlots: {
-      customRender: "totalPrice",
-    },
-  },
+      customRender: "totalPrice"
+    }
+  }
 ];
 
 export default {
   name: "customerModal",
   props: {},
-  components: { SetShenPi },
+  components: { SetShenPi, SeachBomModal },
   data() {
     return {
       title: "标题",
@@ -401,53 +376,79 @@ export default {
         {
           label: "报价单名称",
           key: "bomQuoteName",
-          type: "string",
+          type: "string"
         },
 
         {
           label: "客户名称",
           key: "customerName",
-          type: "string",
+          type: "string"
         },
         {
           label: "项目发起人",
           key: "createUserName",
-          type: "string",
+          type: "string"
         },
         {
           label: "研发类型",
           key: "developmentType",
-          type: "string",
+          type: "string"
         },
         {
           label: "产品类型",
           key: "productType",
-          type: "string",
+          type: "string"
         },
         {
           label: "产品",
           key: "productName",
-          type: "select",
+          type: "select"
         },
         {
           label: "备注",
           key: "remarks",
-          type: "string",
-        },
+          type: "string"
+        }
       ],
       detailDataList1: [],
       detailDataList2: [],
       rules: {
         categoryName: [
-          { required: true, message: "请输入类别名称", trigger: "change" },
-        ],
-      },
+          { required: true, message: "请输入类别名称", trigger: "change" }
+        ]
+      }
     };
   },
   created() {
     this.getDetail();
   },
   methods: {
+    SeachBomModalClick(index, type) {
+      this.$refs.SeachBomModal.openModules(index, type);
+    },
+    checkDataSet(dataSet) {
+      console.log(dataSet);
+      if (dataSet.type == "type1") {
+        this.detailDataList1[dataSet.index].nineNC = dataSet.data.nineNC;
+        this.detailDataList1[dataSet.index].bomName = dataSet.data.bomName;
+        this.detailDataList1[dataSet.index].bomCode = dataSet.data.bomCode;
+        this.detailDataList1[dataSet.index].bomModel = dataSet.data.bomModel;
+        this.detailDataList1[dataSet.index].specification =
+          dataSet.data.specification;
+        this.detailDataList1[dataSet.index].totalPrice =
+          dataSet.data.totalPrice;
+      } else {
+        this.detailDataList2[dataSet.index].nineNC = dataSet.data.nineNC;
+        this.detailDataList2[dataSet.index].bomName = dataSet.data.bomName;
+        this.detailDataList2[dataSet.index].bomCode = dataSet.data.bomCode;
+        this.detailDataList2[dataSet.index].bomModel = dataSet.data.bomModel;
+        this.detailDataList2[dataSet.index].specification =
+          dataSet.data.specification;
+        this.detailDataList2[dataSet.index].totalPrice =
+          dataSet.data.totalPrice;
+      }
+      this.$forceUpdate();
+    },
     getDetail() {
       this.detailDataList1 = [];
       this.detailDataList2 = [];
@@ -455,16 +456,16 @@ export default {
       this.dataSource2 = [];
       //先重置数据
       this.queryFrom = {
-        haveProductDefinitions: true,
+        haveProductDefinitions: true
       };
-      BomDetailDataList(this.$route.query.id).then((res) => {
+      BomDetailDataList(this.$route.query.id).then(res => {
         console.log("详情");
         this.queryFrom = res.data;
         console.log(res.data);
 
         const arr1 = []; //结构料 0
         const arr2 = []; //电子料 1
-        res.data.bomQuoteRelations.map((item) => {
+        res.data.bomQuoteRelations.map(item => {
           if (item.dsBaseDataType == 0) {
             arr1.push(item);
           } else {
@@ -482,24 +483,24 @@ export default {
       });
 
       //获取基础数据 并赋值默认数据
-      getCategoryTypeData().then((res) => {
+      getCategoryTypeData().then(res => {
         console.log(res.data);
-        res.data.map((item) => {
+        res.data.map(item => {
           if (item.dsBaseDataType == 0) {
             this.dataSource1.push({
               categoryName: item.categoryName,
-              id: item.id,
+              id: item.id
             });
           } else {
             this.dataSource2.push({
               categoryName: item.categoryName,
-              id: item.id,
+              id: item.id
             });
           }
         });
       });
       //获取产品列表
-      getAllProductList().then((res) => {
+      getAllProductList().then(res => {
         this.ProductList = res.data;
       });
     },
@@ -511,13 +512,13 @@ export default {
       console.log(record);
       console.log(this.seachData);
       let checkObj = {};
-      this.seachData.map((Sitem) => {
+      this.seachData.map(Sitem => {
         if (Sitem[type] == value) {
           checkObj = Sitem;
         }
       });
       console.log(checkObj);
-      this.TdArr.map((item) => {
+      this.TdArr.map(item => {
         if (checkObj[item]) {
           record[item] = checkObj[item];
         } else {
@@ -533,13 +534,13 @@ export default {
     confirmAddList(record) {
       const params = {
         bomQuoteId: this.$route.query.id,
-        bomQuoteRelations: [record],
+        bomQuoteRelations: [record]
       };
       params.bomQuoteRelations[0].id = "";
-      params.bomQuoteRelations.map((item) => {
+      params.bomQuoteRelations.map(item => {
         item.bomQuoteId = this.$route.query.id;
       });
-      addBomDetail(params).then((res) => {
+      addBomDetail(params).then(res => {
         if (res.code == 1) {
           this.$message.success("添加成功");
           this.getDetail();
@@ -566,7 +567,7 @@ export default {
       if (record[type] == "") {
         return false;
       }
-      bomfilterApi({ [type]: record[type] }).then((res) => {
+      bomfilterApi({ [type]: record[type] }).then(res => {
         console.log(res);
         this.seachData = res.data;
         // var newArr = [];
@@ -577,7 +578,7 @@ export default {
     //新增基础数据
     addDetailDataList1() {
       let hasadd = false;
-      this.detailDataList1.map((item) => {
+      this.detailDataList1.map(item => {
         item.isadd == true ? (hasadd = true) : "";
       });
       if (hasadd) {
@@ -593,7 +594,7 @@ export default {
     //新增基础数据
     addDetailDataList2() {
       let hasadd = false;
-      this.detailDataList2.map((item) => {
+      this.detailDataList2.map(item => {
         item.isadd == true ? (hasadd = true) : "";
       });
       if (hasadd) {
@@ -614,17 +615,17 @@ export default {
     importExcel(resData) {
       let formData = new FormData();
       formData.append("ImportFile", resData.file);
-      importExcel(formData).then((response) => {
+      importExcel(formData).then(response => {
         if (response.code == 1) {
           const params = {
             bomQuoteId: this.$route.query.id,
-            bomQuoteRelations: response.data,
+            bomQuoteRelations: response.data
           };
           params.bomQuoteRelations[0].id = "";
-          params.bomQuoteRelations.map((item) => {
+          params.bomQuoteRelations.map(item => {
             item.bomQuoteId = this.$route.query.id;
           });
-          addBomDetail(params).then((res) => {
+          addBomDetail(params).then(res => {
             if (res.code == 1) {
               this.$message.success("导入成功");
               // this.$message.success("添加成功");
@@ -694,8 +695,8 @@ export default {
           .toLowerCase()
           .indexOf(input.toLowerCase()) >= 0
       );
-    },
-  },
+    }
+  }
 };
 </script>
 

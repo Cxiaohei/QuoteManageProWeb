@@ -14,7 +14,7 @@
         </a-descriptions>
       </div>
       <!-- <a-button type="primary" @click="setShenpi">发起审批</a-button>
-      研发报价单：{{ queryFrom.developProjectId }} -->
+      研发报价单：{{ queryFrom.developProjectId }}-->
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="研发费报价">
           <div style="padding-top: 30px">
@@ -151,8 +151,7 @@
                   :value="item.id"
                   v-for="(item, index) in BomQuoteList"
                   :key="index"
-                  >{{ item.bomQuoteName }}</a-select-option
-                >
+                >{{ item.bomQuoteName }}</a-select-option>
               </a-select>
             </h3>
             <div style="padding-top: 20px">
@@ -172,6 +171,11 @@
                 bordered
               >
                 <span slot="action" slot-scope="text, record, index">
+                  <a
+                    href="javascript:;"
+                    style="margin-right: 5px"
+                    @click="SeachBomModalClick(index,'type2')"
+                  >查询</a>
                   <a-popconfirm
                     v-if="record.isadd"
                     title="确定新增该条数据吗?"
@@ -233,7 +237,8 @@
                   v-for="(tdItem, tdIndex) in TdArr"
                   :key="tdIndex"
                 >
-                  <a-auto-complete
+                  <a-input v-model="record[tdItem]"></a-input>
+                  <!-- <a-auto-complete
                     v-model="record[tdItem]"
                     :data-source="seachData"
                     style="width: 100px"
@@ -248,7 +253,7 @@
                         :value="item[tdItem]"
                       >{{ item[tdItem] }}</a-select-option>
                     </template>
-                  </a-auto-complete>
+                  </a-auto-complete>-->
                 </span>
 
                 <!-- 总价 -->
@@ -274,6 +279,11 @@
                 bordered
               >
                 <span slot="action" slot-scope="text, record, index">
+                  <a
+                    href="javascript:;"
+                    style="margin-right: 5px"
+                    @click="SeachBomModalClick(index,'type1')"
+                  >查询</a>
                   <a-popconfirm
                     v-if="record.isadd"
                     title="确定新增该条数据吗?"
@@ -335,7 +345,8 @@
                   v-for="(tdItem, tdIndex) in TdArr"
                   :key="tdIndex"
                 >
-                  <a-auto-complete
+                  <a-input v-model="record[tdItem]"></a-input>
+                  <!-- <a-auto-complete
                     v-model="record[tdItem]"
                     :data-source="seachData"
                     style="width: 100px"
@@ -350,7 +361,7 @@
                         :value="item[tdItem]"
                       >{{ item[tdItem] }}</a-select-option>
                     </template>
-                  </a-auto-complete>
+                  </a-auto-complete>-->
                 </span>
 
                 <!-- 总价 -->
@@ -368,7 +379,7 @@
               <!-- <a-button type="primary" @click="addProcess" v-if="data33.length == 0">添加</a-button> -->
             </h3>
             <!-- {{ data33 }} -->
-            
+
             <ProcessHtml :queryFromData="data33"></ProcessHtml>
             <!-- <a-table :columns="columns3" :data-source="data33" :pagination="false">
               <span slot="action" slot-scope="text, record">
@@ -378,7 +389,7 @@
                   style="margin-right: 5px"
                 >详情</a>
               </span>
-            </a-table> -->
+            </a-table>-->
           </div>
         </a-tab-pane>
         <a-tab-pane key="4" tab="其他项费用报价" force-render>
@@ -397,7 +408,7 @@
                   style="margin-right: 5px"
                 >详情</a>
               </span>
-            </a-table> -->
+            </a-table>-->
           </div>
         </a-tab-pane>
       </a-tabs>
@@ -430,6 +441,7 @@
     <!-- <ProcessHtml ref="ProcessHtmlRefs" @ok="getDetail"></ProcessHtml> -->
     <OtherHtml ref="OtherHtmlRefs" @ok="getDetail"></OtherHtml>
     <SetShenPi ref="SetShenPiRef" :auditeType="3" :quoteId="$route.query.id"></SetShenPi>
+    <SeachBomModal ref="SeachBomModal" @checkDataSet="checkDataSet"></SeachBomModal>
   </div>
 </template>
 
@@ -447,6 +459,7 @@ import BomQuoteModal from "./modules/BomQuoteModal.vue";
 import ProcessHtml from "./modules/ProcessHtml.vue";
 import OtherHtml from "./modules/OtherHtml.vue";
 import SetShenPi from "./modules/SetShenPi";
+import SeachBomModal from "./modules/SeachBomModal.vue";
 import {
   getBomQuoteAllSelect,
   getCategoryTypeData,
@@ -466,7 +479,7 @@ import cloneDeep from "lodash.clonedeep";
 const columns = [
   {
     title: "操作",
-    width: "120px",
+    width: "140px",
     dataIndex: "action",
     scopedSlots: {
       customRender: "action"
@@ -714,7 +727,8 @@ export default {
     BomQuoteModal,
     ProcessHtml,
     OtherHtml,
-    SetShenPi
+    SetShenPi,
+    SeachBomModal
   },
   props: {},
   data() {
@@ -849,7 +863,7 @@ export default {
       data11: [],
       data22: [],
       data33: {},
-      data44: [],
+      data44: {},
       TdArr: ["nineNC", "bomName", "bomModel", "bomCode", "specification"],
       seachData: [], //查询数据
       dataSource1: [], //结构部件名称
@@ -909,6 +923,32 @@ export default {
   methods: {
     setShenpi() {
       this.$refs.SetShenPiRef.openModules();
+    },
+    SeachBomModalClick(index, type) {
+      this.$refs.SeachBomModal.openModules(index, type);
+    },
+    checkDataSet(dataSet) {
+      console.log(dataSet);
+      if (dataSet.type == "type1") {
+        this.detailDataList1[dataSet.index].nineNC = dataSet.data.nineNC;
+        this.detailDataList1[dataSet.index].bomName = dataSet.data.bomName;
+        this.detailDataList1[dataSet.index].bomCode = dataSet.data.bomCode;
+        this.detailDataList1[dataSet.index].bomModel = dataSet.data.bomModel;
+        this.detailDataList1[dataSet.index].specification =
+          dataSet.data.specification;
+        this.detailDataList1[dataSet.index].totalPrice =
+          dataSet.data.totalPrice;
+      } else {
+        this.detailDataList2[dataSet.index].nineNC = dataSet.data.nineNC;
+        this.detailDataList2[dataSet.index].bomName = dataSet.data.bomName;
+        this.detailDataList2[dataSet.index].bomCode = dataSet.data.bomCode;
+        this.detailDataList2[dataSet.index].bomModel = dataSet.data.bomModel;
+        this.detailDataList2[dataSet.index].specification =
+          dataSet.data.specification;
+        this.detailDataList2[dataSet.index].totalPrice =
+          dataSet.data.totalPrice;
+      }
+      this.$forceUpdate();
     },
     getDetail() {
       //先重置数据
@@ -995,7 +1035,7 @@ export default {
               console.log("其他项费用");
               console.log(res);
               if (res.data) {
-                this.data44 = [res.data];
+                this.data44 = res.data;
               }
             });
           }
