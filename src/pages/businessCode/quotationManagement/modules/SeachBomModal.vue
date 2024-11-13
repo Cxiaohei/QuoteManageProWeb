@@ -57,14 +57,6 @@ const columns = [
       customRender: "action"
     }
   },
-  {
-    title: "物料结构",
-    width: "100px",
-    dataIndex: "dsBaseDataType",
-    scopedSlots: {
-      customRender: "dsBaseDataType"
-    }
-  },
   // {
   //   title: "部件名称",
   //   dataIndex: "categoryName",
@@ -87,17 +79,10 @@ const columns = [
     }
   },
   {
-    title: "物料代码",
-    dataIndex: "bomCode",
+    title: "品牌",
+    dataIndex: "brand",
     scopedSlots: {
-      customRender: "bomCode"
-    }
-  },
-  {
-    title: "型号",
-    dataIndex: "bomModel",
-    scopedSlots: {
-      customRender: "bomModel"
+      customRender: "brand"
     }
   },
   {
@@ -108,10 +93,31 @@ const columns = [
     }
   },
   {
-    title: "总价",
-    dataIndex: "totalPrice",
+    title: "物料脚数",
+    dataIndex: "bomLegNum",
     scopedSlots: {
-      customRender: "totalPrice"
+      customRender: "bomLegNum"
+    }
+  },
+  {
+    title: "最近一次采购价",
+    dataIndex: "recentPrice",
+    scopedSlots: {
+      customRender: "recentPrice"
+    }
+  },
+  {
+    title: "历史最高价",
+    dataIndex: "maxPrice",
+    scopedSlots: {
+      customRender: "maxPrice"
+    }
+  },
+  {
+    title: "历史最低价",
+    dataIndex: "minPrice",
+    scopedSlots: {
+      customRender: "minPrice"
     }
   }
 ];
