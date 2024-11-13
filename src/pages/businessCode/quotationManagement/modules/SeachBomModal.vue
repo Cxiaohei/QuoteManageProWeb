@@ -35,7 +35,7 @@
           <span style="cursor: pointer;" @click="checkData(record)">选择</span>
         </span>
       </a-table>外部
-      <a-table :columns="columns" :dataSource="detailDataList2" :pagination="false" bordered>
+      <a-table :columns="excolumns" :dataSource="detailDataList2" :pagination="false" bordered>
         <span slot="action" slot-scope="text, record">
           <span style="cursor: pointer;" @click="checkData(record)">选择</span>
         </span>
@@ -121,6 +121,72 @@ const columns = [
     }
   }
 ];
+const excolumns = [
+  {
+    title: "操作",
+    width: "70px",
+    dataIndex: "action",
+    scopedSlots: {
+      customRender: "action"
+    }
+  },
+  {
+    title: "物料来源",
+    dataIndex: "dataSource",
+    scopedSlots: {
+      customRender: "dataSource"
+    }
+  },
+  {
+    title: "物料名称",
+    dataIndex: "bomName",
+    scopedSlots: {
+      customRender: "bomName"
+    }
+  },
+  {
+    title: "品牌",
+    dataIndex: "brand",
+    scopedSlots: {
+      customRender: "brand"
+    }
+  },
+  {
+    title: "型号",
+    dataIndex: "bomModel",
+    scopedSlots: {
+      customRender: "bomModel"
+    }
+  },
+  {
+    title: "规格",
+    dataIndex: "specification",
+    scopedSlots: {
+      customRender: "specification"
+    }
+  },
+  {
+    title: "最低价",
+    dataIndex: "currentPrice",
+    scopedSlots: {
+      customRender: "currentPrice"
+    }
+  },
+  {
+    title: "次低价",
+    dataIndex: "secondPrice",
+    scopedSlots: {
+      customRender: "secondPrice"
+    }
+  },
+  {
+    title: "平均价",
+    dataIndex: "currentAvailablePrice",
+    scopedSlots: {
+      customRender: "currentAvailablePrice"
+    }
+  }
+];
 
 export default {
   name: "customerModal",
@@ -132,6 +198,7 @@ export default {
     return {
       uservisible: false,
       columns,
+      excolumns,
       detailDataList1: [],
       detailDataList2: [],
       queryFrom: {},
