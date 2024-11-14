@@ -29,15 +29,21 @@
             <a-button type="primary" @click="reset_pagelists">重置</a-button>
           </a-space>
         </a-form-item>
-      </a-form>内部
+      </a-form>内部物料
       <a-table :columns="columns" :dataSource="detailDataList1" :pagination="false" bordered>
         <span slot="action" slot-scope="text, record">
           <span style="cursor: pointer;" @click="checkData(record)">选择</span>
         </span>
-      </a-table>外部
+      </a-table>外部物料
       <a-table :columns="excolumns" :dataSource="detailDataList2" :pagination="false" bordered>
         <span slot="action" slot-scope="text, record">
           <span style="cursor: pointer;" @click="checkData(record)">选择</span>
+        </span>
+        <span slot="dataSource" slot-scope="text, record">
+          <span style="cursor: pointer;" v-if="record.dataSource==0">嘉立创</span>
+          <span style="cursor: pointer;" v-else-if="record.dataSource==1">华秋</span>
+          <span style="cursor: pointer;" v-else-if="record.dataSource==2">猎芯网</span>
+          <span style="cursor: pointer;" v-else-if="record.dataSource==3">圣禾堂</span>
         </span>
       </a-table>
     </a-modal>
