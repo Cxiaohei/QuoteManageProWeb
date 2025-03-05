@@ -12,7 +12,7 @@
           </a-form-item>
           <a-form-item>
             <a-select v-model="queryFrom.externalSource" style="width: 200px;" placeholder="物料来源">
-            <a-select-option :value="0">嘉立创</a-select-option>
+            <a-select-option :value="0">立创</a-select-option>
             <a-select-option :value="1">华秋</a-select-option>
             <a-select-option :value="3">猎芯网</a-select-option>
             <a-select-option :value="4">圣禾堂</a-select-option>
@@ -61,7 +61,7 @@
 
       <vxe-column field="dataSource" title="外部物料来源" sort-type="number" sortable>
         <template #default="{ row }">
-          <span v-if="row.dataSource === 0">嘉立创</span>
+          <span v-if="row.dataSource === 0">立创</span>
           <span v-if="row.dataSource === 1">华秋</span>
           <span v-if="row.dataSource === 3">猎芯网</span>
           <span v-if="row.dataSource === 4">圣禾堂</span>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { getPageList } from "@/services/businessCode/category1/outMaterialManagement";
+import { getPageList } from "@/services/businessCode/category1/externalBomLookup";
 import { checkPermission } from "@/utils/abp";
 import { mapGetters } from "vuex";
 import OutMaterialManagementModal from "./modules/OutMaterialManagementModal";
@@ -105,6 +105,7 @@ export default {
       selectedRowKeys: [],
       queryFrom: {
         processStepName: "",
+        isSpider:true
       },
       loading: true,
       dataSource: [],
@@ -174,6 +175,7 @@ export default {
     },
     //获取列表数据
     getPageList() {
+      this.queryFrom.isSpider = true;
       const params = {
         skipCount: (this.pagination.current - 1) * this.pagination.pageSize,
         MaxResultCount: this.pagination.pageSize,

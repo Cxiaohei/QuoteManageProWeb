@@ -40,7 +40,7 @@
           <span style="cursor: pointer;" @click="checkData(record)">选择</span>
         </span>
         <span slot="dataSource" slot-scope="text, record">
-          <span style="cursor: pointer;" v-if="record.dataSource==0">嘉立创</span>
+          <span style="cursor: pointer;" v-if="record.dataSource==0">立创</span>
           <span style="cursor: pointer;" v-else-if="record.dataSource==1">华秋</span>
           <span style="cursor: pointer;" v-else-if="record.dataSource==2">猎芯网</span>
           <span style="cursor: pointer;" v-else-if="record.dataSource==3">圣禾堂</span>
