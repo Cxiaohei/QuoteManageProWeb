@@ -3,7 +3,7 @@ import { transformAbpListQuery, download } from '@/utils/abp'
 import qs from 'querystring'
 //获取列表数据
 export async function getPageList(params) {
-    return request("/api/app/external-bom-lookup/search", METHOD.GET, transformAbpListQuery(params))
+    return request("/api/app/external-bom-lookup/smart-search", METHOD.GET, transformAbpListQuery(params))
 }
 //新增内部物料
 export async function addEssentialDataList(params) {
