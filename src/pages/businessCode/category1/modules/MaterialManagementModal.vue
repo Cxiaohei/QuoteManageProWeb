@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal
+    <DragModal
       :width="1100"
       :title="title"
       :visible="uservisible"
@@ -30,7 +30,7 @@
           <a-input v-else v-model="queryFrom[item.key]" style="width: 200px" :placeholder="item.label"></a-input>
         </a-form-model-item>
       </a-form-model>
-    </a-modal>
+    </DragModal>
   </div>
 </template>
 
