@@ -133,7 +133,9 @@ export default {
         }
       ],
       rules: {
-        bomNo: [{ required: true, message: "请输入编号", trigger: "change" }],
+        // bomNo: [{ required: true, message: "请输入编号", trigger: "change" }],
+        bomModel: [{ required: true, message: "请输入型号", trigger: "change" }],
+        minPrice: [{ required: true, message: "请输入历史最低价", trigger: "change" }],
         categoryLevel: [
           { required: true, message: "请选择等级", trigger: "change" }
         ],
