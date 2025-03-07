@@ -28,12 +28,11 @@
         </a-form>
       </template>
     </vxe-toolbar>
-    <vxe-table
+    <vxe-table   height="400px"
       border
       resizable
       ref="xTable1"
       id="toolbar_demo5"
-      height="650"
       size="large"
       :loading="loading"
       :sort-config="{

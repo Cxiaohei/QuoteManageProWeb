@@ -28,7 +28,7 @@
         </a-form>
       </template>
     </vxe-toolbar>
-    <vxe-table
+    <vxe-table   height="400px"
       border
       resizable
       ref="xTable1"

@@ -29,12 +29,11 @@
         </a-form>
       </template>
     </vxe-toolbar>
-    <vxe-table
+    <vxe-table   height="400px"
       border
       resizable
       ref="xTable1"
       id="toolbar_demo5"
-      height="600"
       size="small"
       :loading="loading"
       :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"

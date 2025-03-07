@@ -16,10 +16,14 @@
             ></a-input>
           </a-form-item>
           <a-form-item>
-            <a-select v-model="queryFrom.dataSource" style="width: 200px;" placeholder="物料来源">
-            <a-select-option :value="0">ERP</a-select-option>
-            <a-select-option :value="1">手动录入</a-select-option>
-          </a-select>
+            <a-select
+              v-model="queryFrom.dataSource"
+              style="width: 200px"
+              placeholder="物料来源"
+            >
+              <a-select-option :value="0">ERP</a-select-option>
+              <a-select-option :value="1">手动录入</a-select-option>
+            </a-select>
           </a-form-item>
           <a-form-item>
             <a-space>
@@ -44,15 +48,18 @@
         </a-form>
       </template>
     </vxe-toolbar>
-    <vxe-table
+    <vxe-table   height="400px"
       border
       resizable
       ref="xTable1"
       id="toolbar_demo5"
-      height="600"
       size="small"
       :loading="loading"
-      :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
+      :sort-config="{
+        trigger: 'cell',
+        defaultSort: { field: 'age', order: 'desc' },
+        orders: ['desc', 'asc', null],
+      }"
       show-overflow="tooltip"
       :row-config="rowConfig"
       :custom-config="customConfig"
@@ -62,7 +69,8 @@
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="action" title="操作">
         <template #default="{ row }">
-          <a v-if="row.dataSource==1"
+          <a
+            v-if="row.dataSource == 1"
             href="javascript:;"
             @click="editBomDetail(row)"
             style="margin-right: 5px"
@@ -71,13 +79,37 @@
         </template>
       </vxe-column>
       <!-- <vxe-column field="bomNo" title="物料编号" width="150" sort-type="string" sortable></vxe-column> -->
-      <vxe-column field="nineNC" title="9NC" width="150" sort-type="string" sortable></vxe-column>
+      <vxe-column
+        field="nineNC"
+        title="9NC"
+        width="150"
+        sort-type="string"
+        sortable
+      ></vxe-column>
       <!-- <vxe-column field="bomCode" title="物料代码" width="150" sort-type="string" sortable></vxe-column> -->
-      <vxe-column field="bomName" title="物料名称" width="200" sort-type="string" sortable></vxe-column>
-      <vxe-column field="brand" title="品牌" width="150" sort-type="string" sortable></vxe-column>
-      <vxe-column field="specification" title="型号规格" width="150" sort-type="string" sortable></vxe-column>
+      <vxe-column
+        field="bomName"
+        title="物料名称"
+        width="200"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="brand"
+        title="品牌"
+        width="150"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="specification"
+        title="型号规格"
+        width="150"
+        sort-type="string"
+        sortable
+      ></vxe-column>
       <!-- <vxe-column field="bomModel" title="型号" width="150" sort-type="string" sortable></vxe-column> -->
-      <vxe-column field="bomCraft" title="物料工艺"  sort-type="string" sortable>
+      <vxe-column field="bomCraft" title="物料工艺" sort-type="string" sortable>
         <template #default="{ row }">
           <span v-if="row.bomCraft === 0">贴片</span>
           <span v-if="row.bomCraft === 5">插件</span>
@@ -85,7 +117,13 @@
         </template>
       </vxe-column>
 
-      <vxe-column field="bomLegNum" title="物料脚数" width="150"  sort-type="number" sortable></vxe-column>
+      <vxe-column
+        field="bomLegNum"
+        title="物料脚数"
+        width="150"
+        sort-type="number"
+        sortable
+      ></vxe-column>
       <!-- <vxe-column
         field="inventoriesBomNum"
         title="物料库存数"
@@ -104,15 +142,34 @@
         width="200"
         sort-type="number" sortable
       ></vxe-column> -->
-      <vxe-column field="maxPrice" title="历史最高价" width="150"  sort-type="number" sortable></vxe-column>
-      <vxe-column field="minPrice" title="历史最低价" width="150"  sort-type="number" sortable></vxe-column>
+      <vxe-column
+        field="maxPrice"
+        title="历史最高价"
+        width="150"
+        sort-type="number"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="minPrice"
+        title="历史最低价"
+        width="150"
+        sort-type="number"
+        sortable
+      ></vxe-column>
       <vxe-column
         field="recentPrice"
         title="最近一次采购价"
         width="200"
-        sort-type="number" sortable
+        sort-type="number"
+        sortable
       ></vxe-column>
-      <vxe-column field="remarks" title="备注" width="200"   sort-type="string" sortable></vxe-column>
+      <vxe-column
+        field="remarks"
+        title="备注"
+        width="200"
+        sort-type="string"
+        sortable
+      ></vxe-column>
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">
       <a-pagination
