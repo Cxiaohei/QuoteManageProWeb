@@ -150,6 +150,20 @@
         sortable
       ></vxe-column>
       <vxe-column
+        field="max_CURRENCY"
+        title="最高价格币别"
+        width="120"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="maxHSDJ"
+        title="采购最高含税原币单价"
+        width="180"
+        sort-type="number"
+        sortable
+      ></vxe-column>
+      <vxe-column
         field="minPrice"
         title="历史最低价"
         width="150"
@@ -157,9 +171,37 @@
         sortable
       ></vxe-column>
       <vxe-column
+        field="min_CURRENCY"
+        title="最低价格币别"
+        width="120"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="minHSDJ"
+        title="采购最低含税原币单价"
+        width="180"
+        sort-type="number"
+        sortable
+      ></vxe-column>
+      <vxe-column
         field="recentPrice"
         title="最近一次采购价"
         width="200"
+        sort-type="number"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="recent_CURRENCY"
+        title="最新价格币别"
+        width="120"
+        sort-type="string"
+        sortable
+      ></vxe-column>
+      <vxe-column
+        field="recentHSDJ"
+        title="采购最新含税原币单价"
+        width="180"
         sort-type="number"
         sortable
       ></vxe-column>
