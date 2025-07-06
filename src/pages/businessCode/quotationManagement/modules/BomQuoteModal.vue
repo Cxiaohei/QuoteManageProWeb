@@ -64,7 +64,7 @@
                 >
                   <a-select-option
                     :value="Citem.categoryName"
-                    v-for="(Citem, categoryNameindex) in dataSource1"
+                    v-for="(Citem, categoryNameindex) in dataSource1Copy"
                     :key="categoryNameindex"
                   >{{ Citem.categoryName }}</a-select-option>
                 </a-select>
@@ -305,6 +305,7 @@ export default {
       ProductList: [],
       DevelopProjectList: [],
       confirmLoading: false,
+      dataSource1Copy: [],
       queryFromDataList: [
         {
           label: "报价单名称",
@@ -401,12 +402,18 @@ export default {
           }
           this.detailDataList1 = arr1;
           this.detailDataList2 = arr2;
+
+
+          this.dataSource1Copy = cloneDeep(this.dataSource1);
           if (arr1.length == 0) {
             this.detailDataList1 = [{ dsBaseDataType: 0 }];
           }
           if (arr2.length == 0) {
             this.detailDataList2 = [{ dsBaseDataType: 1 }];
           }
+          
+          this.detailDataList1.length = 1;
+          this.detailDataList2.length = 1;
         });
       });
       //获取产品列表
@@ -531,7 +538,7 @@ export default {
     },
     //新增基础数据
     addDetailDataList1() {
-      this.detailDataList1.push({});
+      this.detailDataList1.push({dsBaseDataType: 0});
     },
     //删除表格
     removeDetailDataList1(index) {
@@ -539,7 +546,7 @@ export default {
     },
     //新增基础数据
     addDetailDataList2() {
-      this.detailDataList2.push({});
+      this.detailDataList2.push({dsBaseDataType: 1});
     },
     //删除表格
     removeDetailDataList2(index) {
