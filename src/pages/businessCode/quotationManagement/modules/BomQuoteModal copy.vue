@@ -9,6 +9,112 @@
       @cancel="handleCancel"
     >
       <a-form-model :model="queryFrom" layout="inline" :rules="rules" ref="userRefs">
+        <a-row :gutter="16">
+          <!-- 设置合适的间距 -->
+          <!-- 遍历生成表单项 -->
+          <a-col :span="8" v-for="(item, index) in queryFromDataList" :key="index">
+            <a-form-model-item :label="item.label">
+              <!-- 输入框 -->
+              <a-input
+                v-if="item.type == 'string'"
+                v-model="queryFrom[item.key]"
+                style="width: 150px"
+                :placeholder="item.label"
+              ></a-input>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 研发报价单 -->
+          <a-col :span="8">
+            <a-form-model-item label="研发报价单">
+              <a-select
+                style="width: 150px"
+                v-model="queryFrom.developProjectId"
+                :disabled="developProjectIdDisabled"
+                placeholder="研发报价单"
+                @change="developProjectSelect()"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.id"
+                  v-for="(item, index) in DevelopProjectList"
+                  :key="index"
+                >{{ item.projectName }}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-model-item label="客户名称">
+              <!-- 输入框 -->
+              <a-input v-model="queryFrom.customerName" style="width: 150px" placeholder="客户名称"></a-input>
+            </a-form-model-item>
+          </a-col>
+          <!-- 产品 -->
+          <a-col :span="8">
+            <a-form-model-item label="产品">
+              <a-select
+                style="width: 150px"
+                v-model="queryFrom.dsProductsId"
+                :disabled="dsProductsIdDisabled"
+                placeholder="产品"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.id"
+                  v-for="(item, index) in ProductList"
+                  :key="index"
+                >{{ item.productName }}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <!-- 产品类型 -->
+          <a-col :span="8">
+            <a-form-model-item label="产品类型">
+              <a-select
+                v-model="queryFrom.productType"
+                placeholder="产品类型"
+                style="width: 150px"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.productTypeName"
+                  v-for="(item, index) in ProductTypeList"
+                  :key="index"
+                >{{ item.productTypeName }}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 研发类型 -->
+          <a-col :span="8">
+            <a-form-model-item label="研发类型">
+              <a-select
+                v-model="queryFrom.developmentType"
+                placeholder="研发类型"
+                style="width: 150px"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.categoryName"
+                  v-for="(item, index) in DevelopmentTypeList"
+                  :key="index"
+                >{{ item.categoryName }}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 项目周期 -->
+          <a-col :span="12">
+            <a-form-model-item label="项目周期">
+              <a-range-picker
+                v-model.trim="timeArr1"
+                style="width: 300px"
+                :allowClear="false"
+                format="YYYY-MM-DD"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
         <a-row>
           <a-form-item>
             <a-space>
@@ -32,16 +138,12 @@
               :pagination="false"
               bordered
             >
-              <span slot="action" slot-scope="text, record, index" class="action-buttons">
-                <a-button
-                  type="primary"
-                  size="small"
-                  class="query-btn"
+              <span slot="action" slot-scope="text, record, index">
+                <a
+                  href="javascript:;"
+                  style="margin-right: 5px"
                   @click="SeachBomModalClick(index,'type1')"
-                >
-                  <a-icon type="search" />
-                  查询
-                </a-button>
+                >查询</a>
                 <a
                   href="javascript:;"
                   v-if="index == 0"
@@ -68,7 +170,7 @@
                 >
                   <a-select-option
                     :value="Citem.categoryName"
-                    v-for="(Citem, categoryNameindex) in dataSource1Copy"
+                    v-for="(Citem, categoryNameindex) in dataSource1"
                     :key="categoryNameindex"
                   >{{ Citem.categoryName }}</a-select-option>
                 </a-select>
@@ -101,22 +203,9 @@
                 </a-auto-complete>-->
               </span>
 
-              <!-- 数量 -->
-              <span slot="needBomNum" slot-scope="text, record">
-                <a-input-number
-                  v-model="record.needBomNum"
-                  :min="1"
-                  :max="999999"
-                  size="small"
-                  style="width: 60px"
-                  @change="calculateTotalPrice(record, 'internal')"
-                  placeholder="数量"
-                />
-              </span>
-
               <!-- 总价 -->
               <span slot="totalPrice" slot-scope="text, record">
-                <span class="total-price-display">¥{{ calculateTotalPrice(record, 'internal') }}</span>
+                <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
               </span>
             </a-table>
           </div>
@@ -134,16 +223,12 @@
               :pagination="false"
               bordered
             >
-              <span slot="action" slot-scope="text, record, index" class="action-buttons">
-                <a-button
-                  type="primary"
-                  size="small"
-                  class="query-btn"
+              <span slot="action" slot-scope="text, record, index">
+                <a
+                  href="javascript:;"
+                  style="margin-right: 5px"
                   @click="SeachBomModalClick(index,'type2')"
-                >
-                  <a-icon type="search" />
-                  查询
-                </a-button>
+                >查询</a>
                 <a
                   href="javascript:;"
                   v-if="index == 0"
@@ -202,22 +287,9 @@
                 </a-auto-complete>-->
               </span>
 
-              <!-- 数量 -->
-              <span slot="needBomNum" slot-scope="text, record">
-                <a-input-number
-                  v-model="record.needBomNum"
-                  :min="1"
-                  :max="999999"
-                  size="small"
-                  style="width: 60px"
-                  @change="calculateTotalPrice(record, 'internal')"
-                  placeholder="数量"
-                />
-              </span>
-
               <!-- 总价 -->
               <span slot="totalPrice" slot-scope="text, record">
-                <span class="total-price-display">¥{{ calculateTotalPrice(record, 'internal') }}</span>
+                <a-input v-model="record.totalPrice" style="width: 80px" placeholder="总价" />
               </span>
             </a-table>
           </div>
@@ -306,14 +378,6 @@ const columns = [
     }
   },
   {
-    title: "数量",
-    dataIndex: "needBomNum",
-    width: "80px",
-    scopedSlots: {
-      customRender: "needBomNum"
-    }
-  },
-  {
     title: "总价",
     dataIndex: "totalPrice",
     scopedSlots: {
@@ -347,7 +411,6 @@ export default {
       ProductList: [],
       DevelopProjectList: [],
       confirmLoading: false,
-      dataSource1Copy: [],
       queryFromDataList: [
         {
           label: "报价单名称",
@@ -444,18 +507,12 @@ export default {
           }
           this.detailDataList1 = arr1;
           this.detailDataList2 = arr2;
-
-
-          this.dataSource1Copy = cloneDeep(this.dataSource1);
           if (arr1.length == 0) {
-            this.detailDataList1 = [{ dsBaseDataType: 0, needBomNum: 1 }];
+            this.detailDataList1 = [{ dsBaseDataType: 0 }];
           }
           if (arr2.length == 0) {
-            this.detailDataList2 = [{ dsBaseDataType: 1, needBomNum: 1 }];
+            this.detailDataList2 = [{ dsBaseDataType: 1 }];
           }
-          
-          this.detailDataList1.length = 1;
-          this.detailDataList2.length = 1;
         });
       });
       //获取产品列表
@@ -495,30 +552,6 @@ export default {
     SeachBomModalClick(index, type) {
       this.$refs.SeachBomModal.openModules(index, type);
     },
-    // 计算总价
-    calculateTotalPrice(record, type) {
-      let price = 0;
-      let quantity = record.needBomNum || 1;
-      
-      // 根据类型选择价格来源
-      if (type === 'internal') {
-        // 结构料：优先使用最近一次采购价
-        price = parseFloat(record.recentPrice) || 0;
-      } else {
-        // 电子料：优先使用当前价格，然后是最近一次采购价
-        price = parseFloat(record.currentPrice) || parseFloat(record.recentPrice) || 0;
-      }
-      
-      // 如果都没有，尝试从总价反推单价
-      if (price === 0 && record.totalPrice && record.needBomNum) {
-        price = parseFloat(record.totalPrice) / parseFloat(record.needBomNum) || 0;
-      }
-      
-      const totalPrice = price * quantity;
-      record.totalPrice = totalPrice.toFixed(2);
-      return totalPrice.toFixed(2);
-    },
-    
     checkDataSet(dataSet) {
       console.log(dataSet);
       if (dataSet.type == "type1") {
@@ -528,8 +561,6 @@ export default {
         this.detailDataList1[dataSet.index].bomModel = dataSet.data.bomModel;
         this.detailDataList1[dataSet.index].specification =
           dataSet.data.specification;
-        this.detailDataList1[dataSet.index].needBomNum = dataSet.data.needBomNum || 1;
-        this.detailDataList1[dataSet.index].recentPrice = dataSet.data.recentPrice;
         this.detailDataList1[dataSet.index].totalPrice =
           dataSet.data.totalPrice;
       } else {
@@ -539,10 +570,6 @@ export default {
         this.detailDataList2[dataSet.index].bomModel = dataSet.data.bomModel;
         this.detailDataList2[dataSet.index].specification =
           dataSet.data.specification;
-        this.detailDataList2[dataSet.index].needBomNum = dataSet.data.needBomNum || 1;
-        // 电子料也使用最近一次采购价，如果没有则使用当前价格
-        this.detailDataList2[dataSet.index].recentPrice = dataSet.data.recentPrice || dataSet.data.currentPrice;
-        this.detailDataList2[dataSet.index].currentPrice = dataSet.data.currentPrice;
         this.detailDataList2[dataSet.index].totalPrice =
           dataSet.data.totalPrice;
       }
@@ -610,10 +637,7 @@ export default {
     },
     //新增基础数据
     addDetailDataList1() {
-      this.detailDataList1.push({
-        dsBaseDataType: 0,
-        needBomNum: 1
-      });
+      this.detailDataList1.push({});
     },
     //删除表格
     removeDetailDataList1(index) {
@@ -621,10 +645,7 @@ export default {
     },
     //新增基础数据
     addDetailDataList2() {
-      this.detailDataList2.push({
-        dsBaseDataType: 1,
-        needBomNum: 1
-      });
+      this.detailDataList2.push({});
     },
     //删除表格
     removeDetailDataList2(index) {
@@ -657,10 +678,10 @@ export default {
           this.detailDataList1 = arr1;
           this.detailDataList2 = arr2;
           if (arr1.length == 0) {
-            this.detailDataList1 = [{ dsBaseDataType: 0, needBomNum: 1 }];
+            this.detailDataList1 = [{ dsBaseDataType: 0 }];
           }
           if (arr2.length == 0) {
-            this.detailDataList2 = [{ dsBaseDataType: 1, needBomNum: 1 }];
+            this.detailDataList2 = [{ dsBaseDataType: 1 }];
           }
           // this.detailDataList1 = this.detailDataList1.concat(arr1);
           // this.detailDataList2 = this.detailDataList2.concat(arr2);
@@ -750,136 +771,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.query-button {
-  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 13px;
-  padding: 4px 12px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  animation: pulse-glow 2s infinite;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
-  }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, #1890ff, #40a9ff, #69c0ff, #1890ff);
-    border-radius: 6px;
-    z-index: -1;
-    animation: border-glow 2s linear infinite;
-  }
-  
-  &:hover {
-    background: linear-gradient(135deg, #40a9ff 0%, #69c0ff 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(24, 144, 255, 0.4);
-    
-    &::before {
-      left: 100%;
-    }
-    
-    &::after {
-      animation: border-glow 1s linear infinite;
-    }
-  }
-  
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(24, 144, 255, 0.3);
-  }
-  
-  &:focus {
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(24, 144, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 15px rgba(24, 144, 255, 0.6);
-  }
-}
-
-@keyframes border-glow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.action-buttons {
-  .ant-btn {
-    margin-right: 8px;
-    
-    &.query-btn {
-      @extend .query-button;
-    }
-  }
-  
-  // 为其他按钮添加样式
-  a {
-    color: #666;
-    text-decoration: none;
-    padding: 4px 8px;
-    border-radius: 3px;
-    transition: all 0.2s ease;
-    
-    &:hover {
-      color: #1890ff;
-      background-color: #f0f8ff;
-    }
-  }
-}
-
-// 表格操作列样式优化
-.ant-table-tbody {
-  .action-buttons {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-}
-
-// 总价显示样式
-.total-price-display {
-  font-weight: bold;
-  color: #f5222d;
-  font-size: 13px;
-}
-
-// 数量输入框样式
-.ant-input-number {
-  .ant-input-number-input {
-    text-align: center;
-  }
-}
-
-// 价格列样式
-.ant-table-tbody > tr > td[data-col-key="totalPrice"] {
-  text-align: right;
-  font-weight: 600;
-}
-</style>
+<style lang="less" scoped></style>
