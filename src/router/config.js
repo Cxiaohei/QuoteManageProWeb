@@ -296,6 +296,23 @@ const options = {
               },
               component: () => import('@/pages/businessCode/quotationManagement/bomQuoteDetail'),
             },
+            {
+              path: 'bomQuoteNew',
+              name: '新BOM报价',
+              meta: {
+                authority: 'BomQuote',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/bomQuoteNew'),
+            },
+            {
+              path: 'bomQuoteNewDetail',
+              name: '新BOM报价详情',
+              meta: {
+                invisible: true,
+                authority: 'BomQuote',
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/bomQuoteNewDetail'),
+            },
           ]
         },
         {

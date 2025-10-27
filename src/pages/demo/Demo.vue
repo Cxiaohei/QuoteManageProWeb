@@ -54,6 +54,10 @@ export default {
             {
               name: "Bom报价",
               path: "/quotationManagement/bomQuote"
+            },
+            {
+              name: "新BOM报价",
+              path: "/quotationManagement/bomQuoteNew"
             }
           ]
         },
