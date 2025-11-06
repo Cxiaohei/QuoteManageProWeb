@@ -295,7 +295,7 @@ const options = {
                 authority: 'BomQuote',
               },
               component: () => import('@/pages/businessCode/quotationManagement/bomQuoteDetail'),
-            },
+            }
           ]
         },
         {
@@ -314,6 +314,35 @@ const options = {
                 authority: 'BasetemplateManagement',
               },
               component: () => import('@/pages/approveManagement/basetemplate'),
+            }
+          ]
+        },
+
+        {
+          path: 'intelligentQuotation',
+          name: '智能报价管理',
+          meta: {
+            icon: 'bulb',
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'bomQuotationManagement',
+              name: 'BOM报价单管理',
+              component: () => import('@/pages/intelligentQuotation/bomQuotationManagement'),
+            },
+            {
+              path: 'smartBomQuoteDetail',
+              name: '智能BOM报价单详情',
+              meta: {
+                invisible: true,
+              },
+              component: () => import('@/pages/intelligentQuotation/smartBomQuoteDetail'),
+            },
+            {
+              path: 'rdQuotationManagement',
+              name: '研发费用报价单管理',
+              component: () => import('@/pages/intelligentQuotation/rdQuotationManagement'),
             }
           ]
         },
