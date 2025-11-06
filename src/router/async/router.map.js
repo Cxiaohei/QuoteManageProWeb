@@ -53,14 +53,6 @@ const routerMap = {
     name: '异常页',
     icon: 'warning',
     component: view.blank
-  },
-  bomQuoteNew: {
-    name: '新BOM报价',
-    component: () => import('@/pages/businessCode/quotationManagement/bomQuoteNew')
-  },
-  bomQuoteNewDetail: {
-    name: '新BOM报价详情',
-    component: () => import('@/pages/businessCode/quotationManagement/bomQuoteNewDetail')
   }
 }
 export default routerMap
