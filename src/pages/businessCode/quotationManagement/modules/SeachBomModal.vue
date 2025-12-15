@@ -9,19 +9,36 @@
     >
       <a-form :model="queryFrom" layout="inline">
         <a-form-item label="9NC">
-          <a-input v-model.trim="queryFrom.nineNC" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.nineNC" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="物料名称">
-          <a-input v-model.trim="queryFrom.bomName" style="width: 110px" placeholder="输入数据"></a-input>
-        </a-form-item>
-        <a-form-item label="物料代码">
-          <a-input v-model.trim="queryFrom.bomCode" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.bomName" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="型号">
-          <a-input v-model.trim="queryFrom.bomModel" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.bomModel" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="规格">
-          <a-input v-model.trim="queryFrom.specification" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.specification" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item>
           <a-space>

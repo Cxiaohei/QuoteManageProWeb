@@ -4,7 +4,8 @@ const BASE_URL = process.env.VUE_APP_API_BASE_URL
 // 跨域认证信息 header 名
 const xsrfHeaderName = 'Authorization'
 
-axios.defaults.timeout = 20000
+// 设置超时时间为60秒（60000毫秒）
+axios.defaults.timeout = 60000
 axios.defaults.withCredentials = false
 axios.defaults.xsrfHeaderName = xsrfHeaderName
 axios.defaults.xsrfCookieName = xsrfHeaderName
