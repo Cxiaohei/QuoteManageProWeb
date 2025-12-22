@@ -9,10 +9,20 @@
           </a-space>
         </a-form-item>
           <a-form-item>
-            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+            <a-input 
+              v-model.trim="queryFrom.Filter" 
+              style="width: 180px" 
+              placeholder="关键字"
+              @keyup.enter="search_pagelist"
+            ></a-input>
           </a-form-item>
           <a-form-item label="年份">
-            <a-input v-model.trim="queryFrom.year" style="width: 180px" placeholder="输入年份"></a-input>
+            <a-input 
+              v-model.trim="queryFrom.year" 
+              style="width: 180px" 
+              placeholder="输入年份"
+              @keyup.enter="search_pagelist"
+            ></a-input>
           </a-form-item>
           <a-form-item>
             <a-space>

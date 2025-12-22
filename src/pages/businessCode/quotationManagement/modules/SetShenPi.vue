@@ -37,12 +37,15 @@
               <a-input
                 v-model="item.value"
                 style="width: 250px;margin-right:5px"
-                placeholder="审批人列表"
+                placeholder="请输入审批人姓名"
               ></a-input>
               <a-button type="primary" style="margin-right: 5px;" @click="addList">+</a-button>
               <a-button type="primary" @click="removeList(index)" v-if="index>0">-</a-button>
             </li>
           </ul>
+          <div style="color: #999; font-size: 12px; margin-top: 5px;">
+            <span style="color: #f5222d;">*</span> 至少需要添加一位审批人
+          </div>
         </a-form-model-item>
 
         <a-form-model-item label="备注">
@@ -100,10 +103,27 @@ export default {
         quoteId: this.quoteId,
         finalScore: this.finalScore
       };
+      // 重置审批人列表
+      this.auditeUserNamesList = [{ value: "" }];
       this.uservisible = true;
     },
     // 确定
     handleOk() {
+      // 验证审批人列表
+      const validApprovers = this.auditeUserNamesList.filter(item => item.value && item.value.trim() !== '');
+      
+      if (validApprovers.length === 0) {
+        this.$message.error('请至少添加一位审批人');
+        return;
+      }
+      
+      // 检查是否有空的审批人输入框
+      const hasEmptyApprover = this.auditeUserNamesList.some(item => !item.value || item.value.trim() === '');
+      if (hasEmptyApprover) {
+        this.$message.error('请填写所有审批人姓名或删除空的输入框');
+        return;
+      }
+      
       this.$refs.userRefs.validate(valid => {
         if (valid) {
           this.confirmLoading = true;
@@ -121,6 +141,7 @@ export default {
     },
     handleCancel() {
       this.uservisible = false;
+      this.auditeUserNamesList = [{ value: "" }];
       this.$refs.userRefs.resetFields();
     },
     //新增基础数据
@@ -130,15 +151,16 @@ export default {
       };
       const auditeUserNames = [];
       this.auditeUserNamesList.map(item => {
-        auditeUserNames.push(item.value);
+        auditeUserNames.push(item.value.trim());
       });
       params['auditeUserNames'] = auditeUserNames;
       setQuoteAudite(params)
         .then(res => {
           if (res.code == 1) {
-            this.$message.success(res.msg);
             this.$emit("ok");
             this.uservisible = false;
+            // 重置审批人列表
+            this.auditeUserNamesList = [{ value: "" }];
           } else {
             this.$message.error(res.msg);
           }

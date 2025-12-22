@@ -6,6 +6,7 @@
           <a-form-item>
             <a-space>
               <a-button type="primary" @click="add_pagelist">新增</a-button>
+              <a-button type="primary" icon="cloud-download" @click="loadFromERP" :loading="erpLoading">从ERP获取数据</a-button>
             </a-space>
           </a-form-item>
           <a-form-item>
@@ -66,8 +67,8 @@
       :data="dataSource"
       @resizable-change="resizableChangeEvent"
     >
-      <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="action" title="操作">
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-column field="action" width="120" title="操作" fixed="left">
         <template #default="{ row }">
           <a
             v-if="row.dataSource == 1"
@@ -76,6 +77,19 @@
             style="margin-right: 5px"
             >编辑</a
           >
+          <a
+            v-if="row.dataSource == 1"
+            href="javascript:;"
+            @click="deleteBomDetail(row)"
+            style="color: red"
+            >删除</a
+          >
+        </template>
+      </vxe-column>
+      <vxe-column field="dataSource" width="100" title="数据来源" sort-type="number" sortable>
+        <template #default="{ row }">
+          <a-tag v-if="row.dataSource === 0" color="blue">ERP获取</a-tag>
+          <a-tag v-if="row.dataSource === 1" color="green">手工录入</a-tag>
         </template>
       </vxe-column>
       <!-- <vxe-column field="bomNo" title="物料编号" width="150" sort-type="string" sortable></vxe-column> -->
@@ -90,7 +104,7 @@
       <vxe-column
         field="bomName"
         title="物料名称"
-        width="200"
+        width="280"
         sort-type="string"
         sortable
       ></vxe-column>
@@ -104,12 +118,12 @@
       <vxe-column
         field="specification"
         title="型号规格"
-        width="150"
+        width="250"
         sort-type="string"
         sortable
       ></vxe-column>
       <!-- <vxe-column field="bomModel" title="型号" width="150" sort-type="string" sortable></vxe-column> -->
-      <vxe-column field="bomCraft" title="物料工艺" sort-type="string" sortable>
+      <vxe-column field="bomCraft" width="100" title="物料工艺" sort-type="string" sortable>
         <template #default="{ row }">
           <span v-if="row.bomCraft === 0">贴片</span>
           <span v-if="row.bomCraft === 5">插件</span>
@@ -120,7 +134,7 @@
       <vxe-column
         field="bomLegNum"
         title="物料脚数"
-        width="150"
+        width="100"
         sort-type="number"
         sortable
       ></vxe-column>
@@ -145,14 +159,14 @@
       <vxe-column
         field="maxPrice"
         title="历史最高价"
-        width="150"
+        width="120"
         sort-type="number"
         sortable
       ></vxe-column>
       <vxe-column
         field="max_CURRENCY"
-        title="最高价格币别"
-        width="120"
+        title="最高价币别"
+        width="110"
         sort-type="string"
         sortable
       ></vxe-column>
@@ -166,14 +180,14 @@
       <vxe-column
         field="minPrice"
         title="历史最低价"
-        width="150"
+        width="120"
         sort-type="number"
         sortable
       ></vxe-column>
       <vxe-column
         field="min_CURRENCY"
-        title="最低价格币别"
-        width="120"
+        title="最低价币别"
+        width="110"
         sort-type="string"
         sortable
       ></vxe-column>
@@ -187,14 +201,14 @@
       <vxe-column
         field="recentPrice"
         title="最近一次采购价"
-        width="200"
+        width="140"
         sort-type="number"
         sortable
       ></vxe-column>
       <vxe-column
         field="recent_CURRENCY"
-        title="最新价格币别"
-        width="120"
+        title="最新价币别"
+        width="110"
         sort-type="string"
         sortable
       ></vxe-column>
@@ -208,7 +222,7 @@
       <vxe-column
         field="remarks"
         title="备注"
-        width="200"
+        width="250"
         sort-type="string"
         sortable
       ></vxe-column>
@@ -236,6 +250,8 @@ import {
   getPageList,
   importExcel,
   downloadTemplate,
+  loadBomsFromDS,
+  deleteBomDetail,
 } from "@/services/businessCode/category1/materialManagement";
 import MaterialManagementModal from "./modules/MaterialManagementModal";
 
@@ -246,6 +262,7 @@ export default {
         Filter: "",
       },
       loading: true,
+      erpLoading: false,
       dataSource: [],
       pagination: {
         pageSize: 10,
@@ -312,9 +329,65 @@ export default {
     add_pagelist() {
       this.$refs.MaterialManagementModalRefs.openModules("add");
     },
+    // 从ERP获取数据
+    loadFromERP() {
+      this.$confirm({
+        title: '确认操作',
+        content: '确定要从ERP获取数据吗？此操作可能需要一些时间。',
+        onOk: () => {
+          this.erpLoading = true;
+          loadBomsFromDS()
+            .then((res) => {
+              if (res.code === 1) {
+                this.$message.success(res.msg || '数据获取成功');
+                // 刷新列表
+                this.getPageList();
+              } else {
+                this.$message.error(res.msg || '数据获取失败');
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+              this.$message.error('数据获取失败，请稍后重试');
+            })
+            .finally(() => {
+              this.erpLoading = false;
+            });
+        },
+      });
+    },
     // 编辑
     editBomDetail(record) {
       this.$refs.MaterialManagementModalRefs.openModules("edit", record);
+    },
+    // 删除
+    deleteBomDetail(record) {
+      this.$confirm({
+        title: '确认删除',
+        content: `确定要删除物料"${record.bomName}"吗？删除后无法恢复。`,
+        onOk: () => {
+          deleteBomDetail(record.id)
+            .then((res) => {
+              // ABP删除接口成功时可能返回code为1，或者没有code字段，或者返回空对象
+              if (!res || res.code === 1 || res.code === undefined) {
+                this.$message.success('删除成功');
+                // 如果当前页只有一条数据且不是第一页，则跳转到上一页
+                if (this.dataSource.length === 1 && this.pagination.current > 1) {
+                  this.pagination.current--;
+                }
+                // 重新加载列表数据
+                this.loading = true;
+                this.getPageList();
+              } else {
+                this.$message.error(res.msg || res.message || '删除失败');
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+              this.$message.error('删除失败，请稍后重试');
+            });
+        },
+      });
     },
     // 重置
     reset_pagelists() {

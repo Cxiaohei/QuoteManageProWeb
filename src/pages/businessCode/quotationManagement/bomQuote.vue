@@ -9,10 +9,20 @@
           </a-space>
         </a-form-item>
           <a-form-item>
-            <a-input v-model.trim="queryFrom.Filter" style="width: 180px" placeholder="关键字"></a-input>
+            <a-input 
+              v-model.trim="queryFrom.Filter" 
+              style="width: 180px" 
+              placeholder="关键字"
+              @keyup.enter="search_pagelist"
+            ></a-input>
           </a-form-item>
           <a-form-item label="年份">
-            <a-input v-model.trim="queryFrom.year" style="width: 180px" placeholder="输入年份"></a-input>
+            <a-input 
+              v-model.trim="queryFrom.year" 
+              style="width: 180px" 
+              placeholder="输入年份"
+              @keyup.enter="search_pagelist"
+            ></a-input>
           </a-form-item>
           <a-form-item>
             <a-space>
@@ -37,8 +47,8 @@
       :data="dataSource"
       @resizable-change="resizableChangeEvent"
     >
-    <vxe-column type="seq" width="60"></vxe-column>
-    <vxe-column field="action" width="80px" title="操作">
+    <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+    <vxe-column field="action" width="180" title="操作" fixed="left">
         <template #default="{ row }">
           <a
           href="javascript:;"
@@ -64,8 +74,8 @@
           </a-popconfirm>
         </template>
       </vxe-column>
-      <vxe-column field="bomQuoteName"  title="报价单名称" sort-type="string" sortable></vxe-column>
-      <vxe-column field="bomQuoteNo"  title="报价单编号" sort-type="string" sortable>
+      <vxe-column field="bomQuoteName" width="200" title="报价单名称" sort-type="string" sortable></vxe-column>
+      <vxe-column field="bomQuoteNo" width="200" title="报价单编号" sort-type="string" sortable>
         <template #default="{ row }">
           <a
           href="javascript:;"
@@ -76,7 +86,7 @@
         }}</a>
         </template>
       </vxe-column>
-      <vxe-column field="status" title="状态" sort-type="number" sortable>
+      <vxe-column field="status" width="100" title="状态" sort-type="number" sortable>
         <template #default="{ row }">
           <span v-if="row.status == 0" >草稿</span>
           <span v-if="row.status == 1">已确认</span>
@@ -85,13 +95,13 @@
           <span v-if="row.status == 10" style="color: red;">不通过</span>
         </template>
       </vxe-column>
-      <vxe-column field="createUserName"  title="报价人姓名" sort-type="string" sortable></vxe-column>
-      <vxe-column field="bomNum"  title="物料种类数" sort-type="number" sortable></vxe-column>
-      <vxe-column field="electronicNum"  title="电子料种类数" sort-type="number" sortable></vxe-column>
-      <vxe-column field="electronicMoney"  title="电子料总价" sort-type="number" sortable></vxe-column>
-      <vxe-column field="structuralNum"  title="结构料种类数" sort-type="number" sortable></vxe-column>
-      <vxe-column field="structuralMoney"  title="结构料总价" sort-type="number" sortable></vxe-column>
-      <vxe-column  title="BOM总价" sortable>
+      <vxe-column field="createUserName" width="120" title="报价人姓名" sort-type="string" sortable></vxe-column>
+      <vxe-column field="bomNum" width="120" title="物料种类数" sort-type="number" sortable></vxe-column>
+      <vxe-column field="electronicNum" width="130" title="电子料种类数" sort-type="number" sortable></vxe-column>
+      <vxe-column field="electronicMoney" width="120" title="电子料总价" sort-type="number" sortable></vxe-column>
+      <vxe-column field="structuralNum" width="130" title="结构料种类数" sort-type="number" sortable></vxe-column>
+      <vxe-column field="structuralMoney" width="120" title="结构料总价" sort-type="number" sortable></vxe-column>
+      <vxe-column width="120" title="BOM总价" sortable>
         <template #default="{ row }">
           <span >
         {{
@@ -100,8 +110,8 @@
       </span>
         </template>
       </vxe-column>
-      <vxe-column field="productName"  title="报价产品名" sort-type="string" sortable></vxe-column>
-      <vxe-column field="creationTime"   title="发起时间" sortable>
+      <vxe-column field="productName" width="200" title="报价产品名" sort-type="string" sortable></vxe-column>
+      <vxe-column field="creationTime" width="180" title="发起时间" sortable>
         <template #default="{ row }">
           <span >
         {{
@@ -112,7 +122,7 @@
       </span>
         </template>
       </vxe-column>
-      <vxe-column field="remarks"  title="备注" sort-type="string" sortable></vxe-column>
+      <vxe-column field="remarks" width="200" title="备注" sort-type="string" sortable></vxe-column>
      
     </vxe-table>
     <div style="margin-top: 10px; display: flex; justify-content: flex-end">

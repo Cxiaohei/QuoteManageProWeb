@@ -299,6 +299,50 @@ const options = {
           ]
         },
         {
+          path: 'intelligentQuotation',
+          name: '智能报价管理',
+          meta: {
+            icon: 'bulb',
+          },
+          component: PageView,
+          children: [
+            {
+              path: 'bomQuote',
+              name: 'BOM报价管理',
+              component: () => import('@/pages/businessCode/quotationManagement/bomQuote'),
+            },
+            {
+              path: 'bomQuoteDetail',
+              name: 'Bom报价详情',
+              meta: {
+                invisible: true,
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/bomQuoteDetail'),
+            },
+            {
+              path: 'rdProjects',
+              name: '研发费用报价管理',
+              component: () => import('@/pages/businessCode/quotationManagement/rdProjects'),
+            },
+            {
+              path: 'rdProjectsDetail',
+              name: '研发费报价详情',
+              meta: {
+                invisible: true,
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetail'),
+            },
+            {
+              path: 'rdProjectsDetailLook',
+              name: '查看研发费报价',
+              meta: {
+                invisible: true,
+              },
+              component: () => import('@/pages/businessCode/quotationManagement/rdProjectsDetailLook'),
+            },
+          ]
+        },
+        {
           path: 'templateManagement',
           name: '模板管理',
           meta: {

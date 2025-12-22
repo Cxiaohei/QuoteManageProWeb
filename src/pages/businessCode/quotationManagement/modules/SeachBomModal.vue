@@ -9,19 +9,44 @@
     >
       <a-form :model="queryFrom" layout="inline">
         <a-form-item label="9NC">
-          <a-input v-model.trim="queryFrom.nineNC" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.nineNC" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="物料名称">
-          <a-input v-model.trim="queryFrom.bomName" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.bomName" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="物料代码">
-          <a-input v-model.trim="queryFrom.bomCode" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.bomCode" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="型号">
-          <a-input v-model.trim="queryFrom.bomModel" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.bomModel" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item label="规格">
-          <a-input v-model.trim="queryFrom.specification" style="width: 110px" placeholder="输入数据"></a-input>
+          <a-input 
+            v-model.trim="queryFrom.specification" 
+            style="width: 110px" 
+            placeholder="输入数据"
+            @keyup.enter="search_pagelist"
+          ></a-input>
         </a-form-item>
         <a-form-item>
           <a-space>
@@ -305,18 +330,48 @@ export default {
       this.detailDataList2 = [];
     },
     search_pagelist() {
+      // 先清空列表
+      this.detailDataList1 = [];
+      this.detailDataList2 = [];
+      
       bomfilterApi(this.queryFrom).then(res => {
-        // 为内部物料数据添加默认数量
-        this.detailDataList1 = res.data.dsBomDetails.map(item => ({
-          ...item,
-          needBomNum: 1
-        }));
+        console.log('=== 后端返回的原始数据 ===', {
+          '内部物料数量': res.data.dsBomDetails?.length || 0,
+          '外部物料数量': res.data.externalBoms?.length || 0,
+          '内部物料第一条': res.data.dsBomDetails?.[0],
+          '外部物料第一条': res.data.externalBoms?.[0]
+        });
         
-        // 为外部物料数据添加默认数量
-        this.detailDataList2 = res.data.externalBoms.map(item => ({
-          ...item,
-          needBomNum: 1
-        }));
+        // 为内部物料数据添加默认数量和初始总价
+        this.detailDataList1 = res.data.dsBomDetails.map(item => {
+          const needBomNum = 1;
+          const recentPrice = parseFloat(item.recentPrice) || 0;
+          const totalPrice = (recentPrice * needBomNum).toFixed(2);
+          
+          return {
+            ...item,
+            needBomNum: needBomNum,
+            totalPrice: totalPrice
+          };
+        });
+        
+        // 为外部物料数据添加默认数量和初始总价
+        this.detailDataList2 = res.data.externalBoms.map(item => {
+          const needBomNum = 1;
+          const currentPrice = parseFloat(item.currentPrice) || parseFloat(item.currentAvailablePrice) || 0;
+          const totalPrice = (currentPrice * needBomNum).toFixed(2);
+          
+          return {
+            ...item,
+            needBomNum: needBomNum,
+            totalPrice: totalPrice
+          };
+        });
+        
+        console.log('=== 处理后的数据 ===', {
+          '内部物料第一条': this.detailDataList1?.[0],
+          '外部物料第一条': this.detailDataList2?.[0]
+        });
       });
     },
     reset_pagelists() {
@@ -344,11 +399,28 @@ export default {
     
     // 确定
     checkData(recorddata) {
-      // 确保数据包含数量和总价
+      // 确保数据包含数量
       if (!recorddata.needBomNum) {
         recorddata.needBomNum = 1;
       }
+      
+      // 计算总价
       this.calculateTotalPrice(recorddata, this.clickType === 'type1' ? 'internal' : 'external');
+      
+      // 打印详细调试信息
+      console.log('=== SeachBomModal 选择物料 ===', {
+        type: this.clickType,
+        needBomNum: recorddata.needBomNum,
+        recentPrice: recorddata.recentPrice,
+        currentPrice: recorddata.currentPrice,
+        currentAvailablePrice: recorddata.currentAvailablePrice,
+        secondPrice: recorddata.secondPrice,
+        minPrice: recorddata.minPrice,
+        maxPrice: recorddata.maxPrice,
+        totalPrice: recorddata.totalPrice,
+        '所有字段名': Object.keys(recorddata),
+        '完整数据': recorddata
+      });
       
       this.$emit("checkDataSet", {
         data: recorddata,

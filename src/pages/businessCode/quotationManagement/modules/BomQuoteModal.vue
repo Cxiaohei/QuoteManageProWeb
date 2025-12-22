@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-modal
-      :width="1200"
+      :width="1400"
       :title="title"
       :visible="uservisible"
       :confirm-loading="confirmLoading"
@@ -9,6 +9,77 @@
       @cancel="handleCancel"
     >
       <a-form-model :model="queryFrom" layout="inline" :rules="rules" ref="userRefs">
+        <a-row :gutter="16">
+          <!-- 设置合适的间距 -->
+          <!-- 遍历生成表单项 -->
+          <a-col :span="8" v-for="(item, index) in queryFromDataList" :key="index">
+            <a-form-model-item :label="item.label">
+              <!-- 输入框 -->
+              <a-input
+                v-if="item.type == 'string'"
+                v-model="queryFrom[item.key]"
+                style="width: 150px"
+                :placeholder="item.label"
+              ></a-input>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 研发报价单 -->
+          <a-col :span="8">
+            <a-form-model-item label="研发报价单">
+              <a-select
+                style="width: 150px"
+                v-model="queryFrom.developProjectId"
+                :disabled="developProjectIdDisabled"
+                placeholder="研发报价单"
+                @change="developProjectSelect()"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.id"
+                  v-for="(item, index) in DevelopProjectList"
+                  :key="index"
+                >{{ item.projectName }}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="8">
+            <a-form-model-item label="客户名称">
+              <!-- 输入框 -->
+              <a-input v-model="queryFrom.customerName" style="width: 150px" placeholder="客户名称"></a-input>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 研发类型 -->
+          <a-col :span="8">
+            <a-form-model-item label="研发类型">
+              <a-select
+                v-model="queryFrom.developmentType"
+                placeholder="研发类型"
+                style="width: 150px"
+                allowClear
+              >
+                <a-select-option
+                  :value="item.categoryName"
+                  v-for="(item, index) in DevelopmentTypeList"
+                  :key="index"
+                >{{ item.categoryName }}</a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-col>
+
+          <!-- 项目周期 -->
+          <a-col :span="12">
+            <a-form-model-item label="项目周期">
+              <a-range-picker
+                v-model.trim="timeArr1"
+                style="width: 300px"
+                :allowClear="false"
+                format="YYYY-MM-DD"
+              />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
         <a-row>
           <a-form-item>
             <a-space>
@@ -30,6 +101,7 @@
               :columns="columns"
               :dataSource="detailDataList1"
               :pagination="false"
+              :scroll="{ x: 1600 }"
               bordered
             >
               <span slot="action" slot-scope="text, record, index" class="action-buttons">
@@ -109,14 +181,14 @@
                   :max="999999"
                   size="small"
                   style="width: 60px"
-                  @change="calculateTotalPrice(record, 'internal')"
+                  @change="onQuantityChange(record, 'internal')"
                   placeholder="数量"
                 />
               </span>
 
               <!-- 总价 -->
               <span slot="totalPrice" slot-scope="text, record">
-                <span class="total-price-display">¥{{ calculateTotalPrice(record, 'internal') }}</span>
+                <span class="total-price-display">¥{{ record.totalPrice || '0.00' }}</span>
               </span>
             </a-table>
           </div>
@@ -132,6 +204,7 @@
               :columns="columns"
               :dataSource="detailDataList2"
               :pagination="false"
+              :scroll="{ x: 1600 }"
               bordered
             >
               <span slot="action" slot-scope="text, record, index" class="action-buttons">
@@ -210,14 +283,14 @@
                   :max="999999"
                   size="small"
                   style="width: 60px"
-                  @change="calculateTotalPrice(record, 'internal')"
+                  @change="onQuantityChange(record, 'external')"
                   placeholder="数量"
                 />
               </span>
 
               <!-- 总价 -->
               <span slot="totalPrice" slot-scope="text, record">
-                <span class="total-price-display">¥{{ calculateTotalPrice(record, 'internal') }}</span>
+                <span class="total-price-display">¥{{ record.totalPrice || '0.00' }}</span>
               </span>
             </a-table>
           </div>
@@ -249,15 +322,16 @@ import SeachBomModal from "./SeachBomModal.vue";
 const columns = [
   {
     title: "操作",
-    width: "70px",
+    width: 140,
     dataIndex: "action",
+    fixed: "left",
     scopedSlots: {
       customRender: "action"
     }
   },
   {
     title: "物料结构",
-    width: "100px",
+    width: 100,
     dataIndex: "dsBaseDataType",
     scopedSlots: {
       customRender: "dsBaseDataType"
@@ -265,56 +339,70 @@ const columns = [
   },
   {
     title: "部件名称",
+    width: 150,
     dataIndex: "categoryName",
+    ellipsis: true,
     scopedSlots: {
       customRender: "categoryName"
     }
   },
   {
     title: "9NC",
+    width: 120,
     dataIndex: "nineNC",
+    ellipsis: true,
     scopedSlots: {
       customRender: "nineNC"
     }
   },
   {
     title: "物料名称",
+    width: 280,
     dataIndex: "bomName",
+    ellipsis: true,
     scopedSlots: {
       customRender: "bomName"
     }
   },
   {
     title: "物料代码",
+    width: 150,
     dataIndex: "bomCode",
+    ellipsis: true,
     scopedSlots: {
       customRender: "bomCode"
     }
   },
   {
     title: "型号",
+    width: 180,
     dataIndex: "bomModel",
+    ellipsis: true,
     scopedSlots: {
       customRender: "bomModel"
     }
   },
   {
     title: "规格",
+    width: 150,
     dataIndex: "specification",
+    ellipsis: true,
     scopedSlots: {
       customRender: "specification"
     }
   },
   {
     title: "数量",
+    width: 80,
     dataIndex: "needBomNum",
-    width: "80px",
     scopedSlots: {
       customRender: "needBomNum"
     }
   },
   {
     title: "总价",
+    width: 120,
+    fixed: "right",
     dataIndex: "totalPrice",
     scopedSlots: {
       customRender: "totalPrice"
@@ -448,10 +536,33 @@ export default {
 
           this.dataSource1Copy = cloneDeep(this.dataSource1);
           if (arr1.length == 0) {
-            this.detailDataList1 = [{ dsBaseDataType: 0, needBomNum: 1 }];
+            this.detailDataList1 = [{
+              dsBaseDataType: 0,
+              needBomNum: 1,
+              nineNC: '',
+              bomName: '',
+              bomCode: '',
+              bomModel: '',
+              specification: '',
+              categoryName: '',
+              recentPrice: 0,
+              totalPrice: '0.00'
+            }];
           }
           if (arr2.length == 0) {
-            this.detailDataList2 = [{ dsBaseDataType: 1, needBomNum: 1 }];
+            this.detailDataList2 = [{
+              dsBaseDataType: 1,
+              needBomNum: 1,
+              nineNC: '',
+              bomName: '',
+              bomCode: '',
+              bomModel: '',
+              specification: '',
+              categoryName: '',
+              currentPrice: 0,
+              recentPrice: 0,
+              totalPrice: '0.00'
+            }];
           }
           
           this.detailDataList1.length = 1;
@@ -479,6 +590,11 @@ export default {
       });
       if (type == "add") {
         this.title = "新增";
+        // 获取当前登录用户信息并填充报价单名称
+        const currentUser = this.$store.getters['account/user'];
+        if (currentUser && currentUser.name) {
+          this.queryFrom.bomQuoteName = currentUser.name;
+        }
       } else {
         this.title = "编辑";
         this.queryFrom = cloneDeep(info);
@@ -495,57 +611,195 @@ export default {
     SeachBomModalClick(index, type) {
       this.$refs.SeachBomModal.openModules(index, type);
     },
-    // 计算总价
+    // 计算总价 - 只计算不修改
     calculateTotalPrice(record, type) {
       let price = 0;
       let quantity = record.needBomNum || 1;
       
       // 根据类型选择价格来源
       if (type === 'internal') {
-        // 结构料：优先使用最近一次采购价
-        price = parseFloat(record.recentPrice) || 0;
+        // 结构料：优先使用 recentPrice，如果为0则尝试使用电子料字段
+        if (record.recentPrice && parseFloat(record.recentPrice) > 0) {
+          price = parseFloat(record.recentPrice);
+        } else if (record.currentPrice && parseFloat(record.currentPrice) > 0) {
+          price = parseFloat(record.currentPrice);
+        } else if (record.currentAvailablePrice && parseFloat(record.currentAvailablePrice) > 0) {
+          price = parseFloat(record.currentAvailablePrice);
+        }
       } else {
         // 电子料：优先使用当前价格，然后是最近一次采购价
-        price = parseFloat(record.currentPrice) || parseFloat(record.recentPrice) || 0;
-      }
-      
-      // 如果都没有，尝试从总价反推单价
-      if (price === 0 && record.totalPrice && record.needBomNum) {
-        price = parseFloat(record.totalPrice) / parseFloat(record.needBomNum) || 0;
+        price = parseFloat(record.currentPrice) || parseFloat(record.currentAvailablePrice) || parseFloat(record.recentPrice) || 0;
       }
       
       const totalPrice = price * quantity;
-      record.totalPrice = totalPrice.toFixed(2);
       return totalPrice.toFixed(2);
     },
     
-    checkDataSet(dataSet) {
-      console.log(dataSet);
-      if (dataSet.type == "type1") {
-        this.detailDataList1[dataSet.index].nineNC = dataSet.data.nineNC;
-        this.detailDataList1[dataSet.index].bomName = dataSet.data.bomName;
-        this.detailDataList1[dataSet.index].bomCode = dataSet.data.bomCode;
-        this.detailDataList1[dataSet.index].bomModel = dataSet.data.bomModel;
-        this.detailDataList1[dataSet.index].specification =
-          dataSet.data.specification;
-        this.detailDataList1[dataSet.index].needBomNum = dataSet.data.needBomNum || 1;
-        this.detailDataList1[dataSet.index].recentPrice = dataSet.data.recentPrice;
-        this.detailDataList1[dataSet.index].totalPrice =
-          dataSet.data.totalPrice;
+    // 数量改变时更新总价
+    onQuantityChange(record, type) {
+      console.log('=== 数量改变事件触发 ===', {
+        type: type,
+        '改变前数量': record.needBomNum,
+        'recentPrice': record.recentPrice,
+        'currentPrice': record.currentPrice,
+        'currentAvailablePrice': record.currentAvailablePrice,
+        '改变前总价': record.totalPrice
+      });
+      
+      let unitPrice = 0;
+      const quantity = parseInt(record.needBomNum) || 1;
+      
+      if (type === 'internal') {
+        // 结构料：优先使用 recentPrice，如果为0则尝试使用电子料字段
+        if (record.recentPrice && parseFloat(record.recentPrice) > 0) {
+          unitPrice = parseFloat(record.recentPrice);
+        } else if (record.currentPrice && parseFloat(record.currentPrice) > 0) {
+          unitPrice = parseFloat(record.currentPrice);
+          console.warn('⚠️ 结构料使用了电子料的价格字段 currentPrice');
+        } else if (record.currentAvailablePrice && parseFloat(record.currentAvailablePrice) > 0) {
+          unitPrice = parseFloat(record.currentAvailablePrice);
+          console.warn('⚠️ 结构料使用了电子料的价格字段 currentAvailablePrice');
+        }
       } else {
-        this.detailDataList2[dataSet.index].nineNC = dataSet.data.nineNC;
-        this.detailDataList2[dataSet.index].bomName = dataSet.data.bomName;
-        this.detailDataList2[dataSet.index].bomCode = dataSet.data.bomCode;
-        this.detailDataList2[dataSet.index].bomModel = dataSet.data.bomModel;
-        this.detailDataList2[dataSet.index].specification =
-          dataSet.data.specification;
-        this.detailDataList2[dataSet.index].needBomNum = dataSet.data.needBomNum || 1;
-        // 电子料也使用最近一次采购价，如果没有则使用当前价格
-        this.detailDataList2[dataSet.index].recentPrice = dataSet.data.recentPrice || dataSet.data.currentPrice;
-        this.detailDataList2[dataSet.index].currentPrice = dataSet.data.currentPrice;
-        this.detailDataList2[dataSet.index].totalPrice =
-          dataSet.data.totalPrice;
+        // 电子料使用 currentPrice
+        unitPrice = parseFloat(record.currentPrice) || parseFloat(record.currentAvailablePrice) || parseFloat(record.recentPrice) || 0;
       }
+      
+      const totalPrice = (unitPrice * quantity).toFixed(2);
+      this.$set(record, 'totalPrice', totalPrice);
+      
+      console.log('=== 数量改变后结果 ===', {
+        数量: quantity,
+        单价: unitPrice,
+        总价: totalPrice
+      });
+      
+      // 强制更新视图
+      this.$forceUpdate();
+    },
+    
+    checkDataSet(dataSet) {
+      console.log('=== 接收到的完整物料数据 ===', JSON.stringify(dataSet, null, 2));
+      
+      if (dataSet.type == "type1") {
+        // 结构料
+        const index = dataSet.index;
+        const data = dataSet.data;
+        
+        console.log('=== 结构料原始数据 ===', {
+          needBomNum: data.needBomNum,
+          recentPrice: data.recentPrice,
+          totalPrice: data.totalPrice,
+          '所有字段': Object.keys(data)
+        });
+        
+        // 使用 $set 确保响应式更新 - 基本信息
+        this.$set(this.detailDataList1[index], 'nineNC', data.nineNC || '');
+        this.$set(this.detailDataList1[index], 'bomName', data.bomName || '');
+        this.$set(this.detailDataList1[index], 'bomCode', data.bomCode || '');
+        this.$set(this.detailDataList1[index], 'bomModel', data.bomModel || '');
+        this.$set(this.detailDataList1[index], 'specification', data.specification || '');
+        this.$set(this.detailDataList1[index], 'categoryName', data.categoryName || '');
+        
+        // 设置数量（确保是数字）
+        const needBomNum = parseInt(data.needBomNum) || 1;
+        this.$set(this.detailDataList1[index], 'needBomNum', needBomNum);
+        
+        // 设置价格字段（确保是数字）
+        // 优先级：recentPrice > currentPrice > currentAvailablePrice > 从总价反推
+        let recentPrice = 0;
+        if (data.recentPrice !== null && data.recentPrice !== undefined && data.recentPrice !== '' && parseFloat(data.recentPrice) > 0) {
+          recentPrice = parseFloat(data.recentPrice);
+        } else if (data.currentPrice !== null && data.currentPrice !== undefined && data.currentPrice !== '' && parseFloat(data.currentPrice) > 0) {
+          // 如果结构料没有价格，尝试使用电子料的价格字段
+          recentPrice = parseFloat(data.currentPrice);
+          console.warn('⚠️ 结构料使用了电子料的价格字段 currentPrice');
+        } else if (data.currentAvailablePrice !== null && data.currentAvailablePrice !== undefined && data.currentAvailablePrice !== '' && parseFloat(data.currentAvailablePrice) > 0) {
+          recentPrice = parseFloat(data.currentAvailablePrice);
+          console.warn('⚠️ 结构料使用了电子料的价格字段 currentAvailablePrice');
+        } else if (data.totalPrice && needBomNum > 0) {
+          // 如果没有单价，尝试从总价反推
+          recentPrice = parseFloat(data.totalPrice) / needBomNum;
+        }
+        
+        // 确保价格是有效数字
+        if (isNaN(recentPrice)) {
+          recentPrice = 0;
+        }
+        
+        this.$set(this.detailDataList1[index], 'recentPrice', recentPrice);
+        
+        // 计算并设置总价
+        const totalPrice = recentPrice * needBomNum;
+        this.$set(this.detailDataList1[index], 'totalPrice', totalPrice.toFixed(2));
+        
+        console.log('=== 结构料处理结果 ===', {
+          needBomNum: needBomNum,
+          recentPrice: recentPrice,
+          totalPrice: totalPrice.toFixed(2),
+          '当前行数据': this.detailDataList1[index]
+        });
+        
+      } else {
+        // 电子料
+        const index = dataSet.index;
+        const data = dataSet.data;
+        
+        console.log('=== 电子料原始数据 ===', {
+          needBomNum: data.needBomNum,
+          currentPrice: data.currentPrice,
+          recentPrice: data.recentPrice,
+          currentAvailablePrice: data.currentAvailablePrice,
+          totalPrice: data.totalPrice,
+          '所有字段': Object.keys(data)
+        });
+        
+        // 使用 $set 确保响应式更新 - 基本信息
+        this.$set(this.detailDataList2[index], 'nineNC', data.nineNC || '');
+        this.$set(this.detailDataList2[index], 'bomName', data.bomName || '');
+        this.$set(this.detailDataList2[index], 'bomCode', data.bomCode || '');
+        this.$set(this.detailDataList2[index], 'bomModel', data.bomModel || '');
+        this.$set(this.detailDataList2[index], 'specification', data.specification || '');
+        this.$set(this.detailDataList2[index], 'categoryName', data.categoryName || '');
+        
+        // 设置数量（确保是数字）
+        const needBomNum = parseInt(data.needBomNum) || 1;
+        this.$set(this.detailDataList2[index], 'needBomNum', needBomNum);
+        
+        // 电子料价格处理：优先级 currentPrice > currentAvailablePrice > recentPrice
+        let unitPrice = 0;
+        if (data.currentPrice !== null && data.currentPrice !== undefined && data.currentPrice !== '') {
+          unitPrice = parseFloat(data.currentPrice);
+        } else if (data.currentAvailablePrice !== null && data.currentAvailablePrice !== undefined && data.currentAvailablePrice !== '') {
+          unitPrice = parseFloat(data.currentAvailablePrice);
+        } else if (data.recentPrice !== null && data.recentPrice !== undefined && data.recentPrice !== '') {
+          unitPrice = parseFloat(data.recentPrice);
+        } else if (data.totalPrice && needBomNum > 0) {
+          // 如果没有单价，尝试从总价反推
+          unitPrice = parseFloat(data.totalPrice) / needBomNum;
+        }
+        
+        // 确保价格是有效数字
+        if (isNaN(unitPrice)) {
+          unitPrice = 0;
+        }
+        
+        this.$set(this.detailDataList2[index], 'currentPrice', unitPrice);
+        this.$set(this.detailDataList2[index], 'recentPrice', unitPrice);
+        
+        // 计算并设置总价
+        const totalPrice = unitPrice * needBomNum;
+        this.$set(this.detailDataList2[index], 'totalPrice', totalPrice.toFixed(2));
+        
+        console.log('=== 电子料处理结果 ===', {
+          needBomNum: needBomNum,
+          unitPrice: unitPrice,
+          totalPrice: totalPrice.toFixed(2),
+          '当前行数据': this.detailDataList2[index]
+        });
+      }
+      
+      // 强制更新视图
       this.$forceUpdate();
     },
     onSearch(record, type) {
@@ -612,7 +866,15 @@ export default {
     addDetailDataList1() {
       this.detailDataList1.push({
         dsBaseDataType: 0,
-        needBomNum: 1
+        needBomNum: 1,
+        nineNC: '',
+        bomName: '',
+        bomCode: '',
+        bomModel: '',
+        specification: '',
+        categoryName: '',
+        recentPrice: 0,
+        totalPrice: '0.00'
       });
     },
     //删除表格
@@ -623,7 +885,16 @@ export default {
     addDetailDataList2() {
       this.detailDataList2.push({
         dsBaseDataType: 1,
-        needBomNum: 1
+        needBomNum: 1,
+        nineNC: '',
+        bomName: '',
+        bomCode: '',
+        bomModel: '',
+        specification: '',
+        categoryName: '',
+        currentPrice: 0,
+        recentPrice: 0,
+        totalPrice: '0.00'
       });
     },
     //删除表格
